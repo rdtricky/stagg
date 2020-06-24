@@ -1,0 +1,13 @@
+{
+  "name": "stagg-scraper",
+  "version": "0.0.0",
+  "author": "Dan Lindsey",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "exit 0"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@stagg/api": "^0.0.5"
+  }
+}
