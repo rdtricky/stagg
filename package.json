@@ -1,0 +1,19 @@
+{
+  "name": "root",
+  "private": true,
+  "author": {
+    "name": "Dan Lindsey"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^14.0.13",
+    "lerna": "^3.22.1",
+    "typescript": "^3.9.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdlindsey/stagg.git"
+  }
+}
