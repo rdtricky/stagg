@@ -2,9 +2,6 @@
 require('dotenv').config()
 export interface Config {
     port: number
-    io: {
-        delay: number
-    }
     api: {
         retry: number
         delay: number
@@ -19,15 +16,9 @@ export interface Config {
     scrape: {
         wait: number
     }
-    discord: {
-        token: string
-    }
 }
 export default {
     port: process.env.PORT || 8080,
-    io: {
-        delay: 150,
-    },
     api: {
         retry: 3,
         delay: 100,
@@ -42,7 +33,4 @@ export default {
     scrape: {
         wait: 3000
     },
-    discord: {
-        token: process.env.DISCORD_TOKEN,
-    }
 } as Config

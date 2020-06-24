@@ -1,7 +1,7 @@
 {
   "name": "stagg-builder",
   "version": "1.0.0",
-  "description": "Stagg monorepo builder",
+  "description": "Stagg Monorepo Builder",
   "main": "index.js",
   "scripts": {
     "test": "exit 0",

@@ -16,13 +16,3 @@ for(const service of services) {
     fs.writeFileSync(`${__dirname}/../services/${service}/app.yaml`, serviceYaml, 'utf8')
     console.log(`    ${service}/app.yaml ready`)
 }
-// Copy common modules to services
-const commonServices = ['api', 'mongo']
-for(const service of services) {
-    for(const commonModule of commonServices) {
-        const serviceCommonDir = `${__dirname}/../services/${service}/common/`
-        if (!fs.existsSync(serviceCommonDir)) fs.mkdirSync(serviceCommonDir)
-        const commonModuleSrc = fs.readFileSync(`${__dirname}/../common/${commonModule}.ts`, 'utf8')
-        fs.writeFileSync(`${serviceCommonDir}/${commonModule}.ts`, commonModuleSrc, 'utf8')
-    }
-}

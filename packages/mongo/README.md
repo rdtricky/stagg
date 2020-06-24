@@ -2,13 +2,50 @@
 
 Provided by [Stagg.co](https://stagg.co)
 
-## Call of Duty
+## Getting Started
 
-Simply install the package and bootstrap a new instance.
+Install the package
+
+```
+yarn install @stagg/mongo
+```
+
+Configure the connection on startup (only done once).
 
 ```typescript
-import { CallOfDuty as CallOfDutyMongoDB } from '@stagg/mongo'
+import * as Mongo from '@stagg/mongo'
 (async () => {
-    await CallOfDutyMongoDB.Bootstrap()
+    const cfg:Mongo.T.Config = {...}
+    Mongo.Config(cfg)
+    const db = await Mongo.Client()
+    // ... do stuff
 })()
 ```
+
+In any subsequent requests, only the client needs to be fetched.
+
+
+```typescript
+import * as Mongo from '@stagg/mongo'
+(async () => {
+    const db = await Mongo.Client()
+    // ... do stuff
+})()
+```
+
+The config interface can be found in `<PKG>.T.Config`
+
+```typescript
+export namespace T {
+    export interface Config {
+        db:string
+        host:string
+        user:string
+        password:string
+    }
+}
+```
+
+### Call of Duty
+
+Currently supports Warzone
