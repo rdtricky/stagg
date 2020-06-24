@@ -3,6 +3,10 @@
   "author": {
     "name": "Dan Lindsey"
   },
+  "private": true,
+  "scripts": {
+    "publish": "lerna run tsc && lerna publish"
+  },
   "workspaces": [
     "packages/*"
   ],

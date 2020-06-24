@@ -1,7 +1,7 @@
 {
   "name": "@stagg/api",
   "version": "0.0.5",
-  "main": "lib/api.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -16,5 +16,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "9dd0ef521e43916afc2775457606c1bb6ba216ac"
+  "gitHead": "9dd0ef521e43916afc2775457606c1bb6ba216ac",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "request": "^2.88.2"
+  }
 }
