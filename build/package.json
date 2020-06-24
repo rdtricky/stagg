@@ -1,0 +1,21 @@
+{
+  "name": "stagg-builder",
+  "version": "1.0.0",
+  "description": "Stagg monorepo builder",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0",
+    "build": "node .",
+    "build:env": "yarn build:env:discord && yarn build:env:db && yarn build:env:host && yarn build:env:user && yarn build:env:pass",
+    "build:env:db": "gcloud secrets versions access latest --secret=MONGO_DB > .env.MONGO_DB",
+    "build:env:host": "gcloud secrets versions access latest --secret=MONGO_HOST > .env.MONGO_HOST",
+    "build:env:user": "gcloud secrets versions access latest --secret=MONGO_USER > .env.MONGO_USER",
+    "build:env:pass": "gcloud secrets versions access latest --secret=MONGO_PASS > .env.MONGO_PASS",
+    "build:env:discord": "gcloud secrets versions access latest --secret=DISCORD_TOKEN > .env.DISCORD_TOKEN"
+  },
+  "author": "Dan Lindsey",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^3.14.0"
+  }
+}
