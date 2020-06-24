@@ -1,6 +1,5 @@
 {
   "name": "@stagg/api",
-  "private": false,
   "version": "0.0.4",
   "main": "lib/api.js",
   "directories": {
@@ -13,5 +12,8 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
-  "gitHead": "b895d683aab724b6557aeae337c0cf56602baefc"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9dd0ef521e43916afc2775457606c1bb6ba216ac"
 }
