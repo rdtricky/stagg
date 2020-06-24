@@ -4,10 +4,17 @@
   "author": "Dan Lindsey",
   "main": "dist/index.js",
   "scripts": {
+    "dev": "ts-node-dev src/index.ts",
+    "start": "node dist/index.js",
     "test": "exit 0"
   },
-  "license": "ISC",
   "dependencies": {
-    "@stagg/api": "^0.0.5"
+    "@stagg/api": "^0.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.13",
+    "ts-node": "^8.10.2",
+    "ts-node-dev": "^1.0.0-pre.49",
+    "typescript": "^3.9.5"
   }
 }

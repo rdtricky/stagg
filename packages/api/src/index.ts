@@ -1,9 +1,10 @@
 import deprecatedRequest from 'request'
 import axios, { AxiosRequestConfig } from 'axios'
 
-export default class {
-    private readonly tokens:T.Req.Tokens
-    constructor(tokens:T.Req.Tokens) {
+export class CallOfDuty {
+    public readonly T = CallOfDuty
+    private readonly tokens:CallOfDuty.Tokens
+    constructor(tokens:CallOfDuty.Tokens) {
         if (!tokens.xsrf || !tokens.atkn || !tokens.sso) {
             throw new Error('Missing tokens for Call of Duty API')
         }
@@ -30,13 +31,13 @@ export default class {
     async Friends() {
         return this.request({ url: `/codfriends/v1/compendium` })
     }
-    async Platforms(username:string, platform:T.Platform='uno') {
+    async Platforms(username:string, platform:CallOfDuty.Platform='uno') {
         return this.request({ url: `/crm/cod/v2/accounts/platform/${platform}/gamer/${encodeURIComponent(username)}` })
     }
-    async Profile(username:string, platform:T.Platform='uno', mode:T.Mode='wz', game:T.Game='mw') {
+    async Profile(username:string, platform:CallOfDuty.Platform='uno', mode:CallOfDuty.Mode='wz', game:CallOfDuty.Game='mw') {
         return this.request({ url: `/stats/cod/v1/title/${game}/platform/${platform}/gamer/${encodeURIComponent(username)}/profile/type/${mode}` })
     }
-    async Matches(username:string, platform:T.Platform='uno', mode:T.Mode='wz', game:T.Game='mw', next:number=0) {
+    async Matches(username:string, platform:CallOfDuty.Platform='uno', mode:CallOfDuty.Mode='wz', game:CallOfDuty.Game='mw', next:number=0) {
         return this.request({ url: `/crm/cod/v2/title/${game}/platform/${platform}/gamer/${encodeURIComponent(username)}/matches/${mode}/start/0/end/${next}/details` })
     }
     async Login(email:string, password:string) {
@@ -74,16 +75,14 @@ export default class {
     }
 }
 
-export namespace T {
+namespace CallOfDuty {
     export type Mode = 'mp' | 'wz'
     export type Game = 'mw' | 'bo4' | 'wwii'
     export type Platform = 'uno' | 'battle' | 'psn' | 'xbl'
-    export namespace Req {
-        export interface Tokens {
-            sso: string
-            xsrf: string
-            atkn: string
-        }
+    export interface Tokens {
+        sso: string
+        xsrf: string
+        atkn: string
     }
     export namespace Res {
         export interface Loadout {
@@ -256,5 +255,4 @@ export namespace T {
             }
         }
     }
-
 }
