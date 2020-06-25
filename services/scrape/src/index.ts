@@ -6,16 +6,17 @@ import cfg from './config'
     Mongo.Config(cfg.mongo)
     const db = await Mongo.Client()
     const players = await db.collection('players').find().toArray()
-    const platforms = await db.collection('platforms').find().toArray()
-    const platformMap = {}
-    for(const platform of platforms) platformMap[platform.tag] = platform
-    for(const player of players) {
-        // console.log('got player', player)
-        const username = player.profiles.ATV
-        new Scrape.CallOfDuty(username, 'uno', player.api.auth, (res) => {
-            console.log(res)
-        })
-    }
+    const [player] = players
+    const username = player.profiles.ATV
+    new Scrape.CallOfDuty(username, 'uno', player.api.auth, (res) => {
+        console.log(res.matches.map(m => m.matchID))
+    })
+    // for(const player of players) {
+    //     const username = player.profiles.ATV
+    //     new Scrape.CallOfDuty(username, 'uno', player.api.auth, (res) => {
+    //         console.log(res.matches.map(m => m.matchID))
+    //     })
+    // }
 })()
 
 // async RecordMatchHistory() {

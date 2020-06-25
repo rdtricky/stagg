@@ -4,11 +4,9 @@ import { T } from '.'
 export class CallOfDuty {
     private readonly tokens:T.CallOfDuty.Tokens
     constructor(tokens:T.CallOfDuty.Tokens) {
-        console.log('Constructing new CallOfDutyAPI')
         if (!tokens.xsrf || !tokens.atkn || !tokens.sso) {
             throw new Error('Missing tokens for Call of Duty API')
         }
-        console.log('tokens valid')
         this.tokens = tokens
     }
     private async request(config:Partial<AxiosRequestConfig>):Promise<any> {
