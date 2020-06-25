@@ -1,10 +1,10 @@
 dispatch:
     - url: api.stagg.co/*
       service: api
-    - url: io.stagg.co/*
-      service: io
-    - url: discord.stagg.co/*
-      service: discord
+    # - url: io.stagg.co/*
+    #   service: io
+    # - url: discord.stagg.co/*
+    #   service: discord
     - url: scrape.stagg.co/*
       service: scrape
     - url: stagg.co/*
