@@ -10,17 +10,17 @@
     axios "^0.19.2"
     request "^2.88.2"
 
-"@stagg/mongo@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@stagg/mongo/-/mongo-0.0.11.tgz#4b9d4cc4e12871cfaa3a6fddec5cd78c05d96f4b"
-  integrity sha512-LJaY769SGvroHoFTcQH7GYlR0FnMxF7qtigKUbfEzg1uegLw1WvGp0eboFZ05eKZwD/XTAzEBtfgAIQ1l/T74g==
+"@stagg/mongo@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@stagg/mongo/-/mongo-0.0.12.tgz#8e299cd51bf88a8d2e0ec7dc74259bd130453f9f"
+  integrity sha512-F4f5iFAtL3+cCuNxL44vnVOHHdGA6C9ieIvwBnDzt8OxsKyKcaeV8naU9/RJXAHsH9E6mPx+qEqsNUZUA83o4g==
   dependencies:
     mongodb "^3.5.9"
 
-"@stagg/scrape@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@stagg/scrape/-/scrape-0.0.11.tgz#8b1bb51207dd848c51c65fb9daf7f4d1b08e742e"
-  integrity sha512-8L9/m/UDqP6KTrBPAz4iWKJhrOyZyjfRAc1jXnPmJHIPZ8MnGsnvL1Qltlr/zsiehFr1l/KZpqp6dLxDTCUL+A==
+"@stagg/scrape@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@stagg/scrape/-/scrape-0.0.12.tgz#8dc169a03f60cab4c92b071b3a091e62b423c94b"
+  integrity sha512-Yezj48EULT523WdlyRUJnJUJ6tERobA3R7f4yCiHWNIe85FMFy5U5n0r8o2s7QRnLfU97YDinaJXlcFXQArvcg==
   dependencies:
     "@stagg/api" "^0.0.6"
 
@@ -249,6 +249,11 @@ diff@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
   integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
+
+dotenv@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
 dynamic-dedupe@^0.3.0:
   version "0.3.0"

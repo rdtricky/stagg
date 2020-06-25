@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@stagg/api": "^0.0.6",
-    "@stagg/mongo": "^0.0.11",
-    "@stagg/scrape": "^0.0.11"
+    "@stagg/mongo": "^0.0.12",
+    "@stagg/scrape": "^0.0.12"
   },
   "devDependencies": {
     "@types/node": "^14.0.13",
+    "dotenv": "^8.2.0",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.49",
     "typescript": "^3.9.5"

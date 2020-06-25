@@ -11,7 +11,7 @@ export interface Config {
         db: string
         host: string
         user: string
-        pass: string
+        password: string
     }
     scrape: {
         wait: number
@@ -28,7 +28,7 @@ export default {
         db: process.env.MONGO_DB,
         host: process.env.MONGO_HOST,
         user: process.env.MONGO_USER,
-        pass: process.env.MONGO_PASS,
+        password: process.env.MONGO_PASS,
     },
     scrape: {
         wait: 3000
