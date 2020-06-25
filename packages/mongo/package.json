@@ -1,6 +1,6 @@
 {
   "name": "@stagg/mongo",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
