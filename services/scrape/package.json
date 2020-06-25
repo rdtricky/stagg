@@ -3,6 +3,7 @@
   "version": "0.0.22",
   "author": "Dan Lindsey",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "start": "node dist/index.js",
