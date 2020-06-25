@@ -1,14 +1,14 @@
-import { T as API, CallOfDuty as CallOfDutyAPI } from '@stagg/api'
+import * as API from '@stagg/api'
 export class CallOfDuty {
     private failures:number
     private complete:boolean
     private timestamp:number
     private matchIds:string[]
     private readonly username : string
-    private readonly platform : API.CallOfDuty.Platform
-    private readonly game     : API.CallOfDuty.Game
-    private readonly mode     : API.CallOfDuty.Mode
-    private readonly API      : CallOfDutyAPI
+    private readonly platform : API.T.CallOfDuty.Platform
+    private readonly game     : API.T.CallOfDuty.Game
+    private readonly mode     : API.T.CallOfDuty.Mode
+    private readonly API      : API.CallOfDuty
     private readonly callback : Function
     private readonly options  : T.CallOfDuty.Options = {
         limit: 0,
@@ -20,13 +20,13 @@ export class CallOfDuty {
         logger: console.log,
         timestampOffset: 300,
     }
-    constructor(username:string, platform:API.CallOfDuty.Platform, tokens:API.CallOfDuty.Tokens, callback:Function, options?:Partial<T.CallOfDuty.Options>) {
+    constructor(username:string, platform:API.T.CallOfDuty.Platform, tokens:API.T.CallOfDuty.Tokens, callback:Function, options?:Partial<T.CallOfDuty.Options>) {
         this.matchIds = []
         this.complete = false
         this.username = username
         this.platform = platform
         this.callback = callback
-        this.API = new CallOfDutyAPI(tokens)
+        this.API = new API.CallOfDuty(tokens)
         this.options = {...this.options, ...options}
         this.timestamp = this.options.timestamp
     }
@@ -36,7 +36,7 @@ export class CallOfDuty {
             await this.Fetch()
         }
     }
-    NextTimestamp(matches:API.CallOfDuty.Res.Warzone.Match[]):number {
+    NextTimestamp(matches:API.T.CallOfDuty.Res.Warzone.Match[]):number {
         const timestamps = matches.map(m => m.utcEndSeconds)
         const edgeTimestamp = Math.min(...timestamps)
         const offsetTimestamp = edgeTimestamp - this.options.timestampOffset
@@ -75,7 +75,7 @@ export namespace T {
             timestampOffset:number
         }
         export namespace Options {
-            export interface Callback { (res:API.CallOfDuty.Res.Warzone.Matches):void }
+            export interface Callback { (res:API.T.CallOfDuty.Res.Warzone.Matches):void }
         }
     }
 }

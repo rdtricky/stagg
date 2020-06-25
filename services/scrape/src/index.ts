@@ -1,5 +1,5 @@
 import * as Mongo from '@stagg/mongo'
-import { CallOfDuty as Scraper } from '@stagg/scrape'
+import * as Scrape from '@stagg/scrape'
 import cfg from './config'
 
 (async () => {
@@ -11,7 +11,7 @@ import cfg from './config'
     for(const platform of platforms) platformMap[platform.tag] = platform
     for(const player of players) {
         const username = player.profiles.ATV
-        new Scraper(username, 'uno', player.api.auth, (res) => {
+        new Scrape.CallOfDuty(username, 'uno', player.api.auth, (res) => {
             console.log(res)
         })
     }
