@@ -1,6 +1,6 @@
 {
   "name": "@stagg/scrape",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
