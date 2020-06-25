@@ -1,0 +1,9 @@
+service: <% SERVICE %>
+runtime: nodejs12
+env_variables:
+    PORT: 8080
+    MONGO_DB: <% MONGO_DB %>
+    MONGO_USER: <% MONGO_USER %>
+    MONGO_PASS: <% MONGO_PASS %>
+    MONGO_HOST: <% MONGO_HOST %>
+    DISCORD_TOKEN: <% DISCORD_TOKEN %>
