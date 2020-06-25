@@ -40,7 +40,7 @@ export namespace T {
             }
             export interface Platform {
                 _id: string
-                tag: T.Platform
+                tag: T.CallOfDuty.Platform
                 name: string
                 api: string
             }
