@@ -24,6 +24,6 @@ steps:
       entrypoint: yarn
       args: ['gcp:build']
     - name: gcr.io/cloud-builders/gcloud
-      args: ['app', 'deploy', 'dispatch.yaml']
-    - name: gcr.io/cloud-builders/gcloud
       args: ['app', 'deploy', 'services/scrape']
+    - name: gcr.io/cloud-builders/gcloud
+      args: ['app', 'deploy', 'dispatch.yaml']
