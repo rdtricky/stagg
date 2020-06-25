@@ -1,7 +1,6 @@
 import deprecatedRequest from 'request'
 import axios, { AxiosRequestConfig } from 'axios'
-
-export class CallOfDuty {
+class CallOfDuty {
     private readonly tokens:T.CallOfDuty.Tokens
     constructor(tokens:T.CallOfDuty.Tokens) {
         if (!tokens.xsrf || !tokens.atkn || !tokens.sso) {
@@ -74,7 +73,7 @@ export class CallOfDuty {
     }
 }
 
-export namespace T {
+namespace T {
     export namespace CallOfDuty {
         export type Mode = 'mp' | 'wz'
         export type Game = 'mw' | 'bo4' | 'wwii'
@@ -257,3 +256,4 @@ export namespace T {
         }
     }
 }
+export { CallOfDuty, T }
