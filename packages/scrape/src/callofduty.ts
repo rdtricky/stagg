@@ -48,7 +48,7 @@ export class CallOfDuty {
             const res = await this.API.Matches(this.username, this.platform, this.mode, this.game, this.timestamp)
             this.callback(res)
             this.timestamp = this.NextTimestamp(res.matches)
-            const newMatchIds = res.matches.filter(m => m).map(m => m.matchId)
+            const newMatchIds = res.matches.filter(m => m).map(m => m.matchID)
             this.matchIds = [...this.matchIds, ...newMatchIds]
             const lessThan20 = newMatchIds.length < 20
             const passedLimit = this.matchIds.length >= this.options.limit
