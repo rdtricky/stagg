@@ -10,7 +10,7 @@ export class CallOfDuty {
     private readonly mode     : API.CallOfDuty.Mode
     private readonly API      : CallOfDutyAPI
     private readonly callback : Function
-    private readonly options  : CallOfDuty.Options = {
+    private readonly options  : T.CallOfDuty.Options = {
         limit: 0,
         retry: 3,
         delay: 100,
@@ -20,7 +20,7 @@ export class CallOfDuty {
         logger: console.log,
         timestampOffset: 300,
     }
-    constructor(username:string, platform:API.CallOfDuty.Platform, tokens:API.CallOfDuty.Tokens, callback:Function, options?:Partial<CallOfDuty.Options>) {
+    constructor(username:string, platform:API.CallOfDuty.Platform, tokens:API.CallOfDuty.Tokens, callback:Function, options?:Partial<T.CallOfDuty.Options>) {
         this.matchIds = []
         this.complete = false
         this.username = username

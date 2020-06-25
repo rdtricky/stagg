@@ -16,7 +16,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "5a3332acf921974f9c84661f8744482701613d3d",
+  "gitHead": "39be5ea695014108e105d668fcc2a3b34975da6a",
   "dependencies": {
     "axios": "^0.19.2",
     "request": "^2.88.2"
