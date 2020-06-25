@@ -11,6 +11,7 @@
     "test": "exit 0"
   },
   "dependencies": {
+    "@stagg/api": "^0.0.23",
     "@stagg/mongo": "^0.0.23",
     "@stagg/scrape": "^0.0.23",
     "cors": "^2.8.5",
