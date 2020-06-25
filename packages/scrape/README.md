@@ -18,3 +18,16 @@ Options:
 - `refetch` - when enabled, scraper will fetch entire match history every time; when disabled, scraper will never refetch old matches
 
 In some cases, the Call of Duty API will return incomplete responses. To combat this incosistency, it is recommended to enable `refetch` to complete previously incomplete match records.
+
+```typescript
+new Scrape.CallOfDuty.All({
+    db: {
+        config: {
+            db,
+            host,
+            user,
+            password,
+        },
+    }
+})
+```

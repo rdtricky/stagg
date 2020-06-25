@@ -3,7 +3,6 @@ import { CallOfDuty } from './callofduty'
 
 let config:T.Config
 let mdbClient:MongoClient
-console.log('--------------\n--------------\n--------------\n--------------\n--------------')
 
 export { CallOfDuty }
 export const Config = (cfg:T.Config) => config = cfg
@@ -15,7 +14,7 @@ export const Client = async () => {
     )
     if (!mdbClient.isConnected()) {
         await mdbClient.connect()
-        console.log('[+] Connected to MongoDB')
+        console.log(`[+] Connected to MongoDB ${config.host}/${config.db}`)
     }
     return mdbClient.db(config.db)
 }

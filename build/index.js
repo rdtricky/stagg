@@ -9,7 +9,7 @@ for(const v of envVars) {
     fs.unlinkSync(`${__dirname}/.env.${v}`)
 }
 const genericYaml = yaml.safeDump(objYaml)
-const services = ['api', 'discord', 'download', 'scrape'] // ui does not take env vars
+const services = ['scrape'] // ui does not take env vars // 'api', 'discord', 'download', 
 console.log('[+] Secret app.yaml generated')
 for(const service of services) {
     const serviceYaml = genericYaml.replace('<% SERVICE %>', service)

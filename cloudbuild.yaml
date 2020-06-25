@@ -1,0 +1,29 @@
+steps:
+    - name: node:12.13.0
+      entrypoint: yarn
+      args: ['install']
+    - name: node:12.13.0
+      entrypoint: yarn
+      args: ['build:cloud:ts']
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=MONGO_DB > build/.env.MONGO_DB' ]
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=MONGO_HOST > build/.env.MONGO_HOST' ]
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=MONGO_USER > build/.env.MONGO_USER' ]
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=MONGO_PASS > build/.env.MONGO_PASS' ]
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=DISCORD_TOKEN > build/.env.DISCORD_TOKEN' ]
+    - name: node:12.13.0
+      entrypoint: yarn
+      args: ['build:cloud:yaml']
+    - name: gcr.io/cloud-builders/gcloud
+      args: ['app', 'deploy', 'dispatch.yaml']
+    - name: gcr.io/cloud-builders/gcloud
+      args: ['app', 'deploy']

@@ -1,10 +1,12 @@
 import { T as API } from '@stagg/api'
-import { CallOfDuty } from './callofduty'
-export { CallOfDuty }
+import { T as Mongo } from '@stagg/mongo'
+import * as CallOfDuty from './callofduty'
 
+export { CallOfDuty }
 export namespace T {
     export namespace CallOfDuty {
         export interface Options {
+            db?:Options.Database
             limit:number
             retry:number
             delay:number
@@ -12,10 +14,15 @@ export namespace T {
             timestamp:number
             perpetual:boolean
             logger:Function
+            callback:Options.Callback
             timestampOffset:number
         }
         export namespace Options {
             export interface Callback { (res:API.CallOfDuty.Res.Warzone.Matches):void }
+            export interface Database {
+                config: Mongo.Config
+                player?: { [key:string]: any }
+            }
         }
     }
 }
