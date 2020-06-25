@@ -1,6 +1,11 @@
 import { CallOfDuty } from '@stagg/scrape'
-import { T as MongoTypes, CallOfDuty } from '@stagg/mongo'
+import { T as MongoTypes, CallOfDuty as CallOfDutyMongoDB } from '@stagg/mongo'
 import config from './config'
+
+
+
+
+
 
 
 
@@ -19,7 +24,7 @@ export class Warzone {
     private attempts:number
     private complete:boolean
     private logger:Function
-    public player:Mongo.Schema.Player
+    public player:MongoTypes.Schema.Player
     public profile:Mongo.Types.UserParams
     public platform:Mongo.Schema.Platform
     public matches:Types.Response.Warzone.Match[]

@@ -1,6 +1,5 @@
 import { MongoClient } from 'mongodb'
-import * as CallOfDutyMongoDB from './callofduty'
-export const CallOfDuty = CallOfDutyMongoDB
+export * from './callofduty'
 
 let config:T.Config
 let mdbClient:MongoClient
