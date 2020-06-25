@@ -1,4 +1,5 @@
 import * as API from '@stagg/api'
+import { T } from '.'
 export class CallOfDuty {
     private failures:number
     private complete:boolean
