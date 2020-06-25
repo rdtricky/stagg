@@ -1,3 +1,3 @@
-export * as CallOfDutyRaw from './callofduty'
-import { CallOfDuty, T } from './callofduty'
+import { T } from './index.d'
+import { CallOfDuty } from './callofduty'
 export { CallOfDuty, T }

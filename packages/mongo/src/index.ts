@@ -1,9 +1,11 @@
 import { MongoClient } from 'mongodb'
-export * from './callofduty'
+import { CallOfDuty } from './callofduty'
+import { T } from './index.d'
 
 let config:T.Config
 let mdbClient:MongoClient
 
+export { CallOfDuty, T }
 export const Config = (cfg:T.Config) => config = cfg
 export const Client = async () => {
     if (!config) throw new Error('MongoDB config not found')
@@ -16,14 +18,4 @@ export const Client = async () => {
         console.log('[+] Connected to MongoDB')
     }
     return mdbClient.db(config.db)
-}
-
-export namespace T {
-    export type Client = MongoClient
-    export interface Config {
-        db:string
-        host:string
-        user:string
-        password:string
-    }
 }

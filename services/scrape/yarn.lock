@@ -2,18 +2,10 @@
 # yarn lockfile v1
 
 
-"@stagg/api@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@stagg/api/-/api-0.0.14.tgz#a630ed8323be5fbda41a65eeb189b2879a25f278"
-  integrity sha512-1AePSATo7SplNcaxUfpUB3HiUV1dKtWfvN+rjmFM2wDSvUnfIMXB9wfO2BZOxWQKGfXGuBy2uauSrkGhRtt4lQ==
-  dependencies:
-    axios "^0.19.2"
-    request "^2.88.2"
-
-"@stagg/api@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@stagg/api/-/api-0.0.6.tgz#e52338b7d3ce8a9322c8b89aa7c9e8e4c00b2126"
-  integrity sha512-/1/5dRvBvd9tHDKexXkNNN3EYVniIjk5RcKjU6bmIJgYxTjDkYsjXjMW+7J2oItJbC6wXMuv18A0gfv24jWKiQ==
+"@stagg/api@^0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@stagg/api/-/api-0.0.17.tgz#92ff61c8d2c25856be2fc79c4ee8d4add6995536"
+  integrity sha512-kgex7erLDZ8IpBrz2HPXFyQnAfah2HffynI2UL0/YNHNTXH6FQmn/MINcYQKc7A4tNti6PZGbq2y8obPvGIHFw==
   dependencies:
     axios "^0.19.2"
     request "^2.88.2"
@@ -25,12 +17,12 @@
   dependencies:
     mongodb "^3.5.9"
 
-"@stagg/scrape@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@stagg/scrape/-/scrape-0.0.14.tgz#fabc8bdfe3e42f413d997b39418dd5c59c5bb07e"
-  integrity sha512-8MoiLa+X8F3CqsdbSFBwvNCEHU8A7kcUhz+Z/agsXvkCCk9hIumkTlDYJH1gBVinxFM8yixG2AHYw8FQ4WKqeg==
+"@stagg/scrape@^0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@stagg/scrape/-/scrape-0.0.17.tgz#f41e2c0080cdff1a71b62dc0667e4f3dcfdcac4a"
+  integrity sha512-ZlpVircRI/Jyyh7aFsvAFTb64KXVCnFjxVe1CTcAyJQUk5SQ8zL1zqm5j43iS7/xvmAlwRNHFcLez+rQVcUy3Q==
   dependencies:
-    "@stagg/api" "^0.0.6"
+    "@stagg/api" "^0.0.17"
 
 "@types/node@^14.0.13":
   version "14.0.14"

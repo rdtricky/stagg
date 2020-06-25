@@ -10,6 +10,7 @@ import cfg from './config'
     const platformMap = {}
     for(const platform of platforms) platformMap[platform.tag] = platform
     for(const player of players) {
+        // console.log('got player', player)
         const username = player.profiles.ATV
         new Scrape.CallOfDuty(username, 'uno', player.api.auth, (res) => {
             console.log(res)
