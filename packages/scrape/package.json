@@ -1,6 +1,6 @@
 {
   "name": "@stagg/scrape",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
@@ -17,7 +17,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@stagg/api": "^0.0.19"
+    "@stagg/api": "^0.0.20"
   },
   "gitHead": "828e79fe51334efce42ddd341a5dc715714ebd93"
 }
