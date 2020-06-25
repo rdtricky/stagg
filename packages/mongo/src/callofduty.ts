@@ -1,5 +1,4 @@
-import { Client } from '.'
-import { T } from './index.d'
+import { T, Client } from '.'
 
 export namespace CallOfDuty {
     export const Platforms = [

@@ -1,6 +1,6 @@
 import deprecatedRequest from 'request'
 import axios, { AxiosRequestConfig } from 'axios'
-import { T } from './index.d'
+import { T } from '.'
 export class CallOfDuty {
     private readonly tokens:T.CallOfDuty.Tokens
     constructor(tokens:T.CallOfDuty.Tokens) {
