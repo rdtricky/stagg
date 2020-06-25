@@ -12,3 +12,4 @@
 /packages/*/lib
 /services/*/lib
 /services/*/app.yaml
+/build/yarn.lock
