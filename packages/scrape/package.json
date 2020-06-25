@@ -1,5 +1,5 @@
 {
-  "name": "@stagg/mongo",
+  "name": "@stagg/scrape",
   "version": "0.0.8",
   "main": "lib/index.js",
   "directories": {
@@ -16,11 +16,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "7f3f4b9183ffd370c496df727c958d50aaa306e6",
   "dependencies": {
-    "mongodb": "^3.5.9"
-  },
-  "devDependencies": {
-    "@types/mongodb": "^3.5.25"
+    "@stagg/api": "^0.0.6"
   }
 }

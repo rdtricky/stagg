@@ -1,3 +1,4 @@
+import { CallOfDuty } from '@stagg/scrape'
 import { T as MongoTypes, CallOfDuty } from '@stagg/mongo'
 import config from './config'
 
