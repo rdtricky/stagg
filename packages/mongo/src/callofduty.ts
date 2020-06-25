@@ -1,4 +1,4 @@
-import { Client } from '.'
+import { Client, T } from '.'
 
 export namespace CallOfDuty {
     export const Platforms = [
@@ -22,7 +22,7 @@ export namespace CallOfDuty {
             api: 'psn',
             name: 'PlayStation Network'
         },
-    ] as T.Schema.Platform[]
+    ] as T.CallOfDuty.Schema.Platform[]
     
     export const Bootstrap = async () => {
         const mongo = await Client()
@@ -34,7 +34,7 @@ export namespace CallOfDuty {
     }
     
     export namespace Get {
-        export const Auth = async (username:string='', platform:T.Platform='ATV') => {
+        export const Auth = async (username:string='', platform:T.CallOfDuty.Platform='ATV') => {
             if (username) {
                 const player = await Player(username, platform)
                 if (player?.api?.auth)
@@ -44,16 +44,16 @@ export namespace CallOfDuty {
             const { api: { auth } } = await mongo.collection('players').findOne({})
             return auth
         }
-        export const Player = async (username:string, platform:T.Platform):Promise<T.Schema.Player> => {
+        export const Player = async (username:string, platform:T.CallOfDuty.Platform):Promise<T.CallOfDuty.Schema.Player> => {
             const mongo = await Client()
             return mongo.collection('players').findOne({ [`profiles.${platform.toUpperCase()}`]: { $regex: username, $options: 'i' } })
         }
-        export const Platform = async (platformTag:T.Platform):Promise<T.Schema.Platform> => {
+        export const Platform = async (platformTag:T.CallOfDuty.Platform):Promise<T.CallOfDuty.Schema.Platform> => {
             const mongo = await Client()
             return mongo.collection('platforms').findOne({ tag: { $regex: platformTag, $options: 'i' } })
         }
         export namespace Warzone {
-            export const MatchIds = async (username:string, platform:T.Platform, matchIds?:string[]):Promise<string[]> => {
+            export const MatchIds = async (username:string, platform:T.CallOfDuty.Platform, matchIds?:string[]):Promise<string[]> => {
                 const mongo = await Client()
                 const player = await Player(username, platform)
                 if (!player) {
@@ -67,7 +67,7 @@ export namespace CallOfDuty {
                 const performanceMatchIds = await mongo.collection('performances.wz').find(query, props).toArray()
                 return performanceMatchIds.map(p => p.matchId)
             }
-            export const Performances = async (username:string, platform:T.Platform, matchIds?:string[]):Promise<T.Schema.Performance[]> => {
+            export const Performances = async (username:string, platform:T.CallOfDuty.Platform, matchIds?:string[]):Promise<T.CallOfDuty.Schema.Performance[]> => {
                 const mongo = await Client()
                 const player = await Player(username, platform)
                 if (!player) {
@@ -81,7 +81,7 @@ export namespace CallOfDuty {
     }
     
     export namespace Put {
-        export const Player = async (player:T.Schema.Player.Scaffold) => {
+        export const Player = async (player:T.CallOfDuty.Schema.Player.Scaffold) => {
             const mongo = await Client()
             return mongo.collection('players').insertOne(player)
         }

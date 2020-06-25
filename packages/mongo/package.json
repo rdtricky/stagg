@@ -16,7 +16,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "2f731c4942d808ca77b05045bf2e5b2f807e3700",
+  "gitHead": "70bb9a99227a98e4c15e95c9ddb869336af16a2e",
   "dependencies": {
     "mongodb": "^3.5.9"
   },
