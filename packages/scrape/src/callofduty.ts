@@ -1,5 +1,5 @@
 import * as API from '@stagg/api'
-import { T } from '.'
+import { T } from './index.d'
 const delay = (ms:number) => new Promise(resolve => setTimeout(() => resolve(), ms))
 export class CallOfDuty {
     private failures:number

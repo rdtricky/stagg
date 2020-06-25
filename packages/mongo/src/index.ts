@@ -4,8 +4,9 @@ import { T } from './index.d'
 
 let config:T.Config
 let mdbClient:MongoClient
+console.log('--------------\n--------------\n--------------\n--------------\n--------------')
 
-export { CallOfDuty, T }
+export { CallOfDuty }
 export const Config = (cfg:T.Config) => config = cfg
 export const Client = async () => {
     if (!config) throw new Error('MongoDB config not found')

@@ -9,7 +9,7 @@ import cfg from './config'
     const [player] = players
     const username = player.profiles.ATV
     new Scrape.CallOfDuty(username, 'uno', player.api.auth, (res) => {
-        console.log(res.matches.map(m => m.matchID))
+        console.log('Got', res.matches.map(m => m.matchID).length, 'matches')
     })
     // for(const player of players) {
     //     const username = player.profiles.ATV
