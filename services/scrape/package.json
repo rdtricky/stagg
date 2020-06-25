@@ -9,7 +9,9 @@
     "test": "exit 0"
   },
   "dependencies": {
-    "@stagg/api": "^0.0.6"
+    "@stagg/api": "^0.0.6",
+    "@stagg/mongo": "^0.0.11",
+    "@stagg/scrape": "^0.0.11"
   },
   "devDependencies": {
     "@types/node": "^14.0.13",
