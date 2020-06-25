@@ -1,6 +1,6 @@
 {
   "name": "stagg-scraper",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "author": "Dan Lindsey",
   "main": "dist/index.js",
   "private": true,
@@ -10,8 +10,8 @@
     "test": "exit 0"
   },
   "dependencies": {
-    "@stagg/mongo": "^0.0.22",
-    "@stagg/scrape": "^0.0.22"
+    "@stagg/mongo": "^0.0.23",
+    "@stagg/scrape": "^0.0.23"
   },
   "devDependencies": {
     "@types/node": "^14.0.13",
