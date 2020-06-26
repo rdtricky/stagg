@@ -1,11 +1,12 @@
 import * as cors from 'cors'
-import SocketIO from 'socket.io'
 import * as express from 'express'
 import * as Mongo from '@stagg/mongo'
+import * as SocketIO from 'socket.io'
+import * as bodyParser from 'body-parser'
 import cfg from './config'
 
 Mongo.Config(cfg.mongo)
-const app = express().use(cors({ credentials: false }))
+const app = express().use(cors({ credentials: false })).use(bodyParser.json())
 const server = app.listen(cfg.port, async () => {
     app.get('/', (req,res) => res.status(418).send({ teapot: true }))
     app.get('/health', (req,res) => res.status(200).send('ok'))
