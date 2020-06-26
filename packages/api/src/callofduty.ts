@@ -2,14 +2,14 @@ import deprecatedRequest from 'request'
 import axios, { AxiosRequestConfig } from 'axios'
 import { T } from '.'
 export class CallOfDuty {
-    private readonly tokens:T.CallOfDuty.Tokens
-    constructor(tokens:T.CallOfDuty.Tokens) {
-        if (!tokens.xsrf || !tokens.atkn || !tokens.sso) {
-            throw new Error('Missing tokens for Call of Duty API')
-        }
-        this.tokens = tokens
+    private tokens:T.CallOfDuty.Tokens
+    constructor(tokens?:T.CallOfDuty.Tokens) {
+        this.Tokens(tokens)
     }
     private async request(config:Partial<AxiosRequestConfig>):Promise<any> {
+        if (!this.tokens.xsrf || !this.tokens.atkn || !this.tokens.sso) {
+            throw new Error('Missing tokens for Call of Duty API')
+        }
         const { data:res, status } = await axios({
             method: 'GET',
             baseURL: 'https://my.callofduty.com/api/papi-client',
@@ -23,6 +23,10 @@ export class CallOfDuty {
             throw res.data.error
         }
         return res.data
+    }
+    Tokens(tokens?:T.CallOfDuty.Tokens) {
+        this.tokens = tokens
+        return this
     }
     async Identity() {
         return this.request({ url: `/crm/cod/v2/identities` })
