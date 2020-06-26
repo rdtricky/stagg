@@ -1,15 +1,14 @@
-
-import { Client, Message } from 'discord.js'
 import * as Mongo from '@stagg/mongo'
+import { Client, Message } from 'discord.js'
 import { CallOfDuty as CallOfDutyAPI } from '@stagg/api'
-import config from './config'
 
 const commaNum = (num:Number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 export default class {
     private bot:Client
-    constructor() {
+    constructor(loginToken:string, mongoConfig:Mongo.T.Config) {
+        Mongo.Config(mongoConfig)
         this.bot = new Client()
-        this.bot.login(config.discord.token)
+        this.bot.login(loginToken)
         this.bot.on('ready', () => console.log(`[+] Discord Bot logged in as ${this.bot.user.tag}`))
         this.bot.on('message', async (msg:Message) => this.MessageController(msg))
     }

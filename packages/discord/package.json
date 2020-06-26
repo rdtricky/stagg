@@ -1,0 +1,24 @@
+{
+  "name": "@stagg/discord",
+  "version": "0.0.24",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@stagg/api": "^0.0.24",
+    "@stagg/mongo": "^0.0.24",
+    "discord.js": "^12.2.0"
+  }
+}

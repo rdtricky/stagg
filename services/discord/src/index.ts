@@ -1,9 +1,9 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import DiscordBot from './discord'
+import DiscordBot from '@stagg/discord'
 import cfg from './config'
 
-new DiscordBot()
+new DiscordBot(cfg.discord.token, cfg.mongo)
 const app = express()
 app.use(cors({ credentials: false })).listen(cfg.port, async () => {
     app.get('/', (req,res) => res.redirect('https://discord.me/ggez'))

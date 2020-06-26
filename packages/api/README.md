@@ -14,7 +14,7 @@ import { CallOfDuty } from '@stagg/api'
         xsrf: '<YOUR-CSRF/XSRF-TOKEN-HERE>',
         atkn: '<YOUR-ATKN-TOKEN-HERE>',
     }
-    const API = new CallOfDutyAPI(tokens)
+    const API = new CallOfDuty(tokens)
     const myProfiles = await API.Identity()
     console.log(myProfiles)
 })()

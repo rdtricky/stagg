@@ -5,8 +5,8 @@ import * as Mongo from '@stagg/mongo'
 import cfg from './config'
 
 Mongo.Config(cfg.mongo)
-const app = express()
-const server = app.use(cors({ credentials: false })).listen(cfg.port, async () => {
+const app = express().use(cors({ credentials: false }))
+const server = app.listen(cfg.port, async () => {
     app.get('/', (req,res) => res.status(418).send({ teapot: true }))
     app.get('/health', (req,res) => res.status(200).send('ok'))
     console.log(

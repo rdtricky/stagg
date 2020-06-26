@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@stagg/api": "^0.0.24",
+    "@stagg/discord": "^0.0.24",
     "@stagg/mongo": "^0.0.24",
     "cors": "^2.8.5",
     "discord.js": "^12.2.0",
