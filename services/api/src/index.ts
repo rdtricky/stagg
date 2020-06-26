@@ -1,12 +1,13 @@
 import * as cors from 'cors'
 import * as express from 'express'
+import bodyParser from 'body-parser'
 import { Config as SetMongoConfig } from '@stagg/mongo'
 import * as HTTP from './http'
 import cfg from './config'
 
 const app = express()
 SetMongoConfig(cfg.mongo)
-app.use(cors({ credentials: false })).listen(cfg.port, async () => {
+app.use(cors({ credentials: false })).use(bodyParser.json()).listen(cfg.port, async () => {
     app.get('/', (req,res) => res.status(418).send({ teapot: true }))
     app.get('/m/:matchId', HTTP.Match)
     app.get('/u/search/:username', HTTP.Profile.Search)
