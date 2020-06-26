@@ -8,6 +8,7 @@ Mongo.Config(cfg.mongo)
 const app = express()
 const server = app.use(cors({ credentials: false })).listen(cfg.port, async () => {
     app.get('/', (req,res) => res.status(418).send({ teapot: true }))
+    app.get('/health', (req,res) => res.status(200).send('ok'))
     console.log(
         `${'\x1b[32m' /* green */}${'\x1b[1m' /* bright/bold */}`+
         `----------------------------------------------------------\n`+

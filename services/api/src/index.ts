@@ -9,6 +9,7 @@ const app = express()
 SetMongoConfig(cfg.mongo)
 app.use(cors({ credentials: false })).use(bodyParser.json()).listen(cfg.port, async () => {
     app.get('/', (req,res) => res.status(418).send({ teapot: true }))
+    app.get('/health', (req,res) => res.status(200).send('ok'))
     app.get('/m/:matchId', HTTP.Match)
     app.get('/u/search/:username', HTTP.Profile.Search)
     app.get('/u/:platform/:username/ping', HTTP.Profile.Ping)
