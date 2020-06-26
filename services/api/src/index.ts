@@ -1,6 +1,6 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import bodyParser from 'body-parser'
+import * as bodyParser from 'body-parser'
 import { Config as SetMongoConfig } from '@stagg/mongo'
 import * as HTTP from './http'
 import cfg from './config'
