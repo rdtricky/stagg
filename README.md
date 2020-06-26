@@ -12,9 +12,9 @@ PRs are always welcome!
 
 #### Call of Duty API
 
-- Unpublish old npm modules
-- Implement Multiplayer API and types
-- Types for Login/Identity/Platforms/Friends
+- Multiplayer API/types
+- Testing and error reporting
+- Login/Identity/Platforms/Friends types
 
 ### Publishing
 

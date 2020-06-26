@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "gcp:tsc": "lerna run tsc",
-    "gcp:build": "node build",
+    "gcp:build": "node build && lerna run build",
     "publish": "lerna run tsc && lerna publish"
   },
   "workspaces": [

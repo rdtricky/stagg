@@ -2,7 +2,7 @@
 /**/.env*
 /**/**/.env
 /**/**/dist
-/*/*/common
+/**/yarn.lock
 /**/**/.vscode
 /**/**/coverage
 /**/**/node_modules
@@ -12,4 +12,5 @@
 /packages/*/lib
 /services/*/lib
 /services/*/app.yaml
-/build/yarn.lock
+!/services/web-ui/app.yaml
+/**/.next
