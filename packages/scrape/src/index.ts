@@ -7,6 +7,7 @@ export namespace T {
     export namespace CallOfDuty {
         export interface Options {
             db?:Options.Database
+            wait:number
             limit:number
             retry:number
             delay:number

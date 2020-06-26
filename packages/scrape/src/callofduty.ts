@@ -48,6 +48,7 @@ export class Player {
         limit: 0,
         retry: 3,
         delay: 500,
+        wait: 300000,
         refetch: true,
         timestamp: 0,
         perpetual: true,
@@ -78,6 +79,7 @@ export class Player {
             await delay(this.options.delay)
         }
         this.options.logger(`[${this.complete ? '+' : '!'}] Scraping ${this.complete ? 'complete' : 'failed'} for ${this.platform}/${this.username}`)
+        await delay(this.options.wait)
         this.Run()
     }
     async OnResponse(res:API.T.CallOfDuty.Res.Warzone.Matches) {
