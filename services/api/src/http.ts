@@ -12,35 +12,11 @@ export const Match = async (req:Express.Request|any,res:Express.Response|any) =>
 export const Login = async (req:Express.Request|any,res:Express.Response|any) => {
     try {
         const API = new DataSources.CallOfDuty()
-        const mongo = await Mongo.Client()
         const { email, password } = req.body
         const { xsrf, atkn, sso } = await API.Login(email, password)
-        const { titleIdentities } = await API.Tokens({ xsrf, atkn, sso }).Identity()
-        const { platform:platformId, username } = titleIdentities.find((i:any) => i.title === 'mw')
-        const { tag:platform } = await mongo.collection('platforms').findOne({ api: platformId })
-        const player = await Mongo.CallOfDuty.Get.Player(username, platform)
-        if (player) {
-            player.email = email
-            player.auth = { xsrf, atkn, sso }
-            await mongo.collection('players').updateOne({ _id: player._id }, { $set:{...player} })
-            return res.send({ email: player.email, profiles: player.profiles })
-        }
-        // Player does not exist in DB, create them
-        const platformIds = await API.Tokens({ xsrf, atkn, sso }).Platforms(platformId, username)
-        const formattedPlatformIds = {} as any
-        for(const platformName of Object.keys(platformIds)) {
-            formattedPlatformIds[platformName] = platformIds[platformName]?.username
-        }
-        const profiles = {} as any
-        for(const platformName in formattedPlatformIds) {
-            const { tag } = await mongo.collection('platforms').findOne({ api: platformName })
-            if (tag) {
-                profiles[tag] = formattedPlatformIds[platformName]
-            }
-        }
         await Mongo.CallOfDuty.Put.Player({ email, auth: { xsrf, atkn, sso } })
-        console.log(`[+] Created player ${platform}<${username}>`)
-        res.status(201).send({ email, profiles })
+        console.log(`[+] Created player for ${email}`)
+        res.status(201).send({ email })
     } catch(error) {
         res.status(500).send({ error })
     }
