@@ -15,6 +15,7 @@ export interface Config {
     }
     scrape: {
         wait: number
+        cooldown: number
     }
 }
 export default {
@@ -22,7 +23,7 @@ export default {
     api: {
         retry: 3,
         delay: 100,
-        failures: 1,
+        failures: 3,
     },
     mongo: {
         db: process.env.MONGO_DB,
@@ -31,6 +32,7 @@ export default {
         password: process.env.MONGO_PASS,
     },
     scrape: {
-        wait: 3000
+        wait: 3000,
+        cooldown: 60000
     },
 } as Config
