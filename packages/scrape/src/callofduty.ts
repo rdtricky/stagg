@@ -80,6 +80,12 @@ export class Warzone {
         await this.RecordResponse(res)
     }
     async RecordResponse(res:DataSources.T.CallOfDuty.Res.Warzone.Matches) {
+        // Set player "uno" id if not already in db
+        if (!this.player.uno) {
+            const [ firstMatch ] = res.matches.filter((m:DataSources.T.CallOfDuty.Res.Warzone.Match) => m.player.uno)
+            this.player.uno = firstMatch.player.uno
+            await this.db.collection('players').updateOne({ _id: this.player._id }, { $set: { uno: this.player.uno } })
+        }
         for(const rawMatch of res.matches) {
             const matchFound = await this.db.collection('matches.wz').findOne({ matchId: rawMatch.matchID })
             if (!matchFound && rawMatch.rankedTeams) {

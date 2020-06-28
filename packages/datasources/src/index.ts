@@ -12,6 +12,15 @@ export namespace T {
             atkn: string
         }
         export namespace Res {
+            export interface Identity {
+                titleIdentities: {
+                    title: string // game name eg: bo4 / mw
+                    platform: Platform
+                    username: string
+                    activeDate: number
+                    activityType: 'wz'
+                }[]
+            }
             export interface Loadout {
                 primaryWeapon: Loadout.Weapon
                 secondaryWeapon: Loadout.Weapon

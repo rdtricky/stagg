@@ -1,8 +1,8 @@
 import * as Mongo from '@stagg/mongo'
 import { Client, Message } from 'discord.js'
 import * as DataSources from '@stagg/datasources'
+import { commaNum } from '@stagg/util'
 
-const commaNum = (num:Number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 export default class {
     private bot:Client
     constructor(loginToken:string, mongoConfig:Mongo.T.Config) {

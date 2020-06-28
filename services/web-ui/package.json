@@ -9,6 +9,7 @@
     "deploy": "gcloud app deploy dispatch.yaml --project stagcp",
     "test": "exit 0"
   },
+  "private": true,
   "author": "Dan Lindsey",
   "license": "MIT",
   "dependencies": {

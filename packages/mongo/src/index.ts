@@ -1,14 +1,15 @@
-import { MongoClient, ObjectID } from 'mongodb'
+import * as Mongo from 'mongodb'
+import { T as DataSources } from '@stagg/datasources'
 import { CallOfDuty } from './callofduty'
 
 let config:T.Config
-let mdbClient:MongoClient
+let mdbClient:Mongo.MongoClient
 
 export { CallOfDuty }
 export const Config = (cfg:T.Config) => config = cfg
 export const Client = async () => {
     if (!config) throw new Error('MongoDB config not found')
-    if (!mdbClient) mdbClient = new MongoClient(
+    if (!mdbClient) mdbClient = new Mongo.MongoClient(
         `mongodb+srv://${config.user}:${config.password}@${config.host}/${config.db}?retryWrites=true&w=majority`,
         { useNewUrlParser: true, useUnifiedTopology: true }
     )
@@ -20,7 +21,8 @@ export const Client = async () => {
 }
 
 export namespace T {
-    export type Client = MongoClient
+    export type Db = Mongo.Db
+    export type Client = Mongo.MongoClient
     export interface Config {
         db:string
         host:string
@@ -30,7 +32,9 @@ export namespace T {
     export namespace CallOfDuty {
         export namespace Schema {
             export interface Player extends Player.Scaffold {
-                _id: ObjectID
+                _id: Mongo.ObjectID
+                uno: string
+                games: DataSources.CallOfDuty.Game[]
                 profiles: { [key:string] : string } // platform:username
                 scrape: {
                     updated:   number

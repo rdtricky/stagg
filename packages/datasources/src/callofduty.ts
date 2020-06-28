@@ -28,7 +28,7 @@ export class CallOfDuty {
         this.tokens = tokens
         return this
     }
-    async Identity() {
+    async Identity():Promise<T.CallOfDuty.Res.Identity> {
         return this.request({ url: `/crm/cod/v2/identities` })
     }
     async Friends() {
