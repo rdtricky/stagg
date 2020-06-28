@@ -1,6 +1,6 @@
 {
   "name": "stagg-api",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "author": "Dan Lindsey",
   "main": "dist/index.js",
   "private": true,
@@ -11,8 +11,8 @@
     "test": "exit 0"
   },
   "dependencies": {
-    "@stagg/datasources": "^0.0.26",
-    "@stagg/mongo": "^0.0.26",
+    "@stagg/datasources": "^0.0.27",
+    "@stagg/mongo": "^0.0.27",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
