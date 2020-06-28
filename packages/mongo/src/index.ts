@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectID } from 'mongodb'
 import { CallOfDuty } from './callofduty'
 
 let config:T.Config
@@ -28,41 +28,25 @@ export namespace T {
         password:string
     }
     export namespace CallOfDuty {
-        export type Platform = 'ATV' | 'BTL' | 'XBL' | 'PSN'
         export namespace Schema {
             export interface Player extends Player.Scaffold {
-                _id: string
-                api: {
+                _id: ObjectID
+                profiles: { [key:string] : string } // platform:username
+                scrape: {
+                    updated:   number
+                    failures:  number
+                    timestamp: number
+                }
+            }
+            export namespace Player {
+                export interface Scaffold {
+                    email: string
                     auth: {
                         sso: string
                         xsrf: string
                         atkn: string
                     }
-                    next?: number
-                    updated?: number
-                    failures?: number
                 }
-            }
-            export namespace Player {
-                export interface Scaffold {
-                    email?:string
-                    profiles: {
-                        [key:string]: string // [platform.tag]: username
-                    }
-                    api: {
-                        auth: {
-                            sso: string
-                            xsrf: string
-                            atkn: string
-                        }
-                    }
-                }
-            }
-            export interface Platform {
-                _id: string
-                tag: T.CallOfDuty.Platform
-                name: string
-                api: string
             }
             export interface Loadout {
                 primary: Loadout.Weapon

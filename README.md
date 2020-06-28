@@ -12,6 +12,8 @@ PRs are always welcome!
 
 #### Call of Duty API
 
+- WZ/MP Profiles
+- Match summaries
 - Multiplayer API/types
 - Testing and error reporting
 - Login/Identity/Platforms/Friends types

@@ -21,7 +21,7 @@ export const Login = async (req:Express.Request|any,res:Express.Response|any) =>
         const player = await Mongo.CallOfDuty.Get.Player(username, platform)
         if (player) {
             player.email = email
-            player.api.auth = { xsrf, atkn, sso }
+            player.auth = { xsrf, atkn, sso }
             await mongo.collection('players').updateOne({ _id: player._id }, { $set:{...player} })
             return res.send({ email: player.email, profiles: player.profiles })
         }

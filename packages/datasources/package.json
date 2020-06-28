@@ -1,5 +1,5 @@
 {
-  "name": "@stagg/discord",
+  "name": "@stagg/datasources",
   "version": "0.0.25",
   "main": "lib/index.js",
   "directories": {
@@ -16,9 +16,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "gitHead": "08343442870a035e1724c610162d1981f3849d7a",
   "dependencies": {
-    "@stagg/datasources": "^0.0.25",
-    "@stagg/mongo": "^0.0.25",
-    "discord.js": "^12.2.0"
+    "axios": "^0.19.2",
+    "request": "^2.88.2"
   }
 }

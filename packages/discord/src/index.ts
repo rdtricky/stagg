@@ -1,6 +1,6 @@
 import * as Mongo from '@stagg/mongo'
 import { Client, Message } from 'discord.js'
-import { CallOfDuty as CallOfDutyAPI } from '@stagg/api'
+import * as DataSources from '@stagg/datasources'
 
 const commaNum = (num:Number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 export default class {
@@ -46,13 +46,13 @@ export default class {
                 response = !response ? '> No results :(' : '> Results:' + response
                 break
             case 'kpg':
-                const kpg = await this.KPG(args[0], args[1] as Mongo.T.CallOfDuty.Platform)
+                const kpg = await this.KPG(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
                 response = `> Total kills: ${commaNum(kpg.kills)}\n`+
                     `> Total games: ${commaNum(kpg.matches)}\n`+
                     `> Average kills: ${(kpg.kills / kpg.matches).toFixed(2)}`
                 break
             case 'dpk':
-                const dpk = await this.DPK(args[0], args[1] as Mongo.T.CallOfDuty.Platform)
+                const dpk = await this.DPK(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
                 response = `> Damage per kill: ${commaNum(Math.round(dpk.damageDone / dpk.kills))}\n`+
                     `> Damage per death: ${commaNum(Math.round(dpk.damageTaken / dpk.deaths))}\n`+
                     `> Total kills: ${commaNum(dpk.kills)}\n`+
@@ -61,14 +61,14 @@ export default class {
                     `> Total damage taken: ${commaNum(dpk.damageTaken)}`
                 break
             case 'kdr':
-                const kdr = await this.KDR(args[0], args[1] as Mongo.T.CallOfDuty.Platform)
+                const kdr = await this.KDR(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
                 response = `> Total kills: ${commaNum(kdr.kills)}\n`+
                     `> Total deaths: ${commaNum(kdr.deaths)}\n`+
                     `> Total games: ${commaNum(kdr.matches)}\n`+
                     `> Average KDR: ${(kdr.kills / kdr.deaths).toFixed(2)}`
                 break
             case 'ping':
-                response = await this.PingProfile(args[0], args[1] as Mongo.T.CallOfDuty.Platform)
+                response = await this.PingProfile(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
                 break
             default:
                 response = '> Unrecognized command, try `help`'
@@ -81,7 +81,7 @@ export default class {
             '> Start messages with `%`, `@Stagg`, or DM `Stagg#4282` to trigger the bot\n'+
             '> Use CLI-style space-separated commands and arguments.\n'+
             '> eg: ping the `Activision` profile for `MellowD#6992980`\n'+
-            '> ```% ping MellowD#6992980 ATV```\n'+
+            '> ```% ping MellowD#6992980 uno```\n'+
             '> Available commands: \n'+
             '> - `help` Get help using the Stagg Discord bot\n'+
             '> - `meta` Get stats on the overall Stagg service\n'+
@@ -93,7 +93,7 @@ export default class {
             '> - `dpk <username> <platform?>` Get average damage per kill/death for player\n'+
             '> \n'+
             '> Any arguments that end with `?` are optional (eg: `<platform?>`); default values are listed below:\n'+
-            '> - `<platform?>` ATV (Activision)\n'+
+            '> - `<platform?>` uno (Activision)\n'+
             '> \n'+
             '> Please note that aggregate commands (`kdr`, `kpg`) process your _entire match history_ so please be patient, it is most likely fetching hundreds or thousands of matches.\n'+
             ''
@@ -113,7 +113,7 @@ export default class {
         )
     }
 
-    async PingProfile(username:string, platform:Mongo.T.CallOfDuty.Platform='ATV'):Promise<string> {
+    async PingProfile(username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<string> {
         const pingRes = await ProfileService.Ping(username, platform)
         if (!pingRes) return `> Player ${username} not found on Call of Duty API`
         return (
@@ -127,7 +127,7 @@ export default class {
         return ProfileService.Search(username)
     }
 
-    async KPG(username:string, platform:Mongo.T.CallOfDuty.Platform='ATV'):Promise<{ kills:number, matches:number }> {
+    async KPG(username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<{ kills:number, matches:number }> {
         const mongo = await Mongo.Client()
         const player = await Mongo.CallOfDuty.Get.Player(username, platform)
         const props = { _id: 0, 'stats.kills': 1 } as any
@@ -136,7 +136,7 @@ export default class {
         return { kills: kills.map(p => p.stats.kills).reduce((a,b) => a+b, 0), matches: kills.length }
     }
 
-    async KDR(username:string, platform:Mongo.T.CallOfDuty.Platform='ATV'):Promise<{ kills:number, deaths:number, matches:number }> {
+    async KDR(username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<{ kills:number, deaths:number, matches:number }> {
         const mongo = await Mongo.Client()
         const player = await Mongo.CallOfDuty.Get.Player(username, platform)
         const props = { _id: 0, 'stats.kills': 1 } as any
@@ -150,7 +150,7 @@ export default class {
         return { kills, deaths, matches: matches.length }
     }
 
-    async DPK(username:string, platform:Mongo.T.CallOfDuty.Platform='ATV'):Promise<{ kills:number, deaths:number, damageDone: number, damageTaken:number }> {
+    async DPK(username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<{ kills:number, deaths:number, damageDone: number, damageTaken:number }> {
         const mongo = await Mongo.Client()
         const player = await Mongo.CallOfDuty.Get.Player(username, platform)
         const props = { _id: 0, 'stats.kills': 1, 'stats.deaths': 1, 'stats.damageDone': 1, 'stats.damageTaken': 1 } as any
@@ -168,7 +168,7 @@ export default class {
 }
 
 export namespace ProfileService {
-    export const Ping = async (username:string, platform:Mongo.T.CallOfDuty.Platform='ATV') => {
+    export const Ping = async (username:string, platform:DataSources.T.CallOfDuty.Platform='uno') => {
         console.log(`[>] New player data request for ${platform}<${username}>`)
         const player = await Mongo.CallOfDuty.Get.Player(username, platform)
         if (player) {
@@ -179,7 +179,7 @@ export namespace ProfileService {
         try {
             const tokens = await Mongo.CallOfDuty.Get.Auth()
             const { api } = await Mongo.CallOfDuty.Get.Platform(platform)
-            const API = new CallOfDutyAPI(tokens)
+            const API = new DataSources.CallOfDuty(tokens)
             await API.Profile(username, api as any)
             return { platform, username, local: false, matches: 0 } // player exists on cod
         } catch(e) {

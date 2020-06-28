@@ -40,8 +40,11 @@ export namespace T {
             }
             export namespace Warzone {
                 export interface Matches {
-                    summary: any
+                    summary: Summary
                     matches: Match[]
+                }
+                export interface Summary {
+                    
                 }
                 export interface Match {
                     utcStartSeconds: number
@@ -169,6 +172,12 @@ export namespace T {
                 }
             }
             export namespace Multiplayer {
+                export interface Matches {
+
+                }
+                export interface Summary {
+
+                }
                 export namespace Match {
                     export interface Player extends Warzone.Match.Player {
                         nemesis: string
