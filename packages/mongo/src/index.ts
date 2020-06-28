@@ -36,6 +36,7 @@ export namespace T {
                 uno: string
                 games: DataSources.CallOfDuty.Game[]
                 profiles: { [key:string] : string } // platform:username
+                // discord: ...
                 scrape: {
                     updated:   number
                     failures:  number

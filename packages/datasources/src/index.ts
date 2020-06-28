@@ -21,6 +21,14 @@ export namespace T {
                     activityType: 'wz'
                 }[]
             }
+            export interface Platforms {
+                [key:string]: { // key is platform
+                    username: string
+                }
+            }
+            export interface Friends {
+                // ...
+            }
             export interface Loadout {
                 primaryWeapon: Loadout.Weapon
                 secondaryWeapon: Loadout.Weapon

@@ -16,12 +16,12 @@ export namespace Profile {
     }
     
     export const Login = async (email:string, password:string) => {
-        await delay(10000)
-        return { email: 'dan@mdlindsey.com', profiles: {
-            BTL:"Dan#17890",
-            XBL:"danL",
-            ATV:"MellowD#6992980",
-        } }
+        // await delay(10000)
+        // return { email: 'dan@mdlindsey.com', profiles: {
+        //     battle:"Dan#17890",
+        //     xbl:"danL",
+        //     uno:"MellowD#6992980",
+        // } }
         const { profiles } = await req(axios.post(`${config.http.host}/u/login`, { email, password }))
         return { email, profiles }
     }

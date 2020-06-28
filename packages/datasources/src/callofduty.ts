@@ -34,7 +34,7 @@ export class CallOfDuty {
     async Friends() {
         return this.request({ url: `/codfriends/v1/compendium` })
     }
-    async Platforms(username:string, platform:T.CallOfDuty.Platform='uno') {
+    async Platforms(username:string, platform:T.CallOfDuty.Platform='uno'):Promise<T.CallOfDuty.Res.Platforms> {
         return this.request({ url: `/crm/cod/v2/accounts/platform/${platform}/gamer/${encodeURIComponent(username)}` })
     }
     async Profile(username:string, platform:T.CallOfDuty.Platform='uno', mode:T.CallOfDuty.Mode='wz', game:T.CallOfDuty.Game='mw'):Promise<T.CallOfDuty.Res.Warzone.Profile> {

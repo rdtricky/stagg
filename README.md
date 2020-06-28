@@ -16,7 +16,8 @@ PRs are always welcome!
 - Match summaries
 - Multiplayer API/types
 - Testing and error reporting
-- Login/Identity/Platforms/Friends types
+- Login/Platforms/Friends types
+- Add Discord to player when applicable
 
 ### Publishing
 

@@ -24,6 +24,9 @@ export class Warzone {
     }
     constructor(player:Mongo.T.CallOfDuty.Schema.Player, options?:Partial<Warzone.Options>) {
         this.player = player
+        if (!this.player.scrape) {
+            this.player.scrape = { updated: 0, failures: 0, timestamp: 0 }
+        }
         this.player.scrape.timestamp = options.start
         this.options = { ...this.options, ...options }
         this.API = new DataSources.CallOfDuty(this.player.auth)
@@ -93,7 +96,7 @@ export class Warzone {
                 const normalizedMatch = Normalize.Warzone.Match(rawMatch) as Mongo.T.CallOfDuty.Schema.Match
                 await this.db.collection('matches.wz').insertOne(normalizedMatch)
             }
-            const performanceFound = await this.db.collection('performances.wz').findOne({ matchId: rawMatch.matchID })
+            const performanceFound = await this.db.collection('performances.wz').findOne({ 'player._id': this.player._id, matchId: rawMatch.matchID })
             if (!performanceFound) {
                 this.options.logger(`    Saving performance for match ${rawMatch.matchID}`)
                 const normalizedPerformance = Normalize.Warzone.Performance(rawMatch, this.player)
