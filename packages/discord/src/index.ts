@@ -178,9 +178,8 @@ export namespace ProfileService {
         }
         try {
             const tokens = await Mongo.CallOfDuty.Get.Auth()
-            const { api } = await Mongo.CallOfDuty.Get.Platform(platform)
             const API = new DataSources.CallOfDuty(tokens)
-            await API.Profile(username, api as any)
+            await API.Profile(username, platform)
             return { platform, username, local: false, matches: 0 } // player exists on cod
         } catch(e) {
             console.log(`[!] Invalid player ${platform}<${username}>`)

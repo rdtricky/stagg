@@ -20,5 +20,6 @@
     "@stagg/datasources": "^0.0.26",
     "@stagg/mongo": "^0.0.26",
     "discord.js": "^12.2.0"
-  }
+  },
+  "gitHead": "99a8f035e435013dd096eae0f9550fa4f6c08bf4"
 }

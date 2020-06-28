@@ -5,9 +5,10 @@
   },
   "private": true,
   "scripts": {
+    "link": "lerna link --force-local",
+    "publish": "lerna run tsc && lerna publish",
     "gcp:tsc": "lerna run tsc",
-    "gcp:build": "node build && lerna run build",
-    "publish": "lerna run tsc && lerna publish"
+    "gcp:build": "node build && lerna run build"
   },
   "workspaces": [
     "build",

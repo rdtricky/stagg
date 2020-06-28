@@ -1,5 +1,5 @@
 import * as Mongo from '@stagg/mongo'
-import { CallOfDuty as CallOfDutyAPI } from '@stagg/api'
+import * as DataSources from '@stagg/datasources'
 export const Match = async (req:Express.Request|any,res:Express.Response|any) => {
     const { matchId } = req.params
     if (!matchId) {
@@ -11,7 +11,7 @@ export const Match = async (req:Express.Request|any,res:Express.Response|any) =>
 }
 export const Login = async (req:Express.Request|any,res:Express.Response|any) => {
     try {
-        const API = new CallOfDutyAPI()
+        const API = new DataSources.CallOfDuty()
         const mongo = await Mongo.Client()
         const { email, password } = req.body
         const { xsrf, atkn, sso } = await API.Login(email, password)
@@ -38,7 +38,7 @@ export const Login = async (req:Express.Request|any,res:Express.Response|any) =>
                 profiles[tag] = formattedPlatformIds[platformName]
             }
         }
-        await Mongo.CallOfDuty.Put.Player({ email, profiles, api: { auth: { xsrf, atkn, sso } } })
+        await Mongo.CallOfDuty.Put.Player({ email, auth: { xsrf, atkn, sso } })
         console.log(`[+] Created player ${platform}<${username}>`)
         res.status(201).send({ email, profiles })
     } catch(error) {
@@ -68,7 +68,7 @@ export namespace Profile {
 
 
 export namespace ProfileService {
-    export const Ping = async (username:string, platform:Mongo.T.CallOfDuty.Platform='ATV') => {
+    export const Ping = async (username:string, platform:DataSources.T.CallOfDuty.Platform='uno') => {
         console.log(`[>] New player data request for ${platform}<${username}>`)
         const player = await Mongo.CallOfDuty.Get.Player(username, platform)
         if (player) {
@@ -78,9 +78,8 @@ export namespace ProfileService {
         }
         try {
             const tokens = await Mongo.CallOfDuty.Get.Auth()
-            const { api } = await Mongo.CallOfDuty.Get.Platform(platform)
-            const API = new CallOfDutyAPI(tokens)
-            await API.Profile(username, api as any)
+            const API = new DataSources.CallOfDuty(tokens)
+            await API.Profile(username, platform)
             return { platform, username, local: false, matches: 0 } // player exists on cod
         } catch(e) {
             console.log(`[!] Invalid player ${platform}<${username}>`)
