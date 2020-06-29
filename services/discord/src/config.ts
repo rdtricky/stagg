@@ -30,7 +30,7 @@ export default {
         token: process.env.DISCORD_TOKEN,
     },
     gmail: {
-        user: process.env.GMAIL_ACCOUNT,
+        user: process.env.GMAIL_ADDRESS,
         pass: process.env.GMAIL_PASSWORD,
     }
 } as Config
