@@ -1,4 +1,4 @@
-import deprecatedRequest from 'request'
+import * as deprecatedRequest from 'request'
 import axios, { AxiosRequestConfig } from 'axios'
 import { T } from '.'
 export class CallOfDuty {
