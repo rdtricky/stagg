@@ -1,18 +1,35 @@
+import * as API from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
 import { Client, Message } from 'discord.js'
 import * as DataSources from '@stagg/datasources'
-import { commaNum } from '@stagg/util'
+import { commaNum, percentage } from '@stagg/util'
 
 export default class {
-    private bot:Client
-    constructor(loginToken:string, mongoConfig:Mongo.T.Config) {
+    protected bot:Client
+    constructor(loginToken:string, jwtSecret:string, mongoConfig:Mongo.T.Config) {
+        this.ConfigureAPI(jwtSecret, mongoConfig)
+        this.Login(loginToken)
+        this.Listen()
+    }
+    protected ConfigureAPI(jwtSecret:string, mongoConfig:Mongo.T.Config) {
         Mongo.Config(mongoConfig)
+        API.JWT.Config(jwtSecret)
+        API.Mongo.Config(mongoConfig)
+    }
+    protected Login(loginToken:string) {
         this.bot = new Client()
         this.bot.login(loginToken)
+    }
+    protected Listen() {
         this.bot.on('ready', () => console.log(`[+] Discord Bot logged in as ${this.bot.user.tag}`))
         this.bot.on('message', async (msg:Message) => this.MessageController(msg))
     }
-    async MessageController(msg:Message):Promise<void> {
+    protected FormatOutput(msgLines:string[]):string {
+        let output = ''
+        for(const line of msgLines) output += `> ${line}\n`
+        return output
+    }
+    protected async MessageController(msg:Message):Promise<void> {
         const content = msg.content.trim().replace(`<@!${this.bot.user.id}>`, ':BOT_TAG:')
         // Allow DMs without manual triggers
         const isDM = msg.channel.type as any === 'dm'
@@ -21,84 +38,93 @@ export default class {
         if (!isDM && !hasTagTrigger && !hasTextTrigger) return
         if (`${msg.author.username}#${msg.author.discriminator}` === this.bot.user.tag) return // ignore messages from self
         const [cmd, ...args] = content.replace(/^%/, '').replace(/^:BOT_TAG:/, '').trim().replace(/\s+/g, ' ').split(' ')
-        let response:string = ''
-        switch(cmd.toLowerCase()) {
-            case 'help':
-                response = this.Help()
-                break
-            case 'connect':
-                response = '> Click below to authorize the Stagg bot for your Discord server\n> https://discord.com/oauth2/authorize?client_id=723179755548967027&scope=bot&permissions=67584'
-                break
-            case 'meta':
-                response = await this.MetaStats()
-                break
-            case 'search':
-                const profilesArr = await this.SearchProfile(args[0]) as any[]
-                response = ''
-                for(const userProfiles of profilesArr) {
-                    for(const platform of Object.keys(userProfiles)) {
-                        const username = userProfiles[platform]
-                        if (username.toLowerCase().includes(args[0].toLowerCase())) {
-                            response += `\n> ${username} (${platform})`
-                        }
-                    }
-                }
-                response = !response ? '> No results :(' : '> Results:' + response
-                break
-            case 'kpg':
-                const kpg = await this.KPG(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
-                response = `> Total kills: ${commaNum(kpg.kills)}\n`+
-                    `> Total games: ${commaNum(kpg.matches)}\n`+
-                    `> Average kills: ${(kpg.kills / kpg.matches).toFixed(2)}`
-                break
-            case 'dpk':
-                const dpk = await this.DPK(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
-                response = `> Damage per kill: ${commaNum(Math.round(dpk.damageDone / dpk.kills))}\n`+
-                    `> Damage per death: ${commaNum(Math.round(dpk.damageTaken / dpk.deaths))}\n`+
-                    `> Total kills: ${commaNum(dpk.kills)}\n`+
-                    `> Total deaths: ${commaNum(dpk.deaths)}\n`+
-                    `> Total damage done: ${commaNum(dpk.damageDone)}\n`+
-                    `> Total damage taken: ${commaNum(dpk.damageTaken)}`
-                break
-            case 'kdr':
-                const kdr = await this.KDR(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
-                response = `> Total kills: ${commaNum(kdr.kills)}\n`+
-                    `> Total deaths: ${commaNum(kdr.deaths)}\n`+
-                    `> Total games: ${commaNum(kdr.matches)}\n`+
-                    `> Average KDR: ${(kdr.kills / kdr.deaths).toFixed(2)}`
-                break
-            case 'ping':
-                response = await this.PingProfile(args[0], args[1] as DataSources.T.CallOfDuty.Platform)
-                break
-            default:
-                response = '> Unrecognized command, try `help`'
-        }
-        msg.channel.send(response)
+        const commandResponse = await this.CommandDispatcher(cmd, ...args)
+        msg.channel.send(commandResponse)
+    }
+    protected async CommandDispatcher(cmd:string, ...args:any):Promise<string> {
+        if (!this[`cmd_${cmd}`]) return this.cmd_unrecognized()
+        return await this[`cmd_${cmd}`](...args)
     }
 
-    Help():string {
-        return (
-            '> Start messages with `%`, `@Stagg`, or DM `Stagg#4282` to trigger the bot\n'+
-            '> Use CLI-style space-separated commands and arguments.\n'+
-            '> eg: ping the `Activision` profile for `MellowD#6992980`\n'+
-            '> ```% ping MellowD#6992980 uno```\n'+
-            '> Available commands: \n'+
-            '> - `help` Get help using the Stagg Discord bot\n'+
-            '> - `meta` Get stats on the overall Stagg service\n'+
-            '> - `connect` Add the Stagg bot to your own Discord\n'+
-            '> - `search <username>` Find profiles matching your query\n'+
-            '> - `ping <username> <platform?>` Get status of player\n'+
-            '> - `kdr <username> <platform?>` Get Kill/Death Ratio for player\n'+
-            '> - `kpg <username> <platform?>` Get average kills per game for player\n'+
-            '> - `dpk <username> <platform?>` Get average damage per kill/death for player\n'+
-            '> \n'+
-            '> Any arguments that end with `?` are optional (eg: `<platform?>`); default values are listed below:\n'+
-            '> - `<platform?>` uno (Activision)\n'+
-            '> \n'+
-            '> Please note that aggregate commands (`kdr`, `kpg`) process your _entire match history_ so please be patient, it is most likely fetching hundreds or thousands of matches.\n'+
-            ''
-        )
+    protected cmd_unrecognized():string {
+        return this.FormatOutput(['Unrecognized command, try `help`'])
     }
+
+    protected cmd_help():string {
+        return this.FormatOutput([
+            'Start messages with `%`, `@Stagg`, or DM `Stagg#4282` to trigger the bot',
+            'Use CLI-style space-separated commands and arguments.',
+            'eg: Get Warzone stats for `MellowD#6992980`',
+            '```% wz stats MellowD#6992980```',
+            'Available commands:',
+            '- `help` Get help using the Stagg Discord bot',
+            '- `meta` Get stats on the overall Stagg service',
+            '- `connect` Add the Stagg bot to your own Discord',
+            '- `search <username>` Find profiles matching your query',
+            '- `wz stats <username> <platform?>` Get aggregate stats for player',
+            '',
+            'Any arguments that end with `?` are optional (eg: `<platform?>`); default values are listed below:',
+            '- `<platform?>` uno (Activision)',
+            '',
+            'Please note that aggregate commands (`wz stats`, etc) process your _entire match history_ so please be patient, it is most likely fetching hundreds or thousands of matches.',
+        ])
+    }
+
+    protected cmd_connect():string {
+        return this.FormatOutput([
+            'Click below to authorize the Stagg bot for your Discord server',
+            'https://discord.com/oauth2/authorize?client_id=723179755548967027&scope=bot&permissions=67584',
+        ])
+    }
+
+    protected async cmd_wz(cmd:string, ...args:any):Promise<string> {
+        if (!this[`cmd_wz_${cmd}`]) return this.cmd_unrecognized()
+        return await this[`cmd_wz_${cmd}`](...args)
+    }
+
+    protected async cmd_wz_stats(username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<string> {
+        const db = await Mongo.Client()
+        const player = await db.collection('players').findOne({ [`profiles.${platform}`]: username })
+        if (!player) return this.FormatOutput(['Player not found, did you forget to register? Try `help`'])
+        const performances = await db.collection('performances.wz').find({ 'player._id': player._id }).toArray() as Mongo.T.CallOfDuty.Schema.Performance[]
+        const brPerformances = performances.filter(p => !p.modeId.toLowerCase().includes('tdm') && !p.modeId.toLowerCase().includes('dmz'))
+        const staggEmpty = { games: 0, wins: 0, top5: 0, top10: 0, kills: 0, deaths: 0, loadouts: 0, gulagWins: 0, gulagGames: 0, damageDone: 0, damageTaken: 0 }
+        const staggAll = { ...staggEmpty }
+        const staggSolos = { ...staggEmpty }
+        const staggDuos = { ...staggEmpty }
+        const staggTrios = { ...staggEmpty }
+        const staggQuads = { ...staggEmpty }
+        for(const p of brPerformances) {
+            staggAll.games++
+            staggAll.kills += p.stats.kills
+            staggAll.deaths += p.stats.deaths
+            staggAll.loadouts += p.loadouts.length
+            staggAll.damageDone += p.stats.damageDone
+            staggAll.damageTaken += p.stats.damageTaken
+            if (p.stats.teamPlacement === 1)                  staggAll.wins++
+            if (p.stats.teamPlacement <= 5)                   staggAll.top5++
+            if (p.stats.teamPlacement <= 10)                  staggAll.top10++
+            if (p.stats.gulagKills >= 1)                      staggAll.gulagWins++
+            if (p.stats.gulagKills || p.stats.gulagDeaths)    staggAll.gulagGames++
+        }
+        return this.FormatOutput([
+            `${username} Aggregate Stats:`,
+            '--------------------------------',
+            `Games played: ${commaNum(staggAll.games)}`,
+            `Total wins: ${commaNum(staggAll.wins)}`,
+            `Total kills: ${commaNum(staggAll.kills)}`,
+            `Total deaths: ${commaNum(staggAll.deaths)}`,
+            `Total damage done: ${commaNum(staggAll.damageDone)}`,
+            `Total damage taken: ${commaNum(staggAll.damageTaken)}`,
+            `Win rate: ${percentage(staggAll.wins, staggAll.games)}%`,
+            `Top 5 rate: ${percentage(staggAll.top5, staggAll.games)}%`,
+            `Top 10 rate: ${percentage(staggAll.top10, staggAll.games)}%`,
+            `Gulag win rate: ${percentage(staggAll.gulagWins, staggAll.gulagGames)}%`,
+            `Damage per kill: ${commaNum(Math.round(staggAll.damageDone / staggAll.kills))}`,
+            `Damage per death: ${commaNum(Math.round(staggAll.damageTaken / staggAll.deaths))}`,
+        ])
+    }
+
 
     async MetaStats():Promise<string> {
         const mongo = await Mongo.Client()

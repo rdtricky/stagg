@@ -1,13 +1,12 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import DiscordBot from '@stagg/discord'
-import { JWT, Mail } from '@stagg/api'
 import cfg from './config'
 
-JWT.Config(cfg.jwt)
-Mail.Config(cfg.gmail)
-Mail.SendConfirmation('dan@mdlindsey.com')
-new DiscordBot(cfg.discord.token, cfg.mongo)
+// JWT.Config(cfg.jwt)
+// Mail.Config(cfg.gmail)
+// Mail.SendConfirmation('dan@mdlindsey.com')
+new DiscordBot(cfg.discord.token, cfg.jwt, cfg.mongo)
 const app = express()
 app.use(cors({ credentials: false })).listen(cfg.port, async () => {
     app.get('/', (req,res) => res.redirect('https://discord.me/ggez'))

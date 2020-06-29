@@ -1,6 +1,7 @@
 // Async/await delay
 export const delay = (ms:number) => new Promise(resolve => setTimeout(() => resolve(), ms))
 export const commaNum = (num:Number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+export const percentage = (divisor:number, dividend:number, decimals:number=2) => ((divisor / dividend) * 100).toFixed(decimals)
 export const timestamp = () => Math.round(new Date().getTime()/1000)
 export namespace CallOfDuty {
     // Platform API tags and UI labels
