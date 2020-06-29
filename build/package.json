@@ -6,12 +6,17 @@
   "scripts": {
     "test": "exit 0",
     "build": "node .",
-    "build:env": "yarn build:env:discord && yarn build:env:db && yarn build:env:host && yarn build:env:user && yarn build:env:pass",
+    "build:env": "yarn build:env:jwt && yarn build:env:discord && build:env:mongo && build:env:gmail",
+    "build:env:mongo": "yarn build:env:db && yarn build:env:host && yarn build:env:user && yarn build:env:pass",
+    "build:env:gmail": "yarn build:env:gmail:user && yarn build:env:gmail:pass",
     "build:env:db": "gcloud secrets versions access latest --secret=MONGO_DB > .env.MONGO_DB",
+    "build:env:jwt": "gcloud secrets versions access latest --secret=JWT_SECRET > .env.JWT_SECRET",
     "build:env:host": "gcloud secrets versions access latest --secret=MONGO_HOST > .env.MONGO_HOST",
     "build:env:user": "gcloud secrets versions access latest --secret=MONGO_USER > .env.MONGO_USER",
     "build:env:pass": "gcloud secrets versions access latest --secret=MONGO_PASS > .env.MONGO_PASS",
-    "build:env:discord": "gcloud secrets versions access latest --secret=DISCORD_TOKEN > .env.DISCORD_TOKEN"
+    "build:env:discord": "gcloud secrets versions access latest --secret=DISCORD_TOKEN > .env.DISCORD_TOKEN",
+    "build:env:gmail:user": "gcloud secrets versions access latest --secret=GMAIL_ACCOUNT > .env.GMAIL_ACCOUNT",
+    "build:env:gmail:pass": "gcloud secrets versions access latest --secret=GMAIL_PASSWORD > .env.GMAIL_PASSWORD"
   },
   "author": "Dan Lindsey",
   "license": "MIT",

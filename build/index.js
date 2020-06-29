@@ -1,7 +1,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 // Translate GCP Secrets into ENV Vars
-const envVars = ['DISCORD_TOKEN', 'MONGO_DB', 'MONGO_HOST', 'MONGO_USER', 'MONGO_PASS']
+const envVars = ['JWT_SECRET', 'GMAIL_ACCOUNT', 'GMAIL_PASSWORD', 'DISCORD_TOKEN', 'MONGO_DB', 'MONGO_HOST', 'MONGO_USER', 'MONGO_PASS']
 const templateYaml = fs.readFileSync(`${__dirname}/app.yaml`, 'utf8')
 const [objYaml] = yaml.safeLoadAll(templateYaml)
 for(const v of envVars) {
