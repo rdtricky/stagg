@@ -8,12 +8,18 @@ export interface Config {
         user: string
         password: string
     }
+    jwt: string
     discord: {
         token: string
+    }
+    gmail: {
+        user: string
+        pass: string
     }
 }
 export default {
     port: process.env.PORT || 8080,
+    jwt: process.env.JWT_SECRET,
     mongo: {
         db: process.env.MONGO_DB,
         host: process.env.MONGO_HOST,
@@ -22,5 +28,9 @@ export default {
     },
     discord: {
         token: process.env.DISCORD_TOKEN,
+    },
+    gmail: {
+        user: process.env.GMAIL_ACCOUNT,
+        pass: process.env.GMAIL_PASSWORD,
     }
 } as Config

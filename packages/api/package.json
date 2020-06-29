@@ -1,0 +1,24 @@
+{
+  "name": "@stagg/api",
+  "version": "0.0.30",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "99a8f035e435013dd096eae0f9550fa4f6c08bf4",
+  "dependencies": {
+    "@stagg/datasources": "^0.0.30",
+    "@stagg/mongo": "^0.0.30"
+  }
+}

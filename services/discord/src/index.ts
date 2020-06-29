@@ -1,8 +1,11 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import DiscordBot from '@stagg/discord'
+import { Mail } from '@stagg/api'
 import cfg from './config'
 
+Mail.Config(cfg.gmail)
+Mail.Send('dan@mdlindsey.com', 'Stagg Bot Test', 'beep boop')
 new DiscordBot(cfg.discord.token, cfg.mongo)
 const app = express()
 app.use(cors({ credentials: false })).listen(cfg.port, async () => {
