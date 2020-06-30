@@ -1,12 +1,11 @@
-const host = 'https://api-dot-stagcp.ue.r.appspot.com'
 export default {
     io: {
-        host,
+        host: 'https://io-dot-stagcp.ue.r.appspot.com',
         delay: 1000,
         abandon: 5000,
     },
     http: {
-        host,
+        host: 'https://api-dot-stagcp.ue.r.appspot.com',
         refresh: 10000,
     },
     idb: {

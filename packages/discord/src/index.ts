@@ -69,39 +69,46 @@ export default class {
 
     protected cmd_help():string {
         return this.FormatOutput([
-            'Start messages with `%`, `@Stagg`, or DM `Stagg#4282` to trigger the bot',
-            'Use CLI-style space-separated commands and arguments.',
-            'eg: Get all Warzone stats for `MellowD#6992980`',
-            '```% wz all MellowD#6992980```',
+            '———————————————————————————',
+            '**# First time users                                                                              #**',
+            '———————————————————————————',
+            'Before using the bot, you must first login to your Call of Duty account at https://stagg.co/login',
+            'When logging in for the first time allow a few minutes for your match history to be gathered.',
+            '(Discord registration/login coming soon!)',
+            '',
+            '———————————————————————————',
+            '**# Using the bot                                                                                  #**',
+            '———————————————————————————',
+            'Start messages with `%`, `@Stagg`, or DM `Stagg#4282` to trigger the bot and use the commands below; example:',
+            '```',
+            '% search MellowD',
+            '```',
             'Available commands:',
             '- `help` Get help using the Stagg Discord bot',
             '- `meta` Get stats on the overall Stagg system',
             '- `register <email>` Register your Discord account to your email',
             '- `search <username> <platform?>` Find profiles matching your query',
             '- `wz all <username> <platform?>` Show all aggregated BR stats',
-            '- `wz combined <username> <platform?>` Aggregated stats from all BR modes',
             '- `wz solos <username> <platform?>` Aggregated stats from all BR Solos matches',
             '- `wz duos <username> <platform?>` Aggregated stats from all BR Duos matches',
             '- `wz trios <username> <platform?>` Aggregated stats from all BR Trios matches',
             '- `wz quads <username> <platform?>` Aggregated stats from all BR Quads matches',
+            '- `wz combined <username> <platform?>` Aggregated stats from all BR modes',
             '',
             'Any arguments that end with `?` are optional (eg: `<platform?>`); default values are listed below:',
             '- `<platform?>` uno (Activision)',
             '',
-            'Please note that aggregate commands (`wz stats`, etc) process your _entire match history_ so please be patient, it is most likely fetching hundreds or thousands of matches.',
-            '',
-            'If you would like to add the Stagg Discord Bot to your own server, click the link below:',
+            'If you want this humble binary buck in your server, click the link below:',
             'https://discord.com/oauth2/authorize?client_id=723179755548967027&scope=bot&permissions=67584',
         ])
     }
 
     protected async cmd_meta() {
         const mongo = await Mongo.Client()
-        const matches = await mongo.collection('matches.wz').count()
-        const players = await mongo.collection('players').count()
-        const performances = await mongo.collection('performances.wz').count()
+        const players = await mongo.collection('players').countDocuments()
+        const matches = await mongo.collection('matches.wz').countDocuments()
+        const performances = await mongo.collection('performances.wz').countDocuments()
         return this.FormatOutput([
-            'Stagg Meta',
             '```',
             `Players: ${commaNum(players)}`,
             `Matches: ${commaNum(performances)}`,
