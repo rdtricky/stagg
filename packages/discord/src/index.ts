@@ -98,6 +98,8 @@ export default class {
             'Any arguments that end with `?` are optional (eg: `<platform?>`); default values are listed below:',
             '- `<platform?>` uno (Activision)',
             '',
+            'Additional support may be provided on an as-needed basis in the `#help` channel here: https://discord.gg/yV2RjJK',
+            '',
             'If you want this humble binary buck in your server, click the link below:',
             'https://discord.com/oauth2/authorize?client_id=723179755548967027&scope=bot&permissions=67584',
         ])
