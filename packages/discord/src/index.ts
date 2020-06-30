@@ -59,8 +59,8 @@ export default class {
         })
     }
     protected async CommandDispatcher(msg:Message, cmd:string, ...args:any):Promise<string> {
-        if (!this[`cmd_${cmd}`]) return this.cmd_unrecognized()
-        return await this[`cmd_${cmd}`](msg, ...args)
+        if (!this[`cmd_${cmd.toLowerCase()}`]) return this.cmd_unrecognized()
+        return await this[`cmd_${cmd.toLowerCase()}`](msg, ...args)
     }
 
     protected cmd_unrecognized():string {
@@ -144,15 +144,14 @@ export default class {
 
     protected async cmd_wz_stats(msg:Message, output:string, username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<string> {
         const db = await Mongo.Client()
-        const player = await db.collection('players').findOne({ [`profiles.${platform}`]: username })
+        const player = await db.collection('players').findOne({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
         if (!player) return this.FormatOutput(['Player not found, did you forget to register? Try `help`'])
         const performances = await db.collection('performances.wz').find({ 'player._id': player._id }).toArray() as Mongo.T.CallOfDuty.Schema.Performance[]
-        const brPerformances = performances.filter(p => !p.modeId.toLowerCase().includes('tdm') && !p.modeId.toLowerCase().includes('dmz'))
-        if (!brPerformances.length) return this.FormatOutput([`No matches found for ${username}`])
         const staggEmpty = { games: 0, wins: 0, top5: 0, top10: 0, kills: 0, deaths: 0, downs: 0, loadouts: 0, gulagWins: 0, gulagGames: 0, damageDone: 0, damageTaken: 0 }
         const staggAll = { ...staggEmpty }
         const staggModes = {}
-        for(const p of brPerformances) {
+        for(const p of performances) {
+            if (p.modeId.toLowerCase().includes('tdm') || p.modeId.toLowerCase().includes('dmz')) continue
             staggAll.games++
             staggAll.kills += p.stats.kills
             staggAll.deaths += p.stats.deaths
@@ -263,7 +262,7 @@ export default class {
         }
         return this.FormatOutput([
             `**${username}** (${player.uno})`,
-            `Full profile: https://stagg.co/u/${username.split('#').join('@')}`,
+            `Full profile: https://stagg.co/wz/${username.split('#').join('@')}`,
             '```',
             ...outputLines,
             '```',
