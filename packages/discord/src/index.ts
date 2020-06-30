@@ -148,6 +148,7 @@ export default class {
         if (!player) return this.FormatOutput(['Player not found, did you forget to register? Try `help`'])
         const performances = await db.collection('performances.wz').find({ 'player._id': player._id }).toArray() as Mongo.T.CallOfDuty.Schema.Performance[]
         const brPerformances = performances.filter(p => !p.modeId.toLowerCase().includes('tdm') && !p.modeId.toLowerCase().includes('dmz'))
+        if (!brPerformances.length) return this.FormatOutput([`No matches found for ${username}`])
         const staggEmpty = { games: 0, wins: 0, top5: 0, top10: 0, kills: 0, deaths: 0, downs: 0, loadouts: 0, gulagWins: 0, gulagGames: 0, damageDone: 0, damageTaken: 0 }
         const staggAll = { ...staggEmpty }
         const staggModes = {}
@@ -165,6 +166,10 @@ export default class {
             if (p.stats.gulagKills >= 1)                      staggAll.gulagWins++
             if (p.stats.gulagKills || p.stats.gulagDeaths)    staggAll.gulagGames++
             const mode = CallOfDuty.Warzone.modeMap[p.modeId]
+            if (!mode) { // If we don't know what the game mode is say fuck it and guess quads?
+                mode.type = 'br'
+                mode.teamSize = 4
+            }
             if (!staggModes[mode.teamSize]) staggModes[mode.teamSize] = { ...staggEmpty }
             staggModes[mode.teamSize].games++
             staggModes[mode.teamSize].kills += p.stats.kills

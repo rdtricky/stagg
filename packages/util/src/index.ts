@@ -24,6 +24,7 @@ export namespace CallOfDuty {
             'br_brtrios':   { type: 'br', teamSize: 3 },
             'br_89':        { type: 'br', teamSize: 4 },
             'br_brquads':   { type: 'br', teamSize: 4 },
+            'br_86':        { type: 'br', teamSize: 4, realism: true },
             'br_br_real':   { type: 'br', teamSize: 4, realism: true },
             'br_dmz_38':    { type: 'plunder', teamSize: 3 },
             'br_dmz_76':    { type: 'plunder', teamSize: 4 },
