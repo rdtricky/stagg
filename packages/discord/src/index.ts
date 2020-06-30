@@ -96,7 +96,7 @@ export default class {
             '- `wz combined <username> <platform?>` Aggregated stats from all BR modes',
             '',
             'Any arguments that end with `?` are optional (eg: `<platform?>`); default values are listed below:',
-            '- `<platform?>` uno (Activision)',
+            '- `<platform?> = uno` (Activision)',
             '',
             'Additional support may be provided on an as-needed basis in the `#help` channel here: https://discord.gg/yV2RjJK',
             '',

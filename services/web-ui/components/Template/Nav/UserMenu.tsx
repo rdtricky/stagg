@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useOnClickOutside } from '../../../hooks'
 
 const Wrapper = styled.span`
     margin-left: 1.25rem;
@@ -22,9 +23,11 @@ const Wrapper = styled.span`
 `
 
 export default () => {
+    const ref = useRef()
     const [open, setOpen] = useState(false)
+    useOnClickOutside(ref, () => setOpen(false))
     return (
-        <Wrapper className={[open ? 'open' : '', 'menu-wrapper'].join(' ')}>
+        <Wrapper ref={ref} className={[open ? 'open' : '', 'menu-wrapper'].join(' ')}>
             {
                 !open ? null : (
                     <aside>

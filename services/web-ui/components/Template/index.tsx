@@ -27,46 +27,14 @@ const Overlay = styled.div`
     height: 100%;
 `
 
-const FontLoader = () => {
-    return (
-        <Head>
-            <link rel="stylesheet" href="/assets/css/icomoon.css" media="all" />
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700%7COpen+Sans:300,400,700&amp;subset=latin,latin,latin" media="all" />
-        </Head>
-    )
-}
-
-const GlobalStyle = () => (
-    <style jsx global>
-        {`
-            html,
-            body {
-                color: #fff;
-                padding: 0;
-                margin: 0;
-                background-color: #0d121a;
-                font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-                Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-                sans-serif;
-            }
-
-            a {
-                color: inherit;
-                text-decoration: inherit;
-            }
-
-            * {
-                box-sizing: border-box;
-            }
-        `}
-    </style>
-)
-
 export default ({ children }) => {
     return (
         <Container>
-            <GlobalStyle />
-            <FontLoader />
+            <Head>
+                <link rel="stylesheet" href="/assets/css/base.css" media="all" />
+                <link rel="stylesheet" href="/assets/css/icomoon.css" media="all" />
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700%7COpen+Sans:300,400,700&amp;subset=latin,latin,latin" media="all" />
+            </Head>
             <Overlay>
                 <Nav />
                 <Main>

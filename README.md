@@ -17,7 +17,6 @@ PRs are always welcome!
 - Multiplayer API/types
 - Testing and error reporting
 - Login/Platforms/Friends types
-- Add Discord to player when applicable
 
 ### Publishing
 

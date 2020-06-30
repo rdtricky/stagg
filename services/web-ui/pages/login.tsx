@@ -10,7 +10,7 @@ import LoginService from '../services/login'
 import * as Store from '../store'
 import config from '../config'
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   height: 80vh;
   margin-bottom: -30rem;
   .centered-container {
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   }
 `
 
-const FormWrapper = styled.div`
+export const FormWrapper = styled.div`
     border-radius: 0.5rem;
     box-shadow: 0px 0px 30px -15px #999999 inset;
     background-image: url('/assets/img/cod.banner.png');
@@ -47,7 +47,7 @@ const FormWrapper = styled.div`
     }
 `
 
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
     * {
         color: white !important;
         border-color: white !important;
@@ -84,7 +84,7 @@ const InputWrapper = styled.div`
     }
 `
 
-const Spacer = styled.div`
+export const Spacer = styled.div`
     height: 0.5rem;
 `
 

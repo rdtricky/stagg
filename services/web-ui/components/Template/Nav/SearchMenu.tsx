@@ -1,7 +1,8 @@
-import { useState, useContext } from 'react'
+import { useRef, useState, useContext } from 'react'
 import styled from 'styled-components'
 import searchService from '../../../services/search'
 import * as Store from '../../../store'
+import { useOnClickOutside } from '../../../hooks'
 
 const Wrapper = styled.span`
     aside {
@@ -40,9 +41,11 @@ const Wrapper = styled.span`
 `
 
 export default (props?:any) => {
+    const ref = useRef()
     const [open, setOpen] = useState(false)
     const [input, setInput] = useState('')
     const [results, setResults] = useState([])
+    useOnClickOutside(ref, () => setOpen(false))
     const store = useContext(Store.Context)
     const updateSearch = async (input:string) => {
         setInput(input)
@@ -63,7 +66,7 @@ export default (props?:any) => {
         }
     }
     return (
-        <Wrapper className={[open ? 'open' : '', 'menu-wrapper'].join(' ')}>
+        <Wrapper ref={ref} className={[open ? 'open' : '', 'menu-wrapper'].join(' ')}>
             {
                 !open ? null : (
                     <aside>

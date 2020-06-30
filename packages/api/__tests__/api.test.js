@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-const api = require('..');
+const api = require('..')
 
 describe('api', () => {
-    it('needs tests');
-});
+    it('needs tests')
+})
