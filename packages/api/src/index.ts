@@ -29,6 +29,7 @@ export namespace Mail {
             user: address,
             pass: password,
         })({ html }, (error, result, fullResult) => error ? reject(error) : resolve({ result, fullResult }))
+        console.log(`[>] Mail: sent "${subject}" to ${to}`)
     })
     export const SendConfirmation = async (email:string, extendedPayload:{[key:string]:any}={}) => {
         if (!JWT.secret) throw new Error('Email confirmation JWT secret not initialized')
