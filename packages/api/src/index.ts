@@ -44,7 +44,11 @@ export namespace User {
     export const ConfirmEmail = async (token:string) => {
         if (!JWT.secret) throw new Error('Confirm email JWT secret not initialized')
         try {
-            const { email, discord } = jwt.verify(token, JWT.secret)
+            const decoded = jwt.verify(token, JWT.secret)
+            if (decoded.email && decoded.discord) {
+                
+            }
+            return true
         } catch(e) {
             return false
         }
