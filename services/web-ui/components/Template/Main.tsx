@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const Container = styled.main`
     padding: 1rem;
-    min-height: calc(90vh - 4rem);
+    min-height: calc(100vh - 7.25rem);
 `
 
 export default (props) => {

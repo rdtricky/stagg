@@ -9,9 +9,6 @@ export interface Config {
         password: string
     }
     jwt: string
-    discord: {
-        token: string
-    }
     gmail: {
         user: string
         pass: string
@@ -26,11 +23,8 @@ export default {
         user: process.env.MONGO_USER,
         password: process.env.MONGO_PASS,
     },
-    discord: {
-        token: process.env.DISCORD_TOKEN,
-    },
     gmail: {
         user: process.env.GMAIL_ADDRESS,
         pass: process.env.GMAIL_PASSWORD,
-    }
+    },
 } as Config

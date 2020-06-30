@@ -39,7 +39,6 @@ export const FormWrapper = styled.div`
     font-family: "Open Sans Condensed", Verdana, Arial, Helvetica, sans-serif;
     h2 {
         font-size: 22px;
-        font-spacing: normal;
         font-weight: bold;
         font-style: normal;
         text-transform: uppercase;

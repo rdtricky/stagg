@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const Container = styled.footer`
+    margin: 0;
     height: 3rem;
-    margin: 0.5rem;
     text-align: center;
     a, a:hover, a:active, a:visited {
         position: relative;
