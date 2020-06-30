@@ -1,6 +1,6 @@
 {
   "name": "@stagg/api",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
@@ -18,8 +18,8 @@
   },
   "gitHead": "99a8f035e435013dd096eae0f9550fa4f6c08bf4",
   "dependencies": {
-    "@stagg/datasources": "^0.0.30",
-    "@stagg/mongo": "^0.0.30",
+    "@stagg/datasources": "^0.0.31",
+    "@stagg/mongo": "^0.0.31",
     "gmail-send": "^1.8.10",
     "jsonwebtoken": "^8.5.1"
   },
