@@ -20,6 +20,7 @@
   "dependencies": {
     "@stagg/datasources": "^0.0.33",
     "@stagg/mongo": "^0.0.33",
+    "@stagg/util": "^0.0.33",
     "gmail-send": "^1.8.10",
     "jsonwebtoken": "^8.5.1"
   },
