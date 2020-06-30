@@ -1,6 +1,6 @@
 {
   "name": "@stagg/discord",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
@@ -17,8 +17,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@stagg/datasources": "^0.0.32",
-    "@stagg/mongo": "^0.0.32",
+    "@stagg/datasources": "^0.0.33",
+    "@stagg/mongo": "^0.0.33",
     "discord.js": "^12.2.0"
   },
   "gitHead": "99a8f035e435013dd096eae0f9550fa4f6c08bf4"
