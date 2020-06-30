@@ -19,7 +19,16 @@ steps:
       args: [ '-c', 'gcloud secrets versions access latest --secret=MONGO_PASS > build/.env.MONGO_PASS' ]
     - name: gcr.io/cloud-builders/gcloud
       entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=JWT_SECRET > build/.env.JWT_SECRET' ]
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
       args: [ '-c', 'gcloud secrets versions access latest --secret=DISCORD_TOKEN > build/.env.DISCORD_TOKEN' ]
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=GMAIL_ADDRESS > build/.env.GMAIL_ADDRESS' ]
+    - name: gcr.io/cloud-builders/gcloud
+      entrypoint: 'bash'
+      args: [ '-c', 'gcloud secrets versions access latest --secret=GMAIL_PASSWORD > build/.env.GMAIL_PASSWORD' ]
     - name: node:12.13.0
       entrypoint: yarn
       args: ['gcp:build']
