@@ -1,6 +1,6 @@
 {
   "name": "@stagg/scrape",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
@@ -17,9 +17,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@stagg/datasources": "^0.0.36",
-    "@stagg/mongo": "^0.0.36",
-    "@stagg/util": "^0.0.36"
+    "@stagg/datasources": "^0.0.37",
+    "@stagg/mongo": "^0.0.37",
+    "@stagg/util": "^0.0.37"
   },
   "gitHead": "99a8f035e435013dd096eae0f9550fa4f6c08bf4",
   "devDependencies": {
