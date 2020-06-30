@@ -45,9 +45,6 @@ export namespace User {
         if (!JWT.secret) throw new Error('Confirm email JWT secret not initialized')
         try {
             const decoded = jwt.verify(token, JWT.secret)
-            if (decoded.email && decoded.discord) {
-                
-            }
             return true
         } catch(e) {
             return false
