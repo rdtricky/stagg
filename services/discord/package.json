@@ -1,6 +1,6 @@
 {
   "name": "stagg-discord",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "author": "Dan Lindsey",
   "main": "dist/index.js",
   "private": true,
@@ -11,10 +11,10 @@
     "test": "exit 0"
   },
   "dependencies": {
-    "@stagg/api": "^0.0.35",
-    "@stagg/datasources": "^0.0.35",
-    "@stagg/discord": "^0.0.35",
-    "@stagg/mongo": "^0.0.35",
+    "@stagg/api": "^0.0.36",
+    "@stagg/datasources": "^0.0.36",
+    "@stagg/discord": "^0.0.36",
+    "@stagg/mongo": "^0.0.36",
     "cors": "^2.8.5",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
