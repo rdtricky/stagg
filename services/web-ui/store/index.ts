@@ -5,6 +5,10 @@ export const { Instance, Context } = MobX
 export namespace Types {
     export type Match = any
     export type Performance = any
+    export interface User {
+        profile: Profile
+        settings: {}
+    }
     export interface Profile {
         mode: string
         platform: string

@@ -4,6 +4,7 @@ import { createContext } from 'react'
 import { Types } from './index'
 
 export class Instance {
+    @observable public user:Types.User
     @observable private _profiles:Types.Profile[] = []
     get profiles() { return [...this._profiles.map((p:Types.Profile) => ({...p, key: `${p.mode}:${p.platform}:${p.username}`}))] }
     addProfile(profile:Types.Profile) {
