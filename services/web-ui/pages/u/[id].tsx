@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
+import { commaNum } from '@stagg/util'
 import Card from '../../components/Card'
 import Center from '../../components/Center'
 import Template from '../../components/Template'
@@ -53,11 +54,11 @@ const Page = ({ user, count, domain }) => {
   return (
     <Template user={user} domain={domain}>
         <Head>
-            <title>{ isMe ? '(ME) ' : '' }{ username } : { count.performances } Matches | Call of Duty Warzone</title>
+            <title>{ isMe ? '(ME) ' : '' }{ username } : { commaNum(count.performances) } Matches | Call of Duty Warzone</title>
         </Head>
         <Center>
             {
-                !performances.length ? <h1>Loading { count.performances } matches...</h1> : (
+                !performances.length ? <h1>Loading { commaNum(count.performances) } matches...</h1> : (
                     <>
                         
                         <Card label={`${performances.map(p => p.stats.kills).reduce((a,b) => a+b, 0)} kills`}>
