@@ -1,142 +1,97 @@
+import ordinal from 'ordinal'
 import { Line } from 'react-chartjs-2'
-import styled from 'styled-components'
 
-const Container = styled.div`
-
-`
 const colors = [
   '#ffa600',
   '#f95d6a',
   '#d45087',
-  '#665191',
   '#a05195',
   '#f95d6a',
   '#ff7c43',
-  '#003f5c',
-  '#2f4b7c',
 ]
-const data = {
-    labels: ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'],
-    datasets: [
-      {
-        label: 'MellowD',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: colors[0],
-        borderColor: colors[0],
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: colors[0],
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: colors[0],
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: [65, 59, 80, 81, 56, 55, 40]
-      },
-      {
-        label: 'SirSicksALot',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: colors[1],
-        borderColor: colors[1],
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: colors[1],
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: colors[1],
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: [32, 43, 74, 65, 45, 23, 75]
-      },
-      {
-        label: '[E] MellowD',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: colors[2],
-        borderColor: colors[2],
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: colors[2],
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: colors[2],
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: [19, 34, 62, 46, 25, 75, 34]
-      },
-      {
-        label: '[E] SirSicksALot',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: colors[3],
-        borderColor: colors[3],
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: colors[3],
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: colors[3],
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: [53, 42, 13, 54, 12, 42, 64]
-      }
-    ]
-  }
+
+const randomInt = (max:number):number => Math.floor(Math.random() * Math.floor(max))
 
 interface Props {
+  lines:{ label: string, data: number[], color?:string }[]
+  xStep?:number
+  yStep?:number
   expanded?:boolean
+  labelType?:'ordinal'|'none'
 }
-export default ({expanded=false}:Props) => {
+export default ({expanded=false, lines, labelType='ordinal', yStep=10, xStep=1}:Props) => {
   const options = {
     legend: {
       display: false,
       labels: {
-          fontColor: "white",
+          fontColor: "rgba(255, 255, 255, 0.5)",
           fontSize: 18
       }
     },
     scales: {
         yAxes: [{
             ticks: {
-                fontColor: "white",
+                fontColor: "rgba(255, 255, 255, 0.5)",
                 fontSize: 18,
-                stepSize: 10,
+                stepSize: yStep,
                 beginAtZero: true
             }
         }],
         xAxes: [{
             ticks: {
-                fontColor: "white",
+                fontColor: "rgba(255, 255, 255, 0.5)",
                 fontSize: 14,
-                stepSize: 1,
+                stepSize: xStep,
                 beginAtZero: true
             }
         }]
     }
   }
+  const data = {
+    labels: [],
+    datasets: []
+  }
+  const randomStartingColorIndex = randomInt(colors.length-1)
+  for(const line of lines) {
+    if (data.labels.length < line.data.length) data.labels = Object.keys(line.data).map(i => labelType === 'ordinal' ? ordinal(Number(i)+1) : '')
+    const colorIndex = (randomStartingColorIndex + data.datasets.length) % colors.length
+    const color = line.color ? line.color : colors[colorIndex]
+    const genericDataset = {
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: color,
+      borderColor: color,
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: color,
+      pointBackgroundColor: '#fff',
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: color,
+      pointHoverBorderColor: 'rgba(220,220,220,1)',
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+    }
+    const avg = line.data.reduce((a,b) => a+b, 0) / line.data.length
+    data.datasets.push({
+      ...genericDataset,
+      label: `(AVG) ${line.label}`,
+      data: line.data.map(() => avg),
+      borderColor: 'rgba(0, 0, 255, 0.5)',
+      backgroundColor: 'rgba(0, 0, 255, 0.5)',
+      pointBorderColor: 'rgba(0, 0, 255, 0.25)',
+      pointBackgroundColor: 'rgba(0, 0, 255, 0.25)',
+      pointHoverBackgroundColor: 'rgba(0, 0, 255, 0.5)',
+    })
+    data.datasets.push({
+      ...genericDataset,
+      label: line.label,
+      data: line.data
+    })
+  }
   options.legend.display = expanded
-  console.log("Expanded:", options.legend.display)
   return <Line options={options} data={data} />
 }

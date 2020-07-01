@@ -6,9 +6,8 @@ import Template from '../components/Template'
 import { Wrapper, FormWrapper } from './login'
 
 
-export const Page = ({ user }) => {
+export const Page = ({ user, domain }) => {
   const { query } = useRouter()
-  console.log(query)
   return (
     <Template user={user} domain={domain}>
       <Head>

@@ -109,7 +109,6 @@ export default ({ user, domain }) => {
     })
     const { jwt, error } = await login.json()
     if (error) {
-      console.log('got error', error)
       return formErr(JSON.stringify(Object.keys(error)))
     }
     Cookies.set('jwt', jwt, { expires: 365 })

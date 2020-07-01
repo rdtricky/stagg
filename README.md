@@ -30,6 +30,8 @@ Probably only need data-sources (rename back to api?) and mongo for schema
 - Multiplayer API/types
 - Testing and error reporting
 - Login/Platforms/Friends types
+- Some teamPlacement props are 0
+- Backfill rankedTeams with TRN whenever possible
 
 ### Publishing
 

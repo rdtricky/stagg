@@ -47,10 +47,11 @@ export const ping = async (req,res) => {
 }
 
 export const download = async (req,res) => {
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
     const mongo = await Mongo.Client()
-    mongo.collection('performances.wz').find({ 'stats.teamPlacement': { $lt: 11 } }).pipe(JSONStream.stringify()).pipe(res)
+    const { username, platform } = req.query
+    const player = await Mongo.CallOfDuty.Get.Player(username, platform)
+    if (!player) return res.status(404).send({ error: 'player not found' })
+    mongo.collection('performances.wz').find({ 'player._id': player._id }).pipe(JSONStream.stringify()).pipe(res)
 }
 
 export const login = async (req,res) => {
@@ -90,7 +91,6 @@ export const login = async (req,res) => {
         const jwt = JWT.sign({ email }, cfg.jwt)
         res.status(200).send({ jwt })
     } catch(error) {
-        console.log(error)
         res.status(500).send({ error })
     }
 }
