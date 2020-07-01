@@ -11,9 +11,7 @@
     "test": "exit 0"
   },
   "dependencies": {
-    "@stagg/api": "^0.0.37",
     "@stagg/datasources": "^0.0.37",
-    "@stagg/discord": "^0.0.37",
     "@stagg/mongo": "^0.0.37",
     "cors": "^2.8.5",
     "discord.js": "^12.2.0",
