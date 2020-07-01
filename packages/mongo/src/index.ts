@@ -42,15 +42,18 @@ export namespace T {
                     failures:  number
                     timestamp: number
                 }
+                prevAuth?: Player.Auth[]
+                prevEmails?: string[]
             }
             export namespace Player {
+                export interface Auth {
+                    sso: string
+                    xsrf: string
+                    atkn: string
+                }
                 export interface Scaffold {
                     email: string
-                    auth: {
-                        sso: string
-                        xsrf: string
-                        atkn: string
-                    }
+                    auth: Auth
                 }
             }
             export interface Loadout {

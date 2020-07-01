@@ -7,10 +7,12 @@ const PageRender = ({ Component, pageProps }:AppProps) => {
 }
 PageRender.getInitialProps = async (appContext) => {
     const appProps = await App.getInitialProps(appContext)
-    const inheritedProps = { ...appProps, pageProps: { ...appProps.pageProps } }
+    const host = appContext.ctx.req.headers.host
+    const domain = host.includes('localhost') ? `http://${host}` : `https://${host}`
+    const inheritedProps = { ...appProps, pageProps: { ...appProps.pageProps, domain } }
     const cookies = cookie.parse(appContext.ctx.req.headers.cookie || '')
     if (cookies.jwt) {
-        const jwtRes = await fetch(`http://localhost:8080/api/jwt?t=${cookies.jwt}`)
+        const jwtRes = await fetch(`${domain}/api/jwt?t=${cookies.jwt}`)
         const jwtJson = await jwtRes.json()
         inheritedProps.pageProps.user = jwtJson
     }

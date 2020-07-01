@@ -10,6 +10,8 @@ You will need a `.env` file in the root of each service you intend to run for lo
 
 PRs are always welcome!
 
+Probably only need data-sources (rename back to api?) and mongo for schema
+
 #### Call of Duty API
 
 - WZ/MP Profiles

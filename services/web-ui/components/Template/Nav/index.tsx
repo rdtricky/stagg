@@ -2,7 +2,6 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import { Button } from '@material-ui/core'
 import SearchMenu from './SearchMenu'
-import ProfilesMenu from './ProfilesMenu'
 import Logo from './Logo'
 import UserMenu from './UserMenu'
 
@@ -58,7 +57,7 @@ const UserActionsContainer = styled.div`
     }
 `
 
-export default ({ user }) => {
+export default ({ user, domain }) => {
     return (
         <Wrapper>
             <Container>
@@ -67,8 +66,7 @@ export default ({ user }) => {
                     {
                         !user ? <Link href="/login"><a><Button variant="contained" color="primary">Sign in</Button></a></Link> : (
                             <>
-                                <SearchMenu />
-                                <ProfilesMenu />
+                                <SearchMenu domain={domain} />
                                 <UserMenu />
                             </>
                         )

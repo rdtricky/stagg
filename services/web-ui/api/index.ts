@@ -7,8 +7,11 @@ import cfg from '../config/api'
 Mongo.Config(cfg.mongo)
 
 export const jwt = async (req, res) => {
-    const decoded = JWT.verify(req.query.t, cfg.jwt)
-    res.send({ decoded })
+    try {
+        res.send(JWT.verify(req.query.t, cfg.jwt))
+    } catch(e) {
+        res.status(400).send({ error: 'invalid jwt' })
+    }
 }
 
 export const meta = async (req, res) => {
@@ -16,9 +19,31 @@ export const meta = async (req, res) => {
     const players = await mongo.collection('players').countDocuments()
     const matches = await mongo.collection('matches.wz').countDocuments()
     const performances = await mongo.collection('performances.wz').countDocuments()
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
     res.send({ players, matches, performances })
+}
+
+export const search = async (req,res) => {
+    const mongo = await Mongo.Client()
+    const { username, platform } = JSON.parse(req.body)
+    const queries = []
+    if (platform) {
+        queries.push({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
+    } else {
+        for(const p of ['uno', 'battle', 'xbl', 'psn']) {
+            queries.push({ [`profiles.${p}`]: { $regex: username, $options: 'i' } })
+        }
+    }
+    const players = await mongo.collection('players').find({ $or: queries }).toArray()
+    res.send(players.map(p => p.profiles))
+}
+
+export const ping = async (req,res) => {
+    const { username, platform } = JSON.parse(req.body)
+    const player = await Mongo.CallOfDuty.Get.Player(username, platform)
+    if (!player) return res.status(404).send({ error: 'player not found' })
+    const mongo = await Mongo.Client()
+    const performances = await mongo.collection('performances.wz').find({ 'player._id': player._id }).count()
+    res.send({ performances })
 }
 
 export const download = async (req,res) => {

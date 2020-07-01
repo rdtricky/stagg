@@ -27,7 +27,7 @@ const Overlay = styled.div`
     height: 100%;
 `
 
-export default ({ children, user }) => {
+export default ({ children, user, domain }) => {
     return (
         <Container>
             <Head>
@@ -36,7 +36,7 @@ export default ({ children, user }) => {
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700%7COpen+Sans:300,400,700&amp;subset=latin,latin,latin" media="all" />
             </Head>
             <Overlay>
-                <Nav user={user} />
+                <Nav user={user} domain={domain} />
                 <Main>
                     { children }
                 </Main>

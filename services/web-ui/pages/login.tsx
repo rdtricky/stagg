@@ -87,7 +87,7 @@ export const Spacer = styled.div`
 `
 
 enum Status { Idle, Loading, Success, Error }
-export default ({ user }) => {
+export default ({ user, domain }) => {
   if (user) try { Router.push(config.login.forward.url) } catch(e) {}
   const [form, setForm] = useState({ status: Status.Idle, input: { email: '', password: '' }, response: '' })
   const buttonDisabled = form.status === Status.Loading || form.status === Status.Success
@@ -103,7 +103,7 @@ export default ({ user }) => {
     if (!form.input.email) return formErr('email required')
     if (!form.input.email.match(/^[^@]+@[^\.]+\..+$/)) return formErr('invalid email')
     if (!form.input.password) return formErr('password required')
-    const login = await fetch('http://localhost:8080/api/login', {
+    const login = await fetch(`${domain}/api/login`, {
       method: 'POST',
       body: JSON.stringify(form.input)
     })
@@ -117,7 +117,7 @@ export default ({ user }) => {
     setTimeout(() => Router.push(config.login.forward.url), config.login.forward.delay)
   }
   return (
-    <Template user={user}>
+    <Template user={user} domain={domain}>
       <Head>
         <title>Sign in to your Call of Duty account</title>
       </Head>

@@ -1,7 +1,5 @@
-import { useRef, useState, useContext } from 'react'
+import { useRef, useState } from 'react'
 import styled from 'styled-components'
-import searchService from '../../../services/search'
-import * as Store from '../../../store'
 import { useOnClickOutside } from '../../../hooks'
 
 const Wrapper = styled.span`
@@ -40,39 +38,34 @@ const Wrapper = styled.span`
     }
 `
 
-export default (props?:any) => {
+export default ({ domain }) => {
     const ref = useRef()
     const [open, setOpen] = useState(false)
     const [input, setInput] = useState('')
     const [results, setResults] = useState([])
     useOnClickOutside(ref, () => setOpen(false))
-    const store = useContext(Store.Context)
     const updateSearch = async (input:string) => {
         setInput(input)
         if (input.length > 1) {
-            const profiles = await searchService(input)
-            setResults(profiles.filter(p => p.ATV).map(p => p.ATV))
+            const search = await fetch(`${domain}/api/search`, {
+                method: 'POST',
+                body: JSON.stringify({ username: input, platform: 'uno' })
+            })
+            const players = await search.json()
+            setResults(players.filter(p => p.profiles).map(p => p.profiles.uno))
         }
     }
-    const addProfile = (username:string) => {
-        if (confirm(`Start tracking profile ${username}?`)) {
-            setInput('')
-            setResults([])
-            store.addProfile({
-                mode: 'wz',
-                platform: 'ATV',
-                username,
-            })
-        }
+    const clickProfile = (username) => {
+
     }
     return (
         <Wrapper ref={ref} className={[open ? 'open' : '', 'menu-wrapper'].join(' ')}>
             {
                 !open ? null : (
                     <aside>
-                        <input placeholder="Search players to compare..." type="text" value={input} onChange={async (e) => await updateSearch(e.target.value)} />
+                        <input placeholder="Search players to compare..." type="text" value={input} onChange={e => updateSearch(e.target.value)} />
                         <ul>
-                            { !input.length ? null : results.map(r => <li key={r} onClick={() => addProfile(r)}>{r}</li>) }
+                            { !input.length ? null : results.map(r => <li key={r} onClick={() => clickProfile(r)}>{r}</li>) }
                         </ul>
                     </aside>
                 )

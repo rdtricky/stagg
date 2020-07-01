@@ -6,11 +6,11 @@ import Template from '../components/Template'
 import { Wrapper, FormWrapper } from './login'
 
 
-export const Page = () => {
+export const Page = ({ user }) => {
   const { query } = useRouter()
   console.log(query)
   return (
-    <Template>
+    <Template user={user} domain={domain}>
       <Head>
         <title>Email Confirmation</title>
       </Head>

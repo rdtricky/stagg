@@ -40,9 +40,9 @@ const GameWrapper = styled.div`
         text-align: center;
     }
 `
-const Page = ({ meta, user }) => {
+const Page = ({ meta, user, domain }) => {
     return (
-        <Template user={user}>
+        <Template user={user} domain={domain}>
             <Head>
                 <title>Call of Duty - Warzone</title>
             </Head>
@@ -64,8 +64,10 @@ const Page = ({ meta, user }) => {
     )
 }
 
-Page.getInitialProps = async () => {
-    const metaRes = await fetch('http://localhost:8080/api/meta')
+Page.getInitialProps = async (ctx) => {
+    const host = ctx.req.headers.host
+    const domain = host.includes('localhost') ? `http://${host}` : `https://${host}`
+    const metaRes = await fetch(`${domain}/api/meta`)
     const meta = await metaRes.json()
     return { meta }
 }
