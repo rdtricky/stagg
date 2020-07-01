@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Head from 'next/head'
 import { commaNum } from '@stagg/util'
 import styled from 'styled-components'
@@ -39,9 +40,9 @@ const GameWrapper = styled.div`
         text-align: center;
     }
 `
-const Page = ({ players, matches, performances }) => {
+const Page = ({ meta, user }) => {
     return (
-        <Template>
+        <Template user={user}>
             <Head>
                 <title>Call of Duty - Warzone</title>
             </Head>
@@ -49,11 +50,13 @@ const Page = ({ players, matches, performances }) => {
             <Center>
                 <GameWrapper>
                     <Center>
-                        <div>
-                            <img src="/assets/img/cod.png" alt="Call of Duty" />
-                            <h2>Modern Warfare</h2>
-                        </div>
-                        <p>{ commaNum(players) } players | { commaNum(performances) } matches | { commaNum(matches * 147) } enemies</p>
+                        <Link href="/login">
+                            <a>
+                                <img src="/assets/img/cod.png" alt="Call of Duty" />
+                                <h2>Modern Warfare</h2>
+                            </a>
+                        </Link>
+                        <p>{ commaNum(meta.players) } players | { commaNum(meta.performances) } matches | { commaNum(meta.matches * 147) } enemies</p>
                     </Center>
                 </GameWrapper>
             </Center>
@@ -62,9 +65,9 @@ const Page = ({ players, matches, performances }) => {
 }
 
 Page.getInitialProps = async () => {
-    const res = await fetch('http://localhost:8080/api/meta')
-    const json = await res.json()
-    return { ...json }
+    const metaRes = await fetch('http://localhost:8080/api/meta')
+    const meta = await metaRes.json()
+    return { meta }
 }
 
 export default observer(Page)

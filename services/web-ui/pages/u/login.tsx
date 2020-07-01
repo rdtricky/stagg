@@ -1,11 +1,13 @@
 import Head from 'next/head'
-import Cookies from 'js-cookie'
 import Router from 'next/router'
-import { useState } from 'react'
+import Cookies from 'js-cookie'
 import styled from 'styled-components'
+import { useState, useEffect, useContext } from 'react'
 import { TextField, Button } from '@material-ui/core'
 import Center from '../components/Center'
 import Template from '../components/Template'
+import LoginService from '../services/login'
+import * as Store from '../store'
 import config from '../config'
 
 export const Wrapper = styled.div`
@@ -86,38 +88,48 @@ export const Spacer = styled.div`
     height: 0.5rem;
 `
 
-enum Status { Idle, Loading, Success, Error }
 export default ({ user }) => {
-  if (user) try { Router.push(config.login.forward.url) } catch(e) {}
-  const [form, setForm] = useState({ status: Status.Idle, input: { email: '', password: '' }, response: '' })
-  const buttonDisabled = form.status === Status.Loading || form.status === Status.Success
-  const setEmail = (email:string) => setForm({ ...form, input: { ...form.input, email } })
-  const setPassword = (password:string) => setForm({ ...form, input: { ...form.input, password } })
-  const formErr = (err:string) => {
-    const newForm = {...form}
-    newForm.response = err
-    newForm.status = Status.Error
-    setForm(newForm)
-  }
-  const submitForm = async () => {
-    if (!form.input.email) return formErr('email required')
-    if (!form.input.email.match(/^[^@]+@[^\.]+\..+$/)) return formErr('invalid email')
-    if (!form.input.password) return formErr('password required')
-    const login = await fetch('http://localhost:8080/api/login', {
-      method: 'POST',
-      body: JSON.stringify(form.input)
-    })
-    const { jwt, error } = await login.json()
-    if (error) {
-      console.log('got error', error)
-      return formErr(JSON.stringify(Object.keys(error)))
+  const store = useContext(Store.Context)
+  const cookie = Cookies.get('player')
+  const [res, setRes] = useState({ error: false, msg: '' })
+  const [disabled, setDisabled] = useState(false)
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [player, setPlayer] = useState(!cookie ? null : JSON.parse(cookie))
+  const login = async () => {
+    if (!loginEmail) return setRes({ error: true, msg: 'email required' })
+    if (!loginPassword) return setRes({ error: true, msg: 'password required' })
+    setRes({ error: false, msg: '' })
+    setDisabled(true)
+    try {
+      const { email, profiles } = await LoginService(loginEmail, loginPassword)
+      if (!email || !profiles || !Object.keys(profiles).length) {
+        setRes({ error: true, msg: 'login failed' })
+        return
+      }
+      setRes({ error: false, msg: 'login successful, forwarding to dashboard...' })
+      setTimeout(() => setPlayer({ email, profiles }), config.login.forward.delay)
+    } catch(e) {
+      if (e?.toLowerCase().includes('captcha')) {
+        e = <a href={config.login.forgot.url} target="_blank">{e}</a>
+      }
+      setRes({ error: true, msg: e })
+      setDisabled(false)
     }
-    Cookies.set('jwt', jwt, { expires: 365 })
-    setForm({ ...form, status: Status.Success, response: 'login successful, one moment...'})
-    setTimeout(() => Router.push(config.login.forward.url), config.login.forward.delay)
   }
+  useEffect(() => {
+    if (player) {
+      Cookies.set('player', JSON.stringify(player), { expires: 365 })
+      store.addProfile({
+        mode: 'wz',
+        platform: 'ATV',
+        username: player.profiles.ATV
+      })
+      Router.push(config.login.forward.url)
+    }
+  }, [player])
   return (
-    <Template user={user}>
+    <Template>
       <Head>
         <title>Sign in to your Call of Duty account</title>
       </Head>
@@ -129,12 +141,12 @@ export default ({ user }) => {
                   <img src="/assets/img/cod.png" alt="Call of Duty" />
                   <h2>SIGN IN TO YOUR CALL OF DUTY ACCOUNT</h2>
                   <InputWrapper>
-                      <TextField autoComplete={'false'} label="Email" variant="outlined" onChange={e => setEmail(e.target.value)} />
+                      <TextField autoComplete={'false'} label="Email" variant="outlined" onChange={e => setLoginEmail(e.target.value)} />
                       <Spacer />
-                      <TextField autoComplete={'false'} label="Password" type="password" variant="outlined" onChange={e => setPassword(e.target.value)} />
+                      <TextField autoComplete={'false'} label="Password" type="password" variant="outlined" onChange={e => setLoginPassword(e.target.value)} />
                       <Spacer />
-                      <Button disabled={buttonDisabled} onClick={submitForm} variant="contained" color="primary">{ buttonDisabled ? 'Loading...' : 'Sign In' }</Button>
-                      <p className={['response', form.status === Status.Error ? '' : 'success'].join(' ')}>{form.response}</p>
+                      <Button disabled={disabled} onClick={login} variant="contained" color="primary">{ disabled ? 'Loading...' : 'Sign In' }</Button>
+                      <p className={['response', res.error ? '' : 'success'].join(' ')}>{res.msg}</p>
                   </InputWrapper>
               </Center>
           </FormWrapper>

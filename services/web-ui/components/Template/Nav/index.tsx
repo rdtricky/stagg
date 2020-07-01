@@ -1,4 +1,6 @@
+import Link from 'next/link'
 import styled from 'styled-components'
+import { Button } from '@material-ui/core'
 import SearchMenu from './SearchMenu'
 import ProfilesMenu from './ProfilesMenu'
 import Logo from './Logo'
@@ -56,75 +58,23 @@ const UserActionsContainer = styled.div`
     }
 `
 
-const asdf = styled.span`
-    position: absolute;
-    top: 0; right: 0;
-    padding: 1rem;
-    width: 50rem;
-
-    background: rgba(0, 0, 0, 0.75);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    width: 100%;
-
-    > *, > * > * {
-        float: right;
-    }
-    .menu-wrapper {
-        position: relative;
-        width: 3rem;
-    }
-    aside {
-        position: absolute;
-        right: 0;
-        top: 3.5rem;
-        padding: 0 0.5rem 0.5rem;
-        width: 20rem;
-        min-height: 2.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        background: rgba(0, 0, 0, 0.8);
-    }
-    .menu-button {
-        width: 2.5rem;
-        height: 2.5rem;
-        text-align: center;
-        color: rgba(255, 255, 255, 0.8);
-        cursor: pointer;
-        transition: all 0.2s ease-in-out;
-    }
-    .menu-button:hover {
-        color: #fff;
-    }
-    .menu-wrapper.open .menu-button {
-        border-right: none;
-    }
-    .menu-button > * {
-        display: block;
-        margin-top: 0.75rem;
-    }
-`
-export default (props:any) => {
+export default ({ user }) => {
     return (
         <Wrapper>
             <Container>
                 <Logo />
                 <UserActionsContainer>
-                    <SearchMenu {...props} />
-                    <ProfilesMenu {...props} />
-                    <UserMenu {...props} />
+                    {
+                        !user ? <Link href="/login"><a><Button variant="contained" color="primary">Sign in</Button></a></Link> : (
+                            <>
+                                <SearchMenu />
+                                <ProfilesMenu />
+                                <UserMenu />
+                            </>
+                        )
+                    }
                 </UserActionsContainer>
             </Container>
-        </Wrapper>
-    )
-}
-export const old = (props:any) => {
-    return (
-        <Wrapper>
-            <Logo />
-            <UserMenu {...props} />
-            <ProfilesMenu {...props} />
-            <SearchMenu {...props} />
-            <div style={{clear: 'both'}} />
         </Wrapper>
     )
 }
