@@ -7,7 +7,7 @@ Provided by [Stagg.co](https://stagg.co)
 Simply install the package and instantiate new instances with your own tokens.
 
 ```typescript
-import { CallOfDuty } from '@stagg/api'
+import { CallOfDuty } from '@stagg/datasources'
 (async () => {
     const tokens = {
         sso: '<YOUR-SSO-TOKEN-HERE>',
