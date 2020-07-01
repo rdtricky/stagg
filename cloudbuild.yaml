@@ -33,11 +33,9 @@ steps:
       entrypoint: yarn
       args: ['gcp:build']
     - name: gcr.io/cloud-builders/gcloud
-      args: ['app', 'deploy', 'services/api']
+      args: ['app', 'deploy', 'services/web-ui']
     - name: gcr.io/cloud-builders/gcloud
       args: ['app', 'deploy', 'services/discord']
-    - name: gcr.io/cloud-builders/gcloud
-      args: ['app', 'deploy', 'services/io']
     - name: gcr.io/cloud-builders/gcloud
       args: ['app', 'deploy', 'services/scrape']
     - name: gcr.io/cloud-builders/gcloud
