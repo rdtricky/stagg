@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useOnClickOutside } from '../../../hooks'
+import cfg from '../../../config'
 
 const Wrapper = styled.span`
     aside {
@@ -38,7 +39,7 @@ const Wrapper = styled.span`
     }
 `
 
-export default ({ domain }) => {
+export default ({}) => {
     const ref = useRef()
     const [open, setOpen] = useState(false)
     const [input, setInput] = useState('')
@@ -47,7 +48,7 @@ export default ({ domain }) => {
     const updateSearch = async (input:string) => {
         setInput(input)
         if (input.length > 1) {
-            const search = await fetch(`${domain}/api/search`, {
+            const search = await fetch(`${cfg.api.host}/search`, {
                 method: 'POST',
                 body: JSON.stringify({ username: input, platform: 'uno' })
             })

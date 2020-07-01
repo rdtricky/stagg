@@ -1,5 +1,6 @@
 export default {
-    http: {
+    api: {
+        host: 'http://localhost:8080/api',
         refresh: 10000,
     },
     login: {

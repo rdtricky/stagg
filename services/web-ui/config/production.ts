@@ -1,5 +1,6 @@
 export default {
-    http: {
+    api: {
+        host: 'https://stagg.co/api',
         refresh: 10000,
     },
     login: {

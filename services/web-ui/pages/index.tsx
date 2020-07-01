@@ -4,6 +4,7 @@ import { commaNum } from '@stagg/util'
 import styled from 'styled-components'
 import Center from '../components/Center'
 import Template from '../components/Template'
+import cfg from '../config'
 
 const GameWrapper = styled.div`
     position: relative;
@@ -39,11 +40,11 @@ const GameWrapper = styled.div`
         text-align: center;
     }
 `
-const Page = ({ meta, user, domain }) => {
+const Page = ({ meta, user }) => {
     const linkUrl = !user ? '/login' : '/u/[id]'
     const asLinkUrl = !user ? '/login' : `/u/${user.profiles?.uno?.split('#').join('@')}`
     return (
-        <Template user={user} domain={domain}>
+        <Template user={user}>
             <Head>
                 <title>Call of Duty - Warzone</title>
             </Head>
@@ -66,9 +67,7 @@ const Page = ({ meta, user, domain }) => {
 }
 
 Page.getInitialProps = async (ctx) => {
-    const host = ctx?.req?.headers?.host || window.location.host
-    const domain = host.includes('localhost') ? `http://${host}` : `https://${host}`
-    const metaRes = await fetch(`${domain}/api/meta`)
+    const metaRes = await fetch(`${cfg.api.host}/meta`)
     const meta = await metaRes.json()
     return { meta }
 }

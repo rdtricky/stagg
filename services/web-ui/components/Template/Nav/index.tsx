@@ -57,7 +57,7 @@ const UserActionsContainer = styled.div`
     }
 `
 
-export default ({ user, domain }) => {
+export default ({ user }) => {
     return (
         <Wrapper>
             <Container>
@@ -66,7 +66,7 @@ export default ({ user, domain }) => {
                     {
                         !user ? <Link href="/login"><a><Button variant="contained" color="primary">Sign in</Button></a></Link> : (
                             <>
-                                <SearchMenu domain={domain} />
+                                <SearchMenu />
                                 <UserMenu />
                             </>
                         )

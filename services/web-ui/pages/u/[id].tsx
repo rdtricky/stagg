@@ -10,6 +10,7 @@ import Radar from '../../components/charts/base/Radar'
 import Pie from '../../components/charts/base/Pie'
 import StatByRank from '../../components/charts/StatByRank'
 import StatOverTime from '../../components/charts/StatOverTime'
+import cfg from '../../config'
 
 const inferUsername = (id:string) => {
     const [name, slug] = id.split('@')
@@ -26,7 +27,7 @@ export interface Filters {
     }
 }
 
-const Page = ({ user, count, domain }) => {
+const Page = ({ user, count }) => {
   const router = useRouter()
   const [performances, setPerformances] = useState([])
   const username = inferUsername(router.query.id as string)
@@ -34,7 +35,7 @@ const Page = ({ user, count, domain }) => {
   const filters:Filters = { timeline: 100, stats: { teamPlacement: { max: 20 } } }
   useEffect(() => {
       (async () => {
-        const download = await fetch(`${domain}/api/download?platform=uno&username=${encodeURIComponent(username)}`)
+        const download = await fetch(`${cfg.api.host}/download?platform=uno&username=${encodeURIComponent(username)}`)
         const performances = await download.json()
         setPerformances(performances)
       })()
@@ -52,7 +53,7 @@ const Page = ({ user, count, domain }) => {
   })
 
   return (
-    <Template user={user} domain={domain}>
+    <Template user={user}>
         <Head>
             <title>{ isMe ? '(ME) ' : '' }{ username } : { commaNum(count.performances) } Matches | Call of Duty Warzone</title>
         </Head>
@@ -107,7 +108,7 @@ const Page = ({ user, count, domain }) => {
 
 Page.getInitialProps = async ({ query }) => {
     const username = inferUsername(query.id)
-    const ping = await fetch('http://localhost:8080/api/ping', {
+    const ping = await fetch(`${cfg.api.host}/ping`, {
         method: 'POST',
         body: JSON.stringify({ username, platform: 'uno' })
     })
