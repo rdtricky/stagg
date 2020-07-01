@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import JWT from 'jsonwebtoken'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 import { useState } from 'react'
@@ -88,7 +89,7 @@ export const Spacer = styled.div`
 
 enum Status { Idle, Loading, Success, Error }
 export default ({ user, domain }) => {
-  if (user) try { Router.push(config.login.forward.url) } catch(e) {}
+  if (user) try { Router.push('/u/[id]', `/u/${user.profiles.uno.split('#').join('@')}`) } catch(e) {}
   const [form, setForm] = useState({ status: Status.Idle, input: { email: '', password: '' }, response: '' })
   const buttonDisabled = form.status === Status.Loading || form.status === Status.Success
   const setEmail = (email:string) => setForm({ ...form, input: { ...form.input, email } })
@@ -111,9 +112,10 @@ export default ({ user, domain }) => {
     if (error) {
       return formErr(JSON.stringify(Object.keys(error)))
     }
+    const { profiles: { uno } } = JWT.decode(jwt) as any
     Cookies.set('jwt', jwt, { expires: 365 })
     setForm({ ...form, status: Status.Success, response: 'login successful, one moment...'})
-    setTimeout(() => Router.push(config.login.forward.url), config.login.forward.delay)
+    setTimeout(() => Router.push('/u/[id]', `/u/${uno.split('#').join('@')}`), config.login.forward.delay)
   }
   return (
     <Template user={user} domain={domain}>

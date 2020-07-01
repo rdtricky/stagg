@@ -4,7 +4,6 @@ export default {
     },
     login: {
         forward: {
-            url: '/dashboard',
             delay: 3000
         },
         forgot: {

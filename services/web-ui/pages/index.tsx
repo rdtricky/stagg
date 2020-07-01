@@ -40,6 +40,8 @@ const GameWrapper = styled.div`
     }
 `
 const Page = ({ meta, user, domain }) => {
+    const linkUrl = !user ? '/login' : '/u/[id]'
+    const asLinkUrl = !user ? '/login' : `/u/${user.profiles?.uno?.split('#').join('@')}`
     return (
         <Template user={user} domain={domain}>
             <Head>
@@ -49,7 +51,7 @@ const Page = ({ meta, user, domain }) => {
             <Center>
                 <GameWrapper>
                     <Center>
-                        <Link href="/login">
+                        <Link href={linkUrl} as={asLinkUrl}>
                             <a>
                                 <img src="/assets/img/cod.png" alt="Call of Duty" />
                                 <h2>Modern Warfare</h2>
@@ -64,7 +66,7 @@ const Page = ({ meta, user, domain }) => {
 }
 
 Page.getInitialProps = async (ctx) => {
-    const host = ctx.req.headers.host
+    const host = ctx?.req?.headers?.host || window.location.host
     const domain = host.includes('localhost') ? `http://${host}` : `https://${host}`
     const metaRes = await fetch(`${domain}/api/meta`)
     const meta = await metaRes.json()
