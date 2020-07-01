@@ -20,6 +20,8 @@ PRs are always welcome!
 - Create new repo
 - Republish
 
+- Large expandable charts dont fit mobile screen
+
 #### Call of Duty API
 
 - WZ/MP Profiles

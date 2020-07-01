@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { commaNum } from '@stagg/util'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 import Center from '../components/Center'
 import Template from '../components/Template'
 
@@ -72,4 +71,4 @@ Page.getInitialProps = async (ctx) => {
     return { meta }
 }
 
-export default observer(Page)
+export default Page
