@@ -10,6 +10,17 @@ You will need a `.env` file in the root of each service you intend to run for lo
 
 PRs are always welcome!
 
+#### Cleanup
+
+- Remove API/IO services
+- Remove Discord/API packages
+- Rename DataSources package to API
+- Refresh repo + packages
+    - Set all packages to empty with no deps
+    - Unpublish all packages
+    - Create new repo
+    - Republish
+
 Probably only need data-sources (rename back to api?) and mongo for schema
 
 #### Call of Duty API
