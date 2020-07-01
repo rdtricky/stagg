@@ -1,15 +1,15 @@
 import { Db } from 'mongodb'
+import * as API from '@stagg/api'
 import { delay } from '@stagg/util'
 import * as Mongo from '@stagg/mongo'
-import * as DataSources from '@stagg/datasources'
 
 export class Warzone {
     public  player              : Mongo.T.CallOfDuty.Schema.Player
     private complete            : boolean
     private db                  : Db
-    private readonly API        : DataSources.CallOfDuty
-    private readonly game       : DataSources.T.CallOfDuty.Game = 'mw'
-    private readonly mode       : DataSources.T.CallOfDuty.Mode = 'wz'
+    private readonly API        : API.CallOfDuty
+    private readonly game       : API.T.CallOfDuty.Game = 'mw'
+    private readonly mode       : API.T.CallOfDuty.Mode = 'wz'
     private readonly options    : Warzone.Options = {
         start: 0,
         retry: 1,
@@ -29,7 +29,7 @@ export class Warzone {
         }
         this.player.scrape.timestamp = options.start
         this.options = { ...this.options, ...options }
-        this.API = new DataSources.CallOfDuty(this.player.auth)
+        this.API = new API.CallOfDuty(this.player.auth)
     }
     async Run(mongoCfg:Mongo.T.Config) {
         Mongo.Config(mongoCfg)
@@ -40,14 +40,14 @@ export class Warzone {
         this.player.scrape.updated = Math.round(new Date().getTime()/1000)
         await this.db.collection('players').updateOne({ _id: this.player._id }, { $set: { scrape: this.player.scrape } })
     }
-    SelectProfile():{ platform: DataSources.T.CallOfDuty.Platform, username: string } {
+    SelectProfile():{ platform: API.T.CallOfDuty.Platform, username: string } {
         if (this.player.profiles.uno)    return { platform: 'uno',    username: this.player.profiles.uno    }
         if (this.player.profiles.xbl)    return { platform: 'xbl',    username: this.player.profiles.xbl    }
         if (this.player.profiles.psn)    return { platform: 'psn',    username: this.player.profiles.psn    }
         if (this.player.profiles.battle) return { platform: 'battle', username: this.player.profiles.battle }
         throw new Error(`No valid profiles found for player ${JSON.stringify(this.player)}`)
     }
-    NextTimestamp(matches:DataSources.T.CallOfDuty.Res.Warzone.Match[]):number {
+    NextTimestamp(matches:API.T.CallOfDuty.Res.Warzone.Match[]):number {
         const timestamps = matches.map(m => m.utcEndSeconds)
         const edgeTimestamp = Math.min(...timestamps)
         const offsetTimestamp = edgeTimestamp - this.options.offset
@@ -78,14 +78,14 @@ export class Warzone {
             }
         }
     }
-    async OnResponse(res:DataSources.T.CallOfDuty.Res.Warzone.Matches) {
+    async OnResponse(res:API.T.CallOfDuty.Res.Warzone.Matches) {
         this.options.callback(res)
         await this.RecordResponse(res)
     }
-    async RecordResponse(res:DataSources.T.CallOfDuty.Res.Warzone.Matches) {
+    async RecordResponse(res:API.T.CallOfDuty.Res.Warzone.Matches) {
         // Set player "uno" id if not already in db
         if (!this.player.uno) {
-            const [ firstMatch ] = res.matches.filter((m:DataSources.T.CallOfDuty.Res.Warzone.Match) => m.player.uno)
+            const [ firstMatch ] = res.matches.filter((m:API.T.CallOfDuty.Res.Warzone.Match) => m.player.uno)
             this.player.uno = firstMatch.player.uno
             await this.db.collection('players').updateOne({ _id: this.player._id }, { $set: { uno: this.player.uno } })
         }
@@ -125,7 +125,7 @@ export namespace Warzone {
 
 export namespace Normalize {
     const getStat = (stats:any, stat:string) => stats && !isNaN(Number(stats[stat])) ? Number(stats[stat]) : 0
-    export const Loadout = (loadout:DataSources.T.CallOfDuty.Res.Loadout) => ({
+    export const Loadout = (loadout:API.T.CallOfDuty.Res.Loadout) => ({
         primary: {
             weapon: loadout.primaryWeapon.name,
             variant: Number(loadout.primaryWeapon.variant),
@@ -142,7 +142,7 @@ export namespace Normalize {
         killstreaks: loadout.killstreaks.filter(ks => ks.name !== 'none').map(ks => ks.name),
     })
     export namespace Warzone {
-        export const Match = (match:DataSources.T.CallOfDuty.Res.Warzone.Match):Mongo.T.CallOfDuty.Schema.Match => ({
+        export const Match = (match:API.T.CallOfDuty.Res.Warzone.Match):Mongo.T.CallOfDuty.Schema.Match => ({
             matchId: match.matchID,
             modeId: match.mode,
             mapId: match.map,
@@ -150,18 +150,18 @@ export namespace Normalize {
             startTime: match.utcStartSeconds,
             teams: Teams(match)
         })
-        export const Teams = (match:DataSources.T.CallOfDuty.Res.Warzone.Match) => !match.rankedTeams ? [] :
-            match.rankedTeams.map((team:DataSources.T.CallOfDuty.Res.Warzone.Match.Team) => ({
+        export const Teams = (match:API.T.CallOfDuty.Res.Warzone.Match) => !match.rankedTeams ? [] :
+            match.rankedTeams.map((team:API.T.CallOfDuty.Res.Warzone.Match.Team) => ({
                 name: team.name,
                 placement: team.placement,
                 time: team.time,
-                players: team.players.map((player:DataSources.T.CallOfDuty.Res.Warzone.Match.Team.Player) => ({
+                players: team.players.map((player:API.T.CallOfDuty.Res.Warzone.Match.Team.Player) => ({
                     uno: player.uno,
                     username: player.username.replace(/^(\[[^\]]+\])?(.*)$/, '$2'),
                     clantag: player.username.replace(/^(\[[^\]]+\])?(.*)$/, '$1') || null,
                     platform: player.platform,
                     rank: player.rank,
-                    loadouts: player.loadouts?.map((loadout:DataSources.T.CallOfDuty.Res.Loadout) => Normalize.Loadout(loadout)) || [],
+                    loadouts: player.loadouts?.map((loadout:API.T.CallOfDuty.Res.Loadout) => Normalize.Loadout(loadout)) || [],
                     stats: {
                         rank: getStat(player.playerStats, 'rank'),
                         score: getStat(player.playerStats, 'score'),
@@ -181,7 +181,7 @@ export namespace Normalize {
                     }
                 })),
             }))
-        export const Performance = (match:DataSources.T.CallOfDuty.Res.Warzone.Match, player:Partial<Mongo.T.CallOfDuty.Schema.Player>) => {
+        export const Performance = (match:API.T.CallOfDuty.Res.Warzone.Match, player:Partial<Mongo.T.CallOfDuty.Schema.Player>) => {
             // Count downs
             let downs = []
             const downKeys = Object.keys(match.playerStats).filter(key => key.includes('objectiveBrDownEnemyCircle'))

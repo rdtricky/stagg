@@ -1,5 +1,5 @@
 import * as Mongo from 'mongodb'
-import { T as DataSources } from '@stagg/datasources'
+import { T as API } from '@stagg/api'
 import { CallOfDuty } from './callofduty'
 
 let config:T.Config
@@ -34,7 +34,7 @@ export namespace T {
             export interface Player extends Player.Scaffold {
                 _id: Mongo.ObjectID
                 uno: string
-                games: DataSources.CallOfDuty.Game[]
+                games: API.CallOfDuty.Game[]
                 profiles: { [key:string] : string } // platform:username
                 // discord: ...
                 scrape: {

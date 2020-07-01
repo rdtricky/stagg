@@ -11,9 +11,8 @@
     "test": "exit 0"
   },
   "dependencies": {
-    "@stagg/datasources": "^0.0.37",
+    "@stagg/api": "^0.0.37",
     "@stagg/mongo": "^0.0.37",
-    "@stagg/scrape": "^0.0.37",
     "@stagg/util": "^0.0.37",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

@@ -18,13 +18,7 @@
   },
   "gitHead": "99a8f035e435013dd096eae0f9550fa4f6c08bf4",
   "dependencies": {
-    "@stagg/datasources": "^0.0.37",
-    "@stagg/mongo": "^0.0.37",
-    "@stagg/util": "^0.0.37",
-    "gmail-send": "^1.8.10",
-    "jsonwebtoken": "^8.5.1"
-  },
-  "devDependencies": {
-    "@types/jsonwebtoken": "^8.5.0"
+    "axios": "^0.19.2",
+    "request": "^2.88.2"
   }
 }

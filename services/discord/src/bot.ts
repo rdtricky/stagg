@@ -1,8 +1,8 @@
 import * as Mongo from '@stagg/mongo'
 import { Client, Message } from 'discord.js'
-import * as DataSources from '@stagg/datasources'
+import * as API from '@stagg/api'
 import { commaNum, percentage, CallOfDuty } from '@stagg/util'
-import * as API from './api'
+import * as LegacyAPI from './api'
 
 export default class {
     protected bot:Client
@@ -13,9 +13,9 @@ export default class {
     }
     protected ConfigureAPI(jwtSecret:string, mailConfig:{user:string,pass:string}, mongoConfig:Mongo.T.Config) {
         Mongo.Config(mongoConfig)
-        API.JWT.Config(jwtSecret)
-        API.Mail.Config(mailConfig)
-        API.Mongo.Config(mongoConfig)
+        LegacyAPI.JWT.Config(jwtSecret)
+        LegacyAPI.Mail.Config(mailConfig)
+        LegacyAPI.Mongo.Config(mongoConfig)
     }
     protected Login(loginToken:string) {
         this.bot = new Client()
@@ -121,13 +121,13 @@ export default class {
 
     protected async cmd_register(msg:Message, email:string) {
         if (!email.match(/^.+@.+\..+$/i)) return this.FormatOutput(['Invalid email address'])
-        await API.Mail.SendConfirmation(email, { discord: msg.author.id })
+        await LegacyAPI.Mail.SendConfirmation(email, { discord: msg.author.id })
         return this.FormatOutput([
             `Confirmation email sent to ${email}, check your inbox...`,
         ])
     }
 
-    protected async cmd_search(msg:Message, username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<string> {
+    protected async cmd_search(msg:Message, username:string, platform:API.T.CallOfDuty.Platform='uno'):Promise<string> {
         const mongo = await Mongo.Client()
         const queries = []
         if (platform) {
@@ -151,7 +151,7 @@ export default class {
         return await this.cmd_wz_stats(msg, cmd, args[0], args[1])
     }
 
-    protected async cmd_wz_stats(msg:Message, output:string, username:string, platform:DataSources.T.CallOfDuty.Platform='uno'):Promise<string> {
+    protected async cmd_wz_stats(msg:Message, output:string, username:string, platform:API.T.CallOfDuty.Platform='uno'):Promise<string> {
         const db = await Mongo.Client()
         const player = await db.collection('players').findOne({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
         if (!player) return this.FormatOutput(['Player not found, did you forget to register? Try `help`'])

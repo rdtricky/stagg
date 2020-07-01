@@ -1,9 +1,9 @@
-import { T as DataSources } from '@stagg/datasources'
+import { T as API } from '@stagg/api'
 import { T, Client } from '.'
 
 export namespace CallOfDuty {
     export namespace Get {
-        export const Auth = async (username:string='', platform:DataSources.CallOfDuty.Platform='uno') => {
+        export const Auth = async (username:string='', platform:API.CallOfDuty.Platform='uno') => {
             if (username) {
                 const player = await Player(username, platform)
                 if (player?.auth)
@@ -13,12 +13,12 @@ export namespace CallOfDuty {
             const { api: { auth } } = await mongo.collection('players').findOne({})
             return auth
         }
-        export const Player = async (username:string, platform:DataSources.CallOfDuty.Platform='uno'):Promise<T.CallOfDuty.Schema.Player> => {
+        export const Player = async (username:string, platform:API.CallOfDuty.Platform='uno'):Promise<T.CallOfDuty.Schema.Player> => {
             const mongo = await Client()
             return mongo.collection('players').findOne({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
         }
         export namespace Warzone {
-            export const MatchIds = async (username:string, platform:DataSources.CallOfDuty.Platform='uno', matchIds:string[]=[]):Promise<string[]> => {
+            export const MatchIds = async (username:string, platform:API.CallOfDuty.Platform='uno', matchIds:string[]=[]):Promise<string[]> => {
                 const mongo = await Client()
                 const player = await Player(username, platform)
                 if (!player) return []
@@ -27,7 +27,7 @@ export namespace CallOfDuty {
                 const performanceMatchIds = await mongo.collection('performances.wz').find(query, props).toArray()
                 return performanceMatchIds.map(p => p.matchId)
             }
-            export const Performances = async (username:string, platform:DataSources.CallOfDuty.Platform='uno', matchIds:string[]=[]):Promise<T.CallOfDuty.Schema.Performance[]> => {
+            export const Performances = async (username:string, platform:API.CallOfDuty.Platform='uno', matchIds:string[]=[]):Promise<T.CallOfDuty.Schema.Performance[]> => {
                 const mongo = await Client()
                 const player = await Player(username, platform)
                 if (!player) return []
