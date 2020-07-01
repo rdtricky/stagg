@@ -13,6 +13,7 @@ PRs are always welcome!
 #### Cleanup
 
 - Make Discord hit HTTP API to get rid system API redundancy
+    - Can then remove gmail-send and jsonwebtoken from Discord service deps
 - Get rid of @stagg/util
 - Set all packages to empty with no deps
 - Unpublish all packages
