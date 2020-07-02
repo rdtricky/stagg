@@ -5,11 +5,12 @@ import { commaNum } from '@stagg/util'
 import Card from '../../components/Card'
 import Center from '../../components/Center'
 import Template from '../../components/Template'
-import Polar from '../../components/charts/base/Polar'
-import Radar from '../../components/charts/base/Radar'
-import Pie from '../../components/charts/base/Pie'
+import GamesByMode from '../../components/charts/GamesByMode'
+import DownsByCircle from '../../components/charts/DownsByCircle'
+import TopFinishesByMode from '../../components/charts/TopFinishesByMode'
 import StatByRank from '../../components/charts/StatByRank'
 import StatOverTime from '../../components/charts/StatOverTime'
+import WinsByMode from '../../components/charts/WinsByMode'
 import cfg from '../../config'
 
 const inferUsername = (id:string) => {
@@ -62,17 +63,17 @@ const Page = ({ user, count }) => {
                 !performances.length ? <h1>Loading { commaNum(count.performances) } matches...</h1> : (
                     <>
                         
-                        <Card label={`${performances.map(p => p.stats.kills).reduce((a,b) => a+b, 0)} kills`}>
-                            <Pie />
+                        <Card label="Games by Mode">
+                            <GamesByMode performances={performances} />
                         </Card>
-                        <Card label="Rank by Mode">
-                            <Polar />
+                        <Card label="Wins by Mode">
+                            <WinsByMode performances={performances} />
                         </Card>
-                        <Card label="Rank by Mode">
-                            <Radar />
+                        <Card label="Top finishes by Mode">
+                            <TopFinishesByMode performances={performances} />
                         </Card>
-                        <Card label="Rank by Mode">
-                            <Radar />
+                        <Card label="Downs by Circle">
+                            <DownsByCircle performances={performances} />
                         </Card>
                         <Card label="Kills by Rank" large expandable>
                             <StatByRank

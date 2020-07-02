@@ -7,7 +7,7 @@ import cfg from '../config'
 export const updateExistingPlayers = async (db:Mongo.Db) => {
     while(true) {
         const [ player ] = await db.collection('players')
-            .find({ 'scrape.updated': { $exists: true, $lt: timestamp() - cfg.scrape.cooldown } })
+            .find({ 'scrape.updated': { $exists: true } })
             .sort({ 'scrape.updated': 1 }).toArray()
         if (!player) continue
         await update(player)

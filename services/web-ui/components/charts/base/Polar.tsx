@@ -1,35 +1,20 @@
 import { Polar } from 'react-chartjs-2'
-import styled from 'styled-components'
 
-const Container = styled.div`
-
-`
 const options = { maintainAspectRatio: false, legend: { display: false }, tooltips: { enabled: true } }
-const data = {
+export default ({ groups }) => {
+  const data = {
+    labels: Object.keys(groups),
     datasets: [{
-      data: [
-        11,
-        16,
-        7,
-        3,
-        14
-      ],
+      label: '',
+      data: Object.values(groups),
       backgroundColor: [
         '#FF6384',
         '#4BC0C0',
         '#FFCE56',
         '#E7E9ED',
-        '#36A2EB'
-      ],
-      label: 'My dataset' // for legend
-    }],
-    labels: [
-      'Red',
-      'Green',
-      'Yellow',
-      'Grey',
-      'Blue'
-    ]
+        '#36A2EB',
+      ]
+    }]
   }
-
-  export default () => <Polar options={options} data={data} />
+  return <Polar options={options} data={data} />
+}
