@@ -24,6 +24,7 @@ PRs are always welcome!
 
 #### Call of Duty API
 
+- WZ game modes
 - WZ/MP Profiles
 - Match summaries
 - Multiplayer API/types
