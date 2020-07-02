@@ -271,7 +271,7 @@ export default class {
         }
         return this.FormatOutput([
             `**${username}** (${player.uno})`,
-            `Full profile: https://stagg.co/wz/${username.split('#').join('@')}`,
+            `Full profile: https://stagg.co/u/${player.profiles?.uno?.split('#').join('@')}`,
             '```',
             ...outputLines,
             '```',
