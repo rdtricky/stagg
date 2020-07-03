@@ -9,7 +9,6 @@ const colors = [
 ]
 
   export default ({ groups }) => {
-    console.log('got groups', groups)
     const data = {
       labels: Object.keys(groups),
       datasets: Object.keys(groups).map((label,i) => ({

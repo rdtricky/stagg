@@ -6,7 +6,7 @@ export default ({ performances }) => {
     for(const p of performances) {
         const mode = CallOfDuty.Warzone.modeMap[p.modeId]
         if (!mode) {
-            console.log(`No mode for "${p.modeId}"`)
+            console.log(`No mode for "${p.modeId}" in`, CallOfDuty.Warzone.modeMap)
             continue
         }
         const teamSizeLabels = ['Solos', 'Duos', 'Trios', 'Quads']
