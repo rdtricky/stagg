@@ -5,7 +5,10 @@ export default ({ performances }) => {
     const groups = {}
     for(const p of performances) {
         const mode = CallOfDuty.Warzone.modeMap[p.modeId]
-        if (!mode) console.log('do not have', p.modeId)
+        if (!mode) {
+            console.log(`No mode for "${p.modeId}"`)
+            continue
+        }
         const teamSizeLabels = ['Solos', 'Duos', 'Trios', 'Quads']
         if (!groups[teamSizeLabels[mode.teamSize-1]]) groups[teamSizeLabels[mode.teamSize-1]] = 0
         if (p.stats.teamPlacement === 1) groups[teamSizeLabels[mode.teamSize-1]]++

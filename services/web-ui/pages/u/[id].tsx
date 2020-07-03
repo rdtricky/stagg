@@ -45,8 +45,30 @@ const FilterContainer = styled.div`
         padding: 0 0.5rem;
     }
 
+    .comparison-profile {
+        display: inline-block;
+        margin-right: 0.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+        position: relative;
+        bottom: -3px;
+
+        span {
+            color: red;
+            font-weight: 900;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.25rem;
+            margin-right: -0.5rem;
+            margin-left: 0.5rem;
+            cursor: pointer;
+        }
+    }
+
     .input-container {
         position: relative;
+        z-index: 1;
         display: inline-block;
         width: 12rem;
         max-width: 33%;
@@ -58,7 +80,8 @@ const FilterContainer = styled.div`
             border: 1px solid rgba(0, 0, 0, 0.95);
             position: absolute;
             top: 1.5rem;
-            > div {
+            div {
+                cursor: pointer;
                 padding: 0.25rem 0.5rem;
             }
         }
@@ -95,12 +118,18 @@ const Page = ({ user, count }) => {
                 method: 'POST',
                 body: JSON.stringify({ username: input, platform: 'uno' })
             })
-            const players = await search.json()
-            setComparisonSearchResults(players.filter(p => p.profiles).map(p => p.profiles.uno))
+            const playerProfiles = await search.json()
+            setComparisonSearchResults(playerProfiles.map(p => p.uno))
         }
     }
     const addProfileForComparison = async (username:string) => {
+        setComparisonSearchInput('')
         await downloadProfile(username)
+    }
+    const removeProfileComparison = (username:string) => {
+        const updatedPerformanceMap = { ...performanceMap }
+        delete updatedPerformanceMap[username]
+        setPerformanceMap(updatedPerformanceMap)
     }
     useEffect(() => { downloadProfile(username) }, [])
   
@@ -110,7 +139,6 @@ const Page = ({ user, count }) => {
           if (!p.stats.teamPlacement) return false
           for(const stat in p.stats) {
               if (filters.stats[stat]) {
-                  console.log('ditching match', p.matchId, 'because', stat, 'is not conforming to', filters.stats[stat])
                   if (filters.stats[stat].min && p.stats[stat] < filters.stats[stat].min) return false
                   if (filters.stats[stat].max && p.stats[stat] > filters.stats[stat].max) return false
               }
@@ -130,13 +158,16 @@ const Page = ({ user, count }) => {
         <Center>
             <FilterContainer>
                 <label>{username}</label>
+                {
+                    Object.keys(performanceMap).filter(uname => uname !== username)
+                        .map(uname => <span key={uname} className="comparison-profile">{uname}<span onClick={() => removeProfileComparison(uname)}>X</span></span>)
+                }
                 <div className="input-container">
                     <input type="text" 
                         placeholder="Search players to compare..." 
                         value={comparisonSearchInput} 
                         onChange={e => updateComparisonSearch(e.target.value)} />
-                    <div className="results">
-                        <div>result</div>
+                    <div className="results" style={{display: comparisonSearchInput.length >=2 && comparisonSearchResults.length ? 'block' : 'none'}}>
                         {
                             comparisonSearchResults.map(uname => <div key={uname} onClick={() => addProfileForComparison(uname)}>{uname}</div>)
                         }
