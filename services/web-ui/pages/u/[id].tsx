@@ -72,6 +72,28 @@ const FilterContainer = styled.div`
         }
     }
 
+    .comparison-container {
+        display: inline-block;
+        max-width: 30%;
+        overflow: auto;
+        overflow-y: hidden;
+        margin: -10px 0.5rem -10px;
+        position: relative;
+        top: -2px;
+        ::-webkit-scrollbar-track {
+            height: 6px;
+            -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+        ::-webkit-scrollbar {
+            height: 6px;
+            background-color: none;
+        }
+        ::-webkit-scrollbar-thumb {
+            height: 6px;
+            background-color: rgba(0, 0, 0, 0.75);
+        }
+    }
     .input-container {
         position: relative;
         z-index: 1;
@@ -139,7 +161,7 @@ const Page = ({ user, count }) => {
     }
     useEffect(() => { downloadProfile(username) }, [])
 
-    // Move active user to top of performanceMap keys
+    // Move active user to top of performanceMap keys if necessary
     if (performanceMap[username] && Object.keys(performanceMap).indexOf(username) > 0) {
         const updatedPerformanceMap = {...performanceMap}
         delete updatedPerformanceMap[username]
@@ -151,7 +173,8 @@ const Page = ({ user, count }) => {
   
     const filteredPerformanceMap = { ...performanceMap }
     for(const username in filteredPerformanceMap) {
-      filteredPerformanceMap[username] = filteredPerformanceMap[username].sort((a,b) => a.startTime - b.startTime).filter((p) => {
+      filteredPerformanceMap[username] = filteredPerformanceMap[username]
+        .sort((a,b) => a.startTime - b.startTime).filter((p) => {
           if (!p.stats.teamPlacement) return false
           for(const stat in p.stats) {
               if (filters.stats[stat]) {
@@ -160,7 +183,7 @@ const Page = ({ user, count }) => {
               }
           }
           return true
-        })//.slice(filters.timeline)
+        }).slice(0, filters.timeline)
     }
 
     const colors = [
@@ -183,6 +206,8 @@ const Page = ({ user, count }) => {
         <Center>
             <FilterContainer>
                 <label>{username}</label>
+
+                <div className="comparison-container">
                 {
                     Object.keys(performanceMap).filter(uname => uname !== username)
                         .map(uname => (
@@ -193,6 +218,7 @@ const Page = ({ user, count }) => {
                             </span>
                         ))
                 }
+                </div>
                 <div className="input-container">
                     <input type="text" 
                         placeholder="Search players to compare..." 

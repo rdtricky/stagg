@@ -3,6 +3,7 @@ import Line from './base/Line'
 export default ({ username, performanceMap, colors=[], stat, xStep=0, yStep=0, color='' }) => {
     const lines = []
     for(const uname in performanceMap) {
+        console.log(`${uname} has ${performanceMap[uname].length} matches`)
         lines.push({
             color: colors[lines.length],
             label: uname.split('#')[0],
