@@ -14,12 +14,14 @@ PRs are always welcome!
 
 - Make Discord hit HTTP API to get rid system API redundancy
     - Can then remove gmail-send and jsonwebtoken from Discord service deps
+    - Log every command and the user id that sent it
 - Get rid of @stagg/util
 - Set all packages to empty with no deps
 - Unpublish all packages
 - Create new repo
 - Republish
 
+- Discord bot should check if already online
 - Large expandable charts dont fit mobile screen
 
 #### Call of Duty API

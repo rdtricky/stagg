@@ -22,7 +22,16 @@ const Container = styled.div`
     }
 `
 
-const Overlay = styled.div`
+export const Overlay = styled.div`
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+`
+export const FixedOverlay = styled.div`
+    position: fixed;
+    z-index: 9;
+    top: 0; right: 0; left: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.5);
     height: 100%;
 `
