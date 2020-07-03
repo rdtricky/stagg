@@ -18,3 +18,4 @@ export default ({ username, performanceMap, stat, xStep=0, yStep=0, colors=[] })
     }
     return <Line xStep={xStep} yStep={yStep} lines={lines} />
 }
+// make colors for players consistent and put color codes in tags from search

@@ -55,9 +55,14 @@ const FilterContainer = styled.div`
         position: relative;
         bottom: -3px;
 
-        span {
+        .color {
+            padding: 0.25rem;
+            margin-left: -0.5rem;
+            margin-right: 0.5rem;
+        }
+        .close {
             color: red;
-            font-weight: 900;
+            font-weight: 700;
             background: rgba(0, 0, 0, 0.5);
             padding: 0.25rem;
             margin-right: -0.5rem;
@@ -147,6 +152,15 @@ const Page = ({ user, count }) => {
         })
     }
 
+    const colors = [
+        'rgba(0, 255, 0, 0.5)',
+        'rgba(255, 255, 0, 0.5)',
+        'rgba(255, 0, 0, 0.5)',
+        'rgba(255, 0, 255, 0.5)',
+        'rgba(0, 255, 255, 0.5)',
+        'rgba(0, 0, 255, 0.5)',
+    ]
+
   return (
     <Template user={user}>
         {
@@ -160,7 +174,13 @@ const Page = ({ user, count }) => {
                 <label>{username}</label>
                 {
                     Object.keys(performanceMap).filter(uname => uname !== username)
-                        .map(uname => <span key={uname} className="comparison-profile">{uname}<span onClick={() => removeProfileComparison(uname)}>X</span></span>)
+                        .map(uname => (
+                            <span key={uname} className="comparison-profile">
+                                <span className="color" style={{background: colors[Object.keys(performanceMap).indexOf(uname)]}}></span>
+                                <span>{uname}</span>
+                                <span className="close" onClick={() => removeProfileComparison(uname)}>X</span>
+                            </span>
+                        ))
                 }
                 <div className="input-container">
                     <input type="text" 
@@ -190,7 +210,7 @@ const Page = ({ user, count }) => {
             <Card label="Kills by Rank" large expandable>
                 <StatByRank
                     yStep={1}
-                    colors={['#00ff00', '#ffff00', '#ff0000']}
+                    colors={colors}
                     username={username}
                     performanceMap={filteredPerformanceMap}
                     stat="kills" />
@@ -198,7 +218,7 @@ const Page = ({ user, count }) => {
             <Card label="Damage by Rank" large expandable>
                 <StatByRank
                     yStep={200}
-                    colors={['#ff0000', '#00ff00', '#ffff00']}
+                    colors={colors}
                     username={username}
                     performanceMap={filteredPerformanceMap}
                     stat="damageDone" />
@@ -206,9 +226,9 @@ const Page = ({ user, count }) => {
             <Card label="Damage per Kill over time" large expanded>
                 <StatOverTime
                     yStep={100}
-                    color='#ff0000'
+                    colors={colors}
                     username={username}
-                    performances={filteredPerformanceMap[username].slice(0, filters.timeline)}
+                    performanceMap={filteredPerformanceMap}
                     stat={{ divisor: 'damageDone', dividend: 'kills' }} />
             </Card>
         </Center>

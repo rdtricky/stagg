@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?mmt0pp');
-  src:  url('fonts/icomoon.eot?mmt0pp#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?mmt0pp') format('truetype'),
-    url('fonts/icomoon.woff?mmt0pp') format('woff'),
-    url('fonts/icomoon.svg?mmt0pp#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?sscwyy');
+  src:  url('fonts/icomoon.eot?sscwyy#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?sscwyy') format('truetype'),
+    url('fonts/icomoon.woff?sscwyy') format('woff'),
+    url('fonts/icomoon.svg?sscwyy#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -199,6 +199,21 @@
 }
 .icon-eye-blocked:before {
   content: "\e9d1";
+}
+.icon-cancel-circle:before {
+  content: "\ea0d";
+}
+.icon-blocked:before {
+  content: "\ea0e";
+}
+.icon-cross:before {
+  content: "\ea0f";
+}
+.icon-checkmark:before {
+  content: "\ea10";
+}
+.icon-filter:before {
+  content: "\ea5b";
 }
 .icon-github1:before {
   content: "\eab0";

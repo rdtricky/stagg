@@ -18,7 +18,7 @@ const Wrapper = styled.nav`
 const Container = styled.div`
     position: relative;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1230px;
     height: 2rem;
     margin: 0 auto;
 `
