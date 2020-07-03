@@ -66,7 +66,7 @@ export default ({ user }) => {
                     {
                         !user ? <Link href="/login"><a><Button variant="contained" color="primary">Sign in</Button></a></Link> : (
                             <>
-                                <SearchMenu />
+                                {/* <SearchMenu /> */}
                                 <UserMenu />
                             </>
                         )
