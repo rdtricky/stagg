@@ -5,7 +5,7 @@ export default ({ username, performanceMap, colors=[], stat, xStep=0, yStep=0, c
     for(const uname in performanceMap) {
         lines.push({
             color: colors[lines.length],
-            label: username.split('#')[0],
+            label: uname.split('#')[0],
             data: performanceMap[uname].map(p => {
                 if (typeof stat === typeof 'str') return p.stats[stat]
                 let quotient = p.stats[stat.divisor]/p.stats[stat.dividend]
