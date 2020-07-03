@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Head from 'next/head'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
@@ -177,7 +178,7 @@ const Page = ({ user, count }) => {
                         .map(uname => (
                             <span key={uname} className="comparison-profile">
                                 <span className="color" style={{background: colors[Object.keys(performanceMap).indexOf(uname)]}}></span>
-                                <span>{uname}</span>
+                                <span><Link href="/u/[id]" as={`/u/${uname.split('#').join('@')}`}><a>{uname}</a></Link></span>
                                 <span className="close" onClick={() => removeProfileComparison(uname)}>X</span>
                             </span>
                         ))
