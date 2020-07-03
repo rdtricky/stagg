@@ -19,6 +19,9 @@ PageRender.getInitialProps = async (appContext) => {
         const jwtJson = await jwtRes.json()
         inheritedProps.pageProps.user = jwtJson
     }
+    if (cookies['wz.filters']) {
+        inheritedProps.pageProps.filters = JSON.parse(cookies['wz.filters'])
+    }
     return inheritedProps
 }
 export default PageRender

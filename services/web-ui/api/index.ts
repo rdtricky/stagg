@@ -94,3 +94,32 @@ export const login = async (req,res) => {
         res.status(500).send({ error })
     }
 }
+
+export namespace Stagg {
+    export const statsByFinish = (performances:Mongo.T.CallOfDuty.Schema.Performance[], stat:any) => {
+        const finishPosStats = []
+        for(const p of performances) {
+            const key = p.stats.teamPlacement - 1
+            if (!finishPosStats[key]) finishPosStats[key] = { games: 0, stats: {} }
+            finishPosStats[key].games++
+            for(const statKey in p.stats) {
+              if (statKey === 'xp') continue // skip xp for now (its nested)
+                if (!finishPosStats[key].stats[statKey]) finishPosStats[key].stats[statKey] = 0
+                finishPosStats[key].stats[statKey] += statKey === 'downs' ? p.stats.downs.reduce((a,b) => a+b, 0) : p.stats[statKey]
+            }
+        }
+        return finishPosStats.map(f => f.stats[stat] / f.games)
+    }
+    export const statOverTime = (performances:Mongo.T.CallOfDuty.Schema.Performance[], stat:any):number[] => 
+        performances.map(p => {
+            if (typeof stat === typeof 'str') return p.stats[stat]
+            let quotient = p.stats[stat.divisor]/p.stats[stat.dividend]
+            if (isNaN(quotient)) {
+                quotient = p.stats[stat.dividend]
+            }
+            if (quotient === Infinity) {
+                quotient = p.stats[stat.divisor]
+            }
+            return quotient
+        })
+}
