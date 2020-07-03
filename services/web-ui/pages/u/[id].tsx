@@ -138,6 +138,16 @@ const Page = ({ user, count }) => {
         setPerformanceMap(updatedPerformanceMap)
     }
     useEffect(() => { downloadProfile(username) }, [])
+
+    // Move active user to top of performanceMap keys
+    if (performanceMap[username] && Object.keys(performanceMap).indexOf(username) > 0) {
+        const updatedPerformanceMap = {...performanceMap}
+        delete updatedPerformanceMap[username]
+        setPerformanceMap({
+            [username]: performanceMap[username],
+            ...updatedPerformanceMap
+        })
+    }
   
     const filteredPerformanceMap = { ...performanceMap }
     for(const username in filteredPerformanceMap) {
@@ -150,7 +160,7 @@ const Page = ({ user, count }) => {
               }
           }
           return true
-        })
+        })//.slice(filters.timeline)
     }
 
     const colors = [
