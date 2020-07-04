@@ -49,6 +49,7 @@ export default class {
         const isDM = msg.channel.type as any === 'dm'
         const hasTagTrigger = content.match(/^:BOT_TAG:/)
         const hasTextTrigger = content.match(/^%/i)
+        console.log(msg.author)
         if (!isDM && !hasTagTrigger && !hasTextTrigger) return
         if (`${msg.author.username}#${msg.author.discriminator}` === this.bot.user.tag) return // ignore messages from self
         const [cmd, ...args] = content.replace(/^%/, '').replace(/^:BOT_TAG:/, '').trim().replace(/\s+/g, ' ').split(' ')

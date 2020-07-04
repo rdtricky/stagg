@@ -10,18 +10,18 @@ You will need a `.env` file in the root of each service you intend to run for lo
 
 PRs are always welcome!
 
-#### Cleanup
+#### Republish
 
-- Make Discord hit HTTP API to get rid system API redundancy
-    - Can then remove gmail-send and jsonwebtoken from Discord service deps
-    - Log every command and the user id that sent it
 - Get rid of @stagg/util
+- Discord bot service fixes/updates
+    - If already logged in exit process
+    - Make all interactions via UI API
+    - Log all interactions (input/user/output?)
 - Set all packages to empty with no deps
 - Unpublish all packages
 - Create new repo
 - Republish
 
-- Discord bot should check if already online
 - Large expandable charts dont fit mobile screen
 
 #### Call of Duty API
@@ -33,7 +33,7 @@ PRs are always welcome!
 - Testing and error reporting
 - Login/Platforms/Friends types
 - Some teamPlacement props are 0
-- Backfill rankedTeams with TRN whenever possible
+- Backfill rankedTeams with TRN whenever possible (maybe useless without uno ids?)
 
 ### Publishing
 
