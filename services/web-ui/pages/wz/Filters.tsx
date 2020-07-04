@@ -263,6 +263,7 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
         updatedFilters.sort = { ...updatedFilters.sort, ...sortKey }
         setFilters(updatedFilters)
     }
+    const sortOrder = !filters.sort.order ? 'asc' : 'desc'
     return (
         <FilterContainer>
             <label>{username}</label>
@@ -288,13 +289,13 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
                         placeholder="Max" min={0} />
                 </span>
                 <span className={sortOpen ? 'open' : ''}>
-                    <i onClick={() => setSortOpen(!sortOpen)} className="icon-sort-numeric-asc" title="sort desc by criteria" />
+                    <i onClick={() => setSortOpen(!sortOpen)} className={!filters.sort.order ? 'icon-sort-numeric-asc' : 'icon-sort-numberic-desc'} title={`sort ${sortOrder} by criteria`} />
                     <span className="dropdown-container">
                         <Dropdown
                             activeItem={{ label: activeSortKey.label, onClick: () => updateSort(activeSortKey)}}
                             items={sortDropdownItems} width="8rem" />
                     </span>
-                    <i className={!filters.sort.order ? 'icon-sort-amount-asc' : 'icon-sort-amount-desc'} title={`sort ${!filters.sort.order ? 'asc' : 'desc'}`} 
+                    <i className={`icon-sort-amount-${sortOrder}`} title={`sort ${sortOrder}`} 
                         style={{marginLeft: 0, display: sortOpen ? 'inline-block' : 'none'}}
                         onClick={() => setFilters({...filters, sort: { ...filters.sort, order: Number(Boolean(!filters.sort.order)) }})} />
                 </span>
