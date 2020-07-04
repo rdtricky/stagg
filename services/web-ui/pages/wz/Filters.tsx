@@ -168,20 +168,29 @@ export interface Filters {
     }
 }
 
+// Need to add a special case for downs
 const filterMap = [
-    { stat: 'teamPlacement',    label: 'Finish' },
-    { stat: 'kills',            label: 'Kills' },
-    { stat: 'Deaths',           label: 'Deaths' },
-    { stat: 'damageDone',       label: 'DMG Done' },
-    { stat: 'damageTaken',      label: 'DMG Taken' },
+    { stat: 'teamPlacement',        label: 'Finish' },
+    { stat: 'kills',                label: 'Kills' },
+    { stat: 'Deaths',               label: 'Deaths' },
+    { stat: 'damageDone',           label: 'DMG Done' },
+    { stat: 'damageTaken',          label: 'DMG Taken' },
+    { stat: 'timePlayed',           label: 'Time Played' },
+    // { stat: 'teamSurvivalTime',     label: 'Survival Time' },
+    { stat: 'eliminations',         label: 'Eliminations' },
+    { stat: 'teamWipes',            label: 'Team Wipes' },
+    { stat: 'revives',              label: 'Revives' },
+    { stat: 'contracts',            label: 'Contracts' },
+    { stat: 'lootCrates',           label: 'Loot Boxes' },
+    { stat: 'buyStations',          label: 'Buy Stations' },
+    { stat: 'gulagKills',           label: 'Gulag Kills' },
+    { stat: 'gulagDeaths',          label: 'Gulag Deaths' },
+    { stat: 'percentTimeMoving',    label: '% Time Moving' },
+    { stat: 'distanceTraveled',     label: 'Distance Traveled' },
 ]
 const sortMap = [
     { prop: 'startTime',        label: 'Date' },
-    { stat: 'teamPlacement',    label: 'Finish' },
-    { stat: 'kills',            label: 'Kills' },
-    { stat: 'Deaths',           label: 'Deaths' },
-    { stat: 'damageDone',       label: 'DMG Done' },
-    { stat: 'damageTaken',      label: 'DMG Taken' },
+    ...filterMap,
 ]
 
 export default ({ username, performanceMap, setPerformanceMap, filters, setFilters }) => {
