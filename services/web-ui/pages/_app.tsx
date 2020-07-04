@@ -1,6 +1,5 @@
 import cookie from 'cookie'
 import App, { AppProps } from 'next/app'
-import { discordProfileByEmail } from '../api'
 import cfg from '../config/ui'
 const PageRender = ({ Component, pageProps }:AppProps) => {
     return (
