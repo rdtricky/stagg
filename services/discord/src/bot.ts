@@ -49,14 +49,30 @@ export default class {
         const isDM = msg.channel.type as any === 'dm'
         const hasTagTrigger = content.match(/^:BOT_TAG:/)
         const hasTextTrigger = content.match(/^%/i)
-        console.log(msg.author)
         if (!isDM && !hasTagTrigger && !hasTextTrigger) return
         if (`${msg.author.username}#${msg.author.discriminator}` === this.bot.user.tag) return // ignore messages from self
         const [cmd, ...args] = content.replace(/^%/, '').replace(/^:BOT_TAG:/, '').trim().replace(/\s+/g, ' ').split(' ')
+        const mongo = await Mongo.Client()
+        const logRecord = {
+            content: msg.content,
+            channel: { type: msg.channel.type },
+            author: {
+                id: msg.author.id,
+                avatar: msg.author.avatar,
+                username: msg.author.username
+            }
+        } as any
+        if (msg.channel.type !== 'dm') {
+            logRecord.channel.id = msg.channel.id
+            logRecord.channel.name = msg.channel.name
+            logRecord.channel.parentID = msg.channel.parentID
+        }
+        await mongo.collection('log.discord').insertOne(logRecord)
         msg.channel.send('> Working on it...').then(async (sentMessage) => {
             const commandResponse = await this.CommandDispatcher(msg, cmd, ...args)
             const truncatedResponse = this.TruncateOutput(commandResponse) // truncates only if > 2k char limit
             sentMessage.edit(truncatedResponse)
+            await mongo.collection('log.discord').updateOne({ _id: logRecord._id }, { $set: { response: truncatedResponse } })
         })
     }
     protected async CommandDispatcher(msg:Message, cmd:string, ...args:any):Promise<string> {
