@@ -154,7 +154,9 @@ export default class {
 
     protected async cmd_wz_stats(msg:Message, output:string, username:string, platform:API.T.CallOfDuty.Platform='uno'):Promise<string> {
         const db = await Mongo.Client()
-        const player = await db.collection('players').findOne({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
+        const player = username.trim().toLowerCase() === 'me'
+            ? await db.collection('players').findOne({ discord: msg.author.id })
+            : await db.collection('players').findOne({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
         if (!player) return this.FormatOutput(['Player not found, did you forget to register? Try `help`'])
         const performances = await db.collection('performances.wz').find({ 'player._id': player._id }).toArray() as Mongo.T.CallOfDuty.Schema.Performance[]
         const staggEmpty = { games: 0, wins: 0, top5: 0, top10: 0, kills: 0, deaths: 0, downs: 0, loadouts: 0, gulagWins: 0, gulagGames: 0, damageDone: 0, damageTaken: 0 }

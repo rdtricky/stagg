@@ -1,2 +1,2 @@
-import { discordProfile } from '../../../api'
-export default discordProfile
+import { profile } from '../../../api/discord'
+export default profile
