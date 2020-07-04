@@ -1,10 +1,9 @@
 import Link from 'next/link'
-import Cookies from 'js-cookie'
 import styled from 'styled-components'
-import { useRef, useState, useEffect } from 'react'
-import cfg from '../../config'
+import { useState, useEffect } from 'react'
+import cfg from '../../config/ui'
 import { colors } from './[id]'
-import { useOnClickOutside } from '../../hooks'
+import Dropdown from '../../components/Dropdown'
 
 const FilterContainer = styled.div`
 margin: 0.5rem;
@@ -29,7 +28,7 @@ label {
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.5);
     font-size: 0.85rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0 0.5rem 0.15rem 1rem;
     position: relative;
     bottom: -3px;
 
@@ -71,7 +70,18 @@ label {
             padding: 0.35rem 0.5rem 0.4rem;
         }
 
+        div {
+            display: none;
+        }
+
+        .dropdown-container {
+            display: none;
+            position: relative;
+            top: -4px;
+        }
+
         input {
+            display: none;
             position: relative;
             top: -1px;
             outline: none;
@@ -84,40 +94,15 @@ label {
             border-left: none;
         }
 
-        ul {
-            text-align: left;
-            position: absolute;
-            cursor: pointer;
-            display: inline-block;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(0, 0, 0, 0.5);
-            li {
-                display: none;
-                padding: 0.2rem 0.5rem 0.25rem;
-                background: rgba(0, 0, 0, 0.75);
-            }
-            li:first-of-type {
-                display: block;
-                background: none;
-            }
-        }
+    }
 
-        ul.open {
-            li {
-                display: block;
-                :hover {
-                    background: rgba(0, 0, 0, 1);
-                }
-            }
+    span.open {
+        .dropdown-container, input, div {
+            display: inline-block;
         }
     }
 }
 .comparison-container {
-    display: inline-block;
-    max-width: 30%;
     overflow: auto;
     overflow-y: hidden;
     margin: -10px 0.5rem -10px;
@@ -138,11 +123,10 @@ label {
     }
 }
 .input-container {
+    display: inline-block;
     position: relative;
     z-index: 1;
-    display: inline-block;
     width: 12rem;
-    max-width: 33%;
     .results {
         text-align: left;
         display: block;
@@ -169,20 +153,18 @@ label {
 
 `
 
-
-
-// allow sort by time, kills, finish, etc
-const filterableStats = [
-]
-
-
 export interface Filters {
-    timeline?:number
     stats?: {
         [key:string]: {
             min?: number
             max?: number
         }
+    }
+    sort: {
+        limit: number
+        prop?:string
+        stat?:string // use either prop or stat (prop is parent level p[prop], stat is p.stats[stat])
+        order:number // 0 asc, 1 desc
     }
 }
 
@@ -203,16 +185,16 @@ const sortMap = [
 ]
 
 export default ({ username, performanceMap, setPerformanceMap, filters, setFilters }) => {
-    const sortRef = useRef()
-    const filterRef = useRef()
-    useOnClickOutside(sortRef, () => setSortOpen(false))
-    useOnClickOutside(filterRef, () => setFiltersOpen(false))
+    const [limitOpen, setLimitOpen] = useState(false)
     const [sortOpen, setSortOpen] = useState(false)
     const [filtersOpen, setFiltersOpen] = useState(false)
+    const [searchOpen, setSearchOpen] = useState(false)
     const [comparisonSearchInput, setComparisonSearchInput] = useState('')
     const [comparisonSearchResults, setComparisonSearchResults] = useState([])
     const [activeFilterKey, setActiveFilterKey] = useState(filterMap[0])
     const [activeSortKey, setActiveSortKey] = useState(sortMap[0])
+    const sortDropdownItems = sortMap.map(s => ({ label: s.label, onClick:() => updateSort(s) }))
+    const filterDropdownItems = filterMap.map(s => ({ label: s.label, onClick:() => setActiveFilterKey(s) }))
     const downloadProfile = async (username:string) => {
       const download = await fetch(`${cfg.api.host}/download?platform=uno&username=${encodeURIComponent(username)}`)
       const performances = await download.json()
@@ -247,15 +229,29 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
                 [stat]: { ...filters.stats[stat], [type]: value }
             }
         }
-        Cookies.set('wz.filters', JSON.stringify(updatedFilters), { expires: 365 })
         setFilters(updatedFilters)
     }
     const onLimitInputChange = (limit:number) => {
         const updatedFilters = {
             ...filters,
-            timeline: limit,
+            sort: {
+                ...filters.sort,
+                limit
+            },
         }
-        Cookies.set('wz.filters', JSON.stringify(updatedFilters), { expires: 365 })
+        setFilters(updatedFilters)
+    }
+    const updateSort = (sortKey) => {
+        setActiveSortKey(sortKey)
+        const updatedFilters = {
+            ...filters,
+            sort: {
+                ...filters.sort,
+            }
+        }
+        delete updatedFilters.sort.prop
+        delete updatedFilters.sort.stat
+        updatedFilters.sort = { ...updatedFilters.sort, ...sortKey }
         setFilters(updatedFilters)
     }
     return (
@@ -264,16 +260,15 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
 
             <div className="filter-container">
                 <span>
+                    <i className="icon-spinner11" title="reset filters/sort/limit to default" onClick={() => setFilters()} />
+                </span>
+                <span className={filtersOpen ? 'open' : ''}>
                     <i onClick={() => setFiltersOpen(!filtersOpen)} className="icon-filter" title="filter matches by criteria" />
-                    <ul ref={filterRef} onClick={() => setFiltersOpen(!filtersOpen)} className={filtersOpen ? 'open' : ''} style={{width: '8rem'}}>
-                        <li onClick={() => setActiveFilterKey(activeFilterKey)}>{activeFilterKey.label}</li>
-                        {
-                            filterMap.map(f => (
-                                activeFilterKey.stat === f.stat ? null : <li key={f.stat} onClick={() => setActiveFilterKey(f)}>{f.label}</li>
-                            ))
-                        }
-                    </ul>
-                    <span style={{display: 'inline-block', width: '8rem'}}></span>
+                    <span className="dropdown-container">
+                        <Dropdown
+                            activeItem={{ label: activeFilterKey.label, onClick: () => setActiveFilterKey(activeFilterKey)}}
+                            items={filterDropdownItems} width="8rem" />
+                    </span>
                     <input type="number" style={{width: '4rem'}}
                         onChange={e => onFilterInputChange(activeFilterKey.stat, 'min', Number(e.target.value))}
                         value={filters.stats[activeFilterKey.stat]?.min || ''}
@@ -283,70 +278,52 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
                         value={filters.stats[activeFilterKey.stat]?.max || ''}
                         placeholder="Max" min={0} />
                 </span>
-                <span>
-                    <i onClick={() => setSortOpen(!sortOpen)} className="icon-sort-alpha-asc" title="sort results by criteria" />
-                    <ul ref={sortRef} onClick={() => setSortOpen(!sortOpen)} className={sortOpen ? 'open' : ''} style={{width: '8rem'}}>
-                        <li onClick={() => setActiveFilterKey(activeFilterKey)}>{activeFilterKey.label}</li>
-                        {
-                            filterMap.map(f => (
-                                activeFilterKey.stat === f.stat ? null : <li key={f.stat} onClick={() => setActiveFilterKey(f)}>{f.label}</li>
-                            ))
-                        }
-                    </ul>
-                    <span style={{display: 'inline-block', width: '8rem'}}></span>
+                <span className={sortOpen ? 'open' : ''}>
+                    <i onClick={() => setSortOpen(!sortOpen)} className="icon-sort-numeric-asc" title="sort desc by criteria" />
+                    <span className="dropdown-container">
+                        <Dropdown
+                            activeItem={{ label: activeSortKey.label, onClick: () => updateSort(activeSortKey)}}
+                            items={sortDropdownItems} width="8rem" />
+                    </span>
+                    <i className={!filters.sort.order ? 'icon-sort-amount-asc' : 'icon-sort-amount-desc'} title={`sort ${!filters.sort.order ? 'asc' : 'desc'}`} 
+                        style={{marginLeft: 0, display: sortOpen ? 'inline-block' : 'none'}}
+                        onClick={() => setFilters({...filters, sort: { ...filters.sort, order: Number(Boolean(!filters.sort.order)) }})} />
                 </span>
-                <span>
-                    <i className="icon-pagebreak" title="# of matches to keep after sorting" />
+                <span className={limitOpen ? 'open' : ''}>
+                    <i onClick={() => setLimitOpen(!limitOpen)} className="icon-pagebreak" title="# of matches to keep after sorting" />
                     <input type="number" style={{width: '4rem'}}
                         onChange={e => onLimitInputChange(Number(e.target.value))}
-                        value={filters.timeline}
+                        value={filters.sort.limit}
                         placeholder="Min" min={5} />
                 </span>
-                {/* <span style={{width: '15rem'}}>
-                    <i onClick={() => setFiltersOpen(!filtersOpen)} className="icon-filter" title="filter matches by criteria" />
-                    <ul onClick={() => setFiltersOpen(!filtersOpen)} className={filtersOpen ? 'open' : ''}>
-                        <li>Kills</li>
-                        <li>Deaths</li>
-                    </ul>
-                    <input type="number" style={{marginLeft: '2rem', width: '4rem'}} placeholder="Min" />
-                    <input type="number" style={{width: '4rem'}} placeholder="Max" />
-                </span>
-                <span style={{width: '4rem'}}>
-                    <i onClick={() => setSortOpen(!sortOpen)} className="icon-sort-alpha-asc" title="filter matches by criteria" />
-                    <ul onClick={() => setSortOpen(!sortOpen)} className={sortOpen ? 'open' : ''} style={{width: }}>
-                        <li>Kills</li>
-                        <li>Deaths</li>
-                    </ul>
-                </span>
-                <span style={{width: '9rem'}}>
-                    <i className="icon-pagebreak" title="# of matches to include" />
-                    <input type="number" style={{width: '4rem'}} />
-                </span> */}
-            </div>
-            <div className="comparison-container">
-            {
-                Object.keys(performanceMap).filter(uname => uname !== username)
-                    .map(uname => (
-                        <span key={uname} className="comparison-profile">
-                            <span className="color" style={{background: colors[Object.keys(performanceMap).indexOf(uname)]}}></span>
-                            <span><Link href="/u/[id]" as={`/u/${uname.split('#').join('@')}`}><a>{uname}</a></Link></span>
-                            <span className="close" onClick={() => removeProfileComparison(uname)}>X</span>
-                        </span>
-                    ))
-            }
-            </div>
-            <div className="input-container">
-                <input type="text" 
-                    placeholder="Search players to compare..." 
-                    value={comparisonSearchInput} 
-                    onChange={e => updateComparisonSearch(e.target.value)} />
-                <div className="results" style={{display: comparisonSearchInput.length >=2 && comparisonSearchResults.length ? 'block' : 'none'}}>
+                <span className={searchOpen ? 'open' : ''}>
+                    <div className="comparison-container">
                     {
-                        comparisonSearchResults.map(uname => <div key={uname} onClick={() => addProfileForComparison(uname)}>{uname}</div>)
+                        Object.keys(performanceMap).filter(uname => uname !== username)
+                            .map(uname => (
+                                <span key={uname} className="comparison-profile">
+                                    <span className="color" style={{background: colors[Object.keys(performanceMap).indexOf(uname)]}}></span>
+                                    <span><Link href="/u/[id]" as={`/u/${uname.split('#').join('@')}`}><a>{uname}</a></Link></span>
+                                    <span className="close" onClick={() => removeProfileComparison(uname)}>X</span>
+                                </span>
+                            ))
                     }
-                </div>
+                    </div>
+                    <div className="input-container">
+                        <input type="text" 
+                            placeholder="Search players to compare..." 
+                            value={comparisonSearchInput} 
+                            onChange={e => updateComparisonSearch(e.target.value)} />
+                        <div className="results" style={{display: comparisonSearchInput.length >=2 && comparisonSearchResults.length ? 'block' : 'none'}}>
+                            {
+                                comparisonSearchResults.map(uname => <div key={uname} onClick={() => addProfileForComparison(uname)}>{uname}</div>)
+                            }
+                        </div>
+                    </div>
+                    <i className={searchOpen ? 'icon-search' : /* icon-stack */ 'icon-search'} title="overlay + compare other players"
+                        onClick={() => setSearchOpen(!searchOpen)} style={{marginLeft: '0.5rem', color: 'rgba(255, 255, 255, 0.75)'}} />
+                </span>
             </div>
-            <i className="icon-search" style={{marginLeft: '0.5rem', color: 'rgba(255, 255, 255, 0.75)'}} />
         </FilterContainer>
     )
 }

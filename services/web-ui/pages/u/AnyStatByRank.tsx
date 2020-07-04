@@ -14,7 +14,7 @@ export default ({ colors, username, performanceMap }) => {
         setActiveItem({ label: statMapItem.label, onClick: () => dropdownItemClicked(statMapItem)})
     }
     const dropdownItems = statMap.map(s => ({ label: s.label, onClick:() => dropdownItemClicked(s) }))
-    const [stat, setStat] = useState(statMap[0])
+    const [stat, setStat] = useState(statMap[0].stat)
     const [activeItem, setActiveItem] = useState(dropdownItems[0])
     const Label = (
         <span>

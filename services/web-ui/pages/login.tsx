@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { TextField, Button } from '@material-ui/core'
 import Center from '../components/Center'
 import Template from '../components/Template'
-import config from '../config'
+import cfg from '../config/ui'
 
 export const Wrapper = styled.div`
   height: 80vh;
@@ -104,7 +104,7 @@ export default ({ user }) => {
     if (!form.input.email) return formErr('email required')
     if (!form.input.email.match(/^[^@]+@[^\.]+\..+$/)) return formErr('invalid email')
     if (!form.input.password) return formErr('password required')
-    const login = await fetch(`${config.api.host}/login`, {
+    const login = await fetch(`${cfg.api.host}/login`, {
       method: 'POST',
       body: JSON.stringify(form.input)
     })
@@ -115,7 +115,7 @@ export default ({ user }) => {
     const { profiles: { uno } } = JWT.decode(jwt) as any
     Cookies.set('jwt', jwt, { expires: 365 })
     setForm({ ...form, status: Status.Success, response: 'login successful, one moment...'})
-    setTimeout(() => Router.push('/u/[id]', `/u/${uno.split('#').join('@')}`), config.login.forward.delay)
+    setTimeout(() => Router.push('/u/[id]', `/u/${uno.split('#').join('@')}`), cfg.login.forward.delay)
   }
   return (
     <Template user={user}>

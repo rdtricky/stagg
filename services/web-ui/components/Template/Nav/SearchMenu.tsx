@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useOnClickOutside } from '../../../hooks'
-import cfg from '../../../config'
+import cfg from '../../../config/ui'
 
 const Wrapper = styled.span`
     aside {

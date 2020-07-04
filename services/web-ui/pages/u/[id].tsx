@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { commaNum } from '@stagg/util'
@@ -13,7 +14,7 @@ import StatOverTime from '../../components/charts/StatOverTime'
 import WinsByMode from '../../components/charts/WinsByMode'
 import Filters, { Filters as FiltersType } from './Filters'
 import AnyStatByRank from './AnyStatByRank'
-import cfg from '../../config'
+import cfg from '../../config/ui'
 
 const inferUsername = (id:string) => {
     const [name, slug] = id.split('@')
@@ -29,19 +30,17 @@ export const colors = [
     'rgba(0, 0, 255, 0.5)',
 ]
 
-const defaultFilters = {
-    timeline: 100,
-    stats: {
-        teamPlacement: { max: 20 }
-    }
-}
-
 const Page = ({ user, count, filters }) => {
     const router = useRouter()
     const username = inferUsername(router.query.id as string)
     const isMe = user?.profiles?.uno === username
     const [performanceMap, setPerformanceMap] = useState({ [username]: [] })
-    const [activeFilters, setActiveFilters] = useState(filters || defaultFilters as FiltersType)
+    const [activeFilters, setActiveFilters] = useState(filters || cfg.filters.default as FiltersType)
+    const setFilters = (filters?:FiltersType) => {
+        const newFilters = filters ? filters : cfg.filters.default
+        Cookies.set('filters', JSON.stringify(newFilters), { expires: 365 })
+        setActiveFilters(newFilters)
+    }
 
     // Move active user to top of performanceMap keys if necessary
     if (performanceMap[username] && Object.keys(performanceMap).indexOf(username) > 0) {
@@ -56,7 +55,12 @@ const Page = ({ user, count, filters }) => {
     const filteredPerformanceMap = { ...performanceMap }
     for(const username in filteredPerformanceMap) {
       filteredPerformanceMap[username] = filteredPerformanceMap[username]
-        .sort((a,b) => a.startTime - b.startTime).filter((p) => {
+        .sort((a,b) => {
+            const { prop, stat, order } = activeFilters.sort
+            if (prop) return order ? a[prop] - b[prop] : b[prop] - a[prop]
+            if (stat) return order ? a.stats[stat] - b.stats[stat] : b.stats[stat] - a.stats[stat]
+            return a.startTime - b.startTime
+        }).filter((p) => {
           if (!p.stats.teamPlacement) return false
           for(const stat in p.stats) {
               if (activeFilters.stats[stat]) {
@@ -65,7 +69,7 @@ const Page = ({ user, count, filters }) => {
               }
           }
           return true
-        }).slice(0, activeFilters.timeline)
+        }).slice(0, activeFilters.sort.limit)
     }
 
 
@@ -81,7 +85,7 @@ const Page = ({ user, count, filters }) => {
             <Filters
                 username={username}
                 filters={activeFilters}
-                setFilters={setActiveFilters}
+                setFilters={setFilters}
                 performanceMap={performanceMap}
                 setPerformanceMap={setPerformanceMap} />
             <Card label="Games by Mode">

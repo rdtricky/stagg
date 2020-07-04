@@ -4,7 +4,7 @@ import { commaNum } from '@stagg/util'
 import styled from 'styled-components'
 import Center from '../components/Center'
 import Template from '../components/Template'
-import cfg from '../config'
+import cfg from '../config/ui'
 
 const GameWrapper = styled.div`
     position: relative;

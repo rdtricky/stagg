@@ -1,6 +1,6 @@
 import cookie from 'cookie'
 import App, { AppProps } from 'next/app'
-import cfg from '../config'
+import cfg from '../config/ui'
 const PageRender = ({ Component, pageProps }:AppProps) => {
     return (
         <Component {...pageProps} />
@@ -19,8 +19,8 @@ PageRender.getInitialProps = async (appContext) => {
         const jwtJson = await jwtRes.json()
         inheritedProps.pageProps.user = jwtJson
     }
-    if (cookies['wz.filters']) {
-        inheritedProps.pageProps.filters = JSON.parse(cookies['wz.filters'])
+    if (cookies['filters']) {
+        inheritedProps.pageProps.filters = JSON.parse(cookies['filters'])
     }
     return inheritedProps
 }

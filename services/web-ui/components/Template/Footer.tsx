@@ -2,9 +2,11 @@ import styled from 'styled-components'
 
 const Container = styled.footer`
     margin: 0;
+    margin-top: 0.5rem;
     height: 3rem;
     text-align: center;
     a, a:hover, a:active, a:visited {
+        top: -1rem;
         position: relative;
         display: inline-block;
         color: inherit;
