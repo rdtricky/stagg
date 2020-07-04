@@ -149,7 +149,7 @@ export default class {
     }
     
     protected async cmd_wz(msg:Message, cmd:string, ...args:any):Promise<string> {
-        return await this.cmd_wz_stats(msg, cmd, args[0], args[1])
+        return await this.cmd_wz_stats(msg, cmd.replace(/s$/i, '')+'s', args[0], args[1])
     }
 
     protected async cmd_wz_stats(msg:Message, output:string, username:string, platform:API.T.CallOfDuty.Platform='uno'):Promise<string> {
