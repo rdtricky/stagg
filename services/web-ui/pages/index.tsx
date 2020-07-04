@@ -41,8 +41,8 @@ const GameWrapper = styled.div`
     }
 `
 const Page = ({ meta, user }) => {
-    const linkUrl = !user ? '/login' : '/u/[id]'
-    const asLinkUrl = !user ? '/login' : `/u/${user.profiles?.uno?.split('#').join('@')}`
+    const linkUrl = !user ? '/login' : '/wz/[id]'
+    const asLinkUrl = !user ? '/login' : `/wz/${user.profiles?.uno?.split('#').join('@')}`
     return (
         <Template user={user}>
             <Head>

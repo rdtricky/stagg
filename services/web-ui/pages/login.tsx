@@ -89,7 +89,7 @@ export const Spacer = styled.div`
 
 enum Status { Idle, Loading, Success, Error }
 export default ({ user }) => {
-  if (user) try { Router.push('/u/[id]', `/u/${user.profiles.uno.split('#').join('@')}`) } catch(e) {}
+  if (user) try { Router.push('/wz/[id]', `/wz/${user.profiles.uno.split('#').join('@')}`) } catch(e) {}
   const [form, setForm] = useState({ status: Status.Idle, input: { email: '', password: '' }, response: '' })
   const buttonDisabled = form.status === Status.Loading || form.status === Status.Success
   const setEmail = (email:string) => setForm({ ...form, input: { ...form.input, email } })
@@ -115,7 +115,7 @@ export default ({ user }) => {
     const { profiles: { uno } } = JWT.decode(jwt) as any
     Cookies.set('jwt', jwt, { expires: 365 })
     setForm({ ...form, status: Status.Success, response: 'login successful, one moment...'})
-    setTimeout(() => Router.push('/u/[id]', `/u/${uno.split('#').join('@')}`), cfg.login.forward.delay)
+    setTimeout(() => Router.push('/wz/[id]', `/wz/${uno.split('#').join('@')}`), cfg.login.forward.delay)
   }
   return (
     <Template user={user}>

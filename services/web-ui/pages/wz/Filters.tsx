@@ -303,7 +303,7 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
                             .map(uname => (
                                 <span key={uname} className="comparison-profile">
                                     <span className="color" style={{background: colors[Object.keys(performanceMap).indexOf(uname)]}}></span>
-                                    <span><Link href="/u/[id]" as={`/u/${uname.split('#').join('@')}`}><a>{uname}</a></Link></span>
+                                    <span><Link href="/wz/[id]" as={`/wz/${uname.split('#').join('@')}`}><a>{uname}</a></Link></span>
                                     <span className="close" onClick={() => removeProfileComparison(uname)}>X</span>
                                 </span>
                             ))

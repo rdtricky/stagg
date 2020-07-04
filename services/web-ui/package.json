@@ -23,6 +23,7 @@
     "babel-plugin-styled-components": "^1.10.7",
     "chart.js": "^2.9.3",
     "cookie": "^0.4.1",
+    "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
     "idb-kv": "^2.1.1",

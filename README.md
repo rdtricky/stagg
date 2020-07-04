@@ -22,7 +22,12 @@ PRs are always welcome!
 - Create new repo
 - Republish
 
+#### Web UI
+
 - Large expandable charts dont fit mobile screen
+- Add tooltips to each chart to explain the correlations
+- Customizable dashboard with custom-built charts
+- Correlation creation tool
 
 #### Call of Duty API
 
@@ -35,7 +40,7 @@ PRs are always welcome!
 - Some teamPlacement props are 0
 - Backfill rankedTeams with TRN whenever possible (maybe useless without uno ids?)
 
-### Publishing
+### Publishing to NPM
 
 To publish new packages, you will need access to [Stagg NPM](https://www.npmjs.com/settings/stagg/packages). After gaining permissions to publish to this organization, use the following command to authenticate your local client.
 

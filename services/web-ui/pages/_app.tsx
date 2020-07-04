@@ -1,5 +1,6 @@
 import cookie from 'cookie'
 import App, { AppProps } from 'next/app'
+import { discordProfileByEmail } from '../api'
 import cfg from '../config/ui'
 const PageRender = ({ Component, pageProps }:AppProps) => {
     return (
@@ -18,6 +19,11 @@ PageRender.getInitialProps = async (appContext) => {
         const jwtRes = await fetch(`${host}/jwt?t=${cookies.jwt}`)
         const jwtJson = await jwtRes.json()
         inheritedProps.pageProps.user = jwtJson
+        try {
+            const discordProfileRes = await fetch(`${host}/discord/profile?email=${jwtJson.email}`)
+            const discordProfileJson = await discordProfileRes.json()
+            inheritedProps.pageProps.user.discord = discordProfileJson
+        } catch(e) { /* no discord in db for this player */ }
     }
     if (cookies['filters']) {
         inheritedProps.pageProps.filters = JSON.parse(cookies['filters'])

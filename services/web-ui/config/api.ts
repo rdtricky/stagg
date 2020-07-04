@@ -13,6 +13,9 @@ export interface Config {
         user: string
         pass: string
     }
+    discord: {
+        token: string
+    }
 }
 export default {
     port: process.env.PORT || 8080,
@@ -22,6 +25,9 @@ export default {
         host: process.env.MONGO_HOST,
         user: process.env.MONGO_USER,
         password: process.env.MONGO_PASS,
+    },
+    discord: {
+        token: process.env.DISCORD_TOKEN,
     },
     gmail: {
         user: process.env.GMAIL_ADDRESS,

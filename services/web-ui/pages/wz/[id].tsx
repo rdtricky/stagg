@@ -30,7 +30,7 @@ export const colors = [
     'rgba(0, 0, 255, 0.5)',
 ]
 
-const Page = ({ user, count, filters }) => {
+const Page = ({ user, count, discord, filters }) => {
     const router = useRouter()
     const username = inferUsername(router.query.id as string)
     const isMe = user?.profiles?.uno === username

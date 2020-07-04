@@ -2,9 +2,12 @@ import JWT from 'jsonwebtoken'
 import JSONStream from 'JSONStream'
 import { CallOfDuty } from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
+import { Client } from 'discord.js'
 import cfg from '../config/api'
 
 Mongo.Config(cfg.mongo)
+const discord = new Client()
+discord.login(cfg.discord.token)
 
 export const jwt = async (req, res) => {
     try {
@@ -12,6 +15,20 @@ export const jwt = async (req, res) => {
     } catch(e) {
         res.status(400).send({ error: 'invalid jwt' })
     }
+}
+
+export const discordProfileById = async (id:string) => discord.users.fetch(id)
+export const discordProfileByEmail = async (email:string) => {
+    const mongo = await Mongo.Client()
+    const player = await mongo.collection('players').findOne({ email })
+    if (!player) return null
+    if (!player.discord) return null
+    return discordProfileById(player.discord)
+}
+
+export const discordProfile = async (req, res) => {
+    const discord = await discordProfileByEmail(req.query.email)
+    res.send({ ...discord })
 }
 
 export const meta = async (req, res) => {
@@ -43,7 +60,8 @@ export const ping = async (req,res) => {
     if (!player) return res.status(404).send({ error: 'player not found' })
     const mongo = await Mongo.Client()
     const performances = await mongo.collection('performances.wz').find({ 'player._id': player._id }).count()
-    res.send({ performances })
+    const result = { performances } as any
+    res.send(result)
 }
 
 export const download = async (req,res) => {

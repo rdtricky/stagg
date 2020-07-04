@@ -33,15 +33,15 @@ export namespace T {
         export namespace Schema {
             export interface Player extends Player.Scaffold {
                 _id: Mongo.ObjectID
-                uno: string
-                games: API.CallOfDuty.Game[]
                 profiles: { [key:string] : string } // platform:username
-                // discord: ...
+                games: API.CallOfDuty.Game[]
+                uno: string
                 scrape: {
                     updated:   number
                     failures:  number
                     timestamp: number
                 }
+                discord?: string
                 prevAuth?: Player.Auth[]
                 prevEmails?: string[]
             }

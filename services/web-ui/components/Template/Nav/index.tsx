@@ -52,8 +52,17 @@ const UserActionsContainer = styled.div`
         background: rgba(0, 0, 0, 0.9);
         border: 1px solid rgba(255, 255, 255, 0.3);
         padding: 0.5rem;
-        width: 265px;
         min-height: 95px;
+    }
+
+    aside::after {
+        position: absolute;
+        top: -11px; right: 12px;
+        font-family: 'icomoon' !important;
+        content: "\\ea25";
+        display: block;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 12px;
     }
 `
 
@@ -67,7 +76,7 @@ export default ({ user }) => {
                         !user ? <Link href="/login"><a><Button variant="contained" color="primary">Sign in</Button></a></Link> : (
                             <>
                                 {/* <SearchMenu /> */}
-                                <UserMenu />
+                                <UserMenu user={user} />
                             </>
                         )
                     }

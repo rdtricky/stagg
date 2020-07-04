@@ -22,6 +22,11 @@ const staging = {
                 prop: 'startTime',
             }
         }
+    },
+    docs: {
+        postman: {
+            url: 'https://documenter.getpostman.com/view/5519582/SzzgAefq'
+        }
     }
 }
 
