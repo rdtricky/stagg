@@ -193,6 +193,14 @@ const filterMap = [
     { stat: 'damageDone',       label: 'DMG Done' },
     { stat: 'damageTaken',      label: 'DMG Taken' },
 ]
+const sortMap = [
+    { prop: 'startTime',        label: 'Date' },
+    { stat: 'teamPlacement',    label: 'Finish' },
+    { stat: 'kills',            label: 'Kills' },
+    { stat: 'Deaths',           label: 'Deaths' },
+    { stat: 'damageDone',       label: 'DMG Done' },
+    { stat: 'damageTaken',      label: 'DMG Taken' },
+]
 
 export default ({ username, performanceMap, setPerformanceMap, filters, setFilters }) => {
     const sortRef = useRef()
@@ -204,6 +212,7 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
     const [comparisonSearchInput, setComparisonSearchInput] = useState('')
     const [comparisonSearchResults, setComparisonSearchResults] = useState([])
     const [activeFilterKey, setActiveFilterKey] = useState(filterMap[0])
+    const [activeSortKey, setActiveSortKey] = useState(sortMap[0])
     const downloadProfile = async (username:string) => {
       const download = await fetch(`${cfg.api.host}/download?platform=uno&username=${encodeURIComponent(username)}`)
       const performances = await download.json()
@@ -230,13 +239,21 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
         setPerformanceMap(updatedPerformanceMap)
     }
     useEffect(() => { downloadProfile(username) }, [])
-    const onInputChange = (stat:string, type:'min'|'max', value:number) => {
+    const onFilterInputChange = (stat:string, type:'min'|'max', value:number) => {
         const updatedFilters = {
             ...filters,
             stats: {
                 ...filters.stats,
                 [stat]: { ...filters.stats[stat], [type]: value }
             }
+        }
+        Cookies.set('wz.filters', JSON.stringify(updatedFilters), { expires: 365 })
+        setFilters(updatedFilters)
+    }
+    const onLimitInputChange = (limit:number) => {
+        const updatedFilters = {
+            ...filters,
+            timeline: limit,
         }
         Cookies.set('wz.filters', JSON.stringify(updatedFilters), { expires: 365 })
         setFilters(updatedFilters)
@@ -258,13 +275,32 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
                     </ul>
                     <span style={{display: 'inline-block', width: '8rem'}}></span>
                     <input type="number" style={{width: '4rem'}}
-                        onChange={e => onInputChange(activeFilterKey.stat, 'min', Number(e.target.value))}
+                        onChange={e => onFilterInputChange(activeFilterKey.stat, 'min', Number(e.target.value))}
                         value={filters.stats[activeFilterKey.stat]?.min || ''}
                         placeholder="Min" min={0} />
                     <input type="number" style={{width: '4rem'}}
-                        onChange={e => onInputChange(activeFilterKey.stat, 'max', Number(e.target.value))}
+                        onChange={e => onFilterInputChange(activeFilterKey.stat, 'max', Number(e.target.value))}
                         value={filters.stats[activeFilterKey.stat]?.max || ''}
                         placeholder="Max" min={0} />
+                </span>
+                <span>
+                    <i onClick={() => setSortOpen(!sortOpen)} className="icon-sort-alpha-asc" title="sort results by criteria" />
+                    <ul ref={sortRef} onClick={() => setSortOpen(!sortOpen)} className={sortOpen ? 'open' : ''} style={{width: '8rem'}}>
+                        <li onClick={() => setActiveFilterKey(activeFilterKey)}>{activeFilterKey.label}</li>
+                        {
+                            filterMap.map(f => (
+                                activeFilterKey.stat === f.stat ? null : <li key={f.stat} onClick={() => setActiveFilterKey(f)}>{f.label}</li>
+                            ))
+                        }
+                    </ul>
+                    <span style={{display: 'inline-block', width: '8rem'}}></span>
+                </span>
+                <span>
+                    <i className="icon-pagebreak" title="# of matches to keep after sorting" />
+                    <input type="number" style={{width: '4rem'}}
+                        onChange={e => onLimitInputChange(Number(e.target.value))}
+                        value={filters.timeline}
+                        placeholder="Min" min={5} />
                 </span>
                 {/* <span style={{width: '15rem'}}>
                     <i onClick={() => setFiltersOpen(!filtersOpen)} className="icon-filter" title="filter matches by criteria" />

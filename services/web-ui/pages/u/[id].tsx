@@ -12,6 +12,7 @@ import StatByRank from '../../components/charts/StatByRank'
 import StatOverTime from '../../components/charts/StatOverTime'
 import WinsByMode from '../../components/charts/WinsByMode'
 import Filters, { Filters as FiltersType } from './Filters'
+import AnyStatByRank from './AnyStatByRank'
 import cfg from '../../config'
 
 const inferUsername = (id:string) => {
@@ -95,15 +96,8 @@ const Page = ({ user, count, filters }) => {
             <Card label="Downs by Circle">
                 <DownsByCircle performances={filteredPerformanceMap[username]} />
             </Card>
-            <Card label="Kills by Rank" large expandable>
-                <StatByRank
-                    yStep={1}
-                    colors={colors}
-                    username={username}
-                    performanceMap={filteredPerformanceMap}
-                    stat="kills" />
-            </Card>
-            <Card label="Damage by Rank" large expandable>
+            <AnyStatByRank colors={colors} username={username} performanceMap={filteredPerformanceMap} />
+            <Card label="Damage by Finish" large expandable>
                 <StatByRank
                     yStep={200}
                     colors={colors}

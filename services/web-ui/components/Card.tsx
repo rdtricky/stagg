@@ -42,7 +42,7 @@ const ExpandButtonWrapper = styled.div`
     padding: 0.7rem 0.5rem;
 `
 
-interface Props { label: string, large?: boolean, expanded?:boolean, expandable?: boolean, children?: any }
+interface Props { label: any, large?: boolean, expanded?:boolean, expandable?: boolean, children?: any }
 export default ({ label, large, expandable, expanded=false, children }:Props) => {
     const [isExp, setIsExp] = useState(expanded)
     return (
