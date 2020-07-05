@@ -40,10 +40,12 @@ export namespace T {
                     updated:   number
                     failures:  number
                     timestamp: number
+                    rechecked: number // last time initialization recheck was ran
                 }
                 discord?: string
                 prevAuth?: Player.Auth[]
                 prevEmails?: string[]
+                initFailure?: boolean // true if titleIdentities was blank on init
             }
             export namespace Player {
                 export interface Auth {

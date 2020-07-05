@@ -66,7 +66,12 @@ export const login = async (req,res) => {
         if (!email || !password || !email.match(/^[^@]+@[^\.]+\..+$/)) {
             return res.status(400).send({ error: 'invalid email/password' })
         }
-        const auth = await API.Login(email, password)
+        let auth:any
+        try {
+            auth = await API.Login(email, password)
+        } catch(error) {
+            return res.status(503).send({ error })
+        }
         const userRecord = await mongo.collection('players').findOne({ email })
         if (userRecord) {
             const prevAuth = userRecord.prevAuth ? userRecord.prevAuth : []

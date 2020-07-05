@@ -20,7 +20,7 @@ export class CallOfDuty {
         })
         if (status !== 200 || res.status !== 'success') {
             console.log('[!] API Error:', res.data.message.replace('Not permitted: ', ''))
-            throw res.data.error
+            throw res.data.message.replace('Not permitted: ', '')
         }
         return res.data
     }
@@ -71,6 +71,7 @@ export class CallOfDuty {
         try {
             const atkn = headers['set-cookie'].find((cookie:string) => cookie.includes('atkn='))?.replace(/^atkn=([^;]+);.*$/, '$1')
             const sso = headers['set-cookie'].find((cookie:string) => cookie.includes('ACT_SSO_COOKIE='))?.replace(/^ACT_SSO_COOKIE=([^;]+);.*$/, '$1')
+            if (!atkn || !sso) throw 'invalid credentials'
             return { xsrf, atkn, sso }
         } catch(e) {
             throw 'invalid credentials'
