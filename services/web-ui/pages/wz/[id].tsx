@@ -54,6 +54,7 @@ const Page = ({ user, count, discord, filters }) => {
   
     const filteredPerformanceMap = { ...performanceMap }
     for(const username in filteredPerformanceMap) {
+      const originalCount = filteredPerformanceMap[username].length
       filteredPerformanceMap[username] = filteredPerformanceMap[username]
         .sort((a,b) => {
             const { prop, stat, order } = activeFilters.sort
@@ -69,7 +70,11 @@ const Page = ({ user, count, discord, filters }) => {
               }
           }
           return true
-        }).slice(0, activeFilters.sort.limit)
+        })
+      if (activeFilters.sort.limit) {
+        filteredPerformanceMap[username] = filteredPerformanceMap[username].slice(0, activeFilters.sort.limit)
+      }
+      if (originalCount && !filteredPerformanceMap[username].length) setFilters()
     }
 
 

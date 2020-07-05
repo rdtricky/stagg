@@ -17,7 +17,7 @@ export const profileByEmail = async (email:string) => {
 }
 
 export const profile = async (req, res) => {
-    const discord = await req.query.id ? profileById(req.query.id) : profileByEmail(req.query.email)
+    const discord = req.query.id ? await profileById(req.query.id) : await profileByEmail(req.query.email)
     res.send({ ...discord })
 }
 

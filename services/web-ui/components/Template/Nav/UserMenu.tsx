@@ -46,7 +46,7 @@ export default ({ user }) => {
         Cookies.set('jwt', '', { expires: -1 })
         window.location.reload()
     }
-    const lvl = `https://www.callofduty.com/cdn/app/icons/mw/ranks/mp/icon_rank_155.png`
+    const lvl = `https://i.imgur.com/1qddTUx.png`
     const iconImgUrl = user?.discord?.avatar
         ? `https://cdn.discordapp.com/avatars/${user?.discord?.id}/${user?.discord?.avatar}.webp`
         : lvl
@@ -56,7 +56,7 @@ export default ({ user }) => {
                 !open ? null : (
                     <aside>
                         {
-                            !user?.discord ? null
+                            !user?.discord?.username ? null
                                 : <label><i className="icon-discord" />{ `${user.discord.username}#${user.discord.discriminator}` }</label>
                         }
                         <Link href="/wz/[id]" as={`/wz/${user.profiles.uno.split('#').join('@')}`}>

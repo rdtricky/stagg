@@ -170,12 +170,12 @@ export interface Filters {
 
 // Need to add a special case for downs
 const filterMap = [
+    { stat: 'timePlayed',           label: 'Time Played' },
     { stat: 'teamPlacement',        label: 'Finish' },
     { stat: 'kills',                label: 'Kills' },
     { stat: 'Deaths',               label: 'Deaths' },
     { stat: 'damageDone',           label: 'DMG Done' },
     { stat: 'damageTaken',          label: 'DMG Taken' },
-    { stat: 'timePlayed',           label: 'Time Played' },
     // { stat: 'teamSurvivalTime',     label: 'Survival Time' },
     { stat: 'eliminations',         label: 'Eliminations' },
     { stat: 'teamWipes',            label: 'Team Wipes' },

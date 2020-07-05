@@ -14,7 +14,7 @@ const staging = {
     filters: {
         default: {
             stats: {
-                // teamPlacement: { max: 20 }
+                timePlayed: { min: 300 },
             },
             sort: {
                 order: 1,
