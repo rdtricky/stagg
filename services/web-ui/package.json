@@ -1,6 +1,6 @@
 {
   "name": "stagg-cod-ui-web",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Call of Duty Web UI for Stagg.co",
   "scripts": {
     "dev": "next dev -p 8080",
@@ -14,8 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
-    "@stagg/api": "^0.1.2",
-    "@stagg/mongo": "^0.1.2",
+    "@stagg/api": "^0.1.3",
+    "@stagg/mongo": "^0.1.3",
     "@stagg/util": "^0.1.1",
     "JSONStream": "^1.3.5",
     "async-request": "^1.2.0",
