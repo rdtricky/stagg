@@ -24,6 +24,7 @@ PRs are always welcome!
 
 #### Web UI
 
+- Breakage when no Discord linked
 - Large expandable charts dont fit mobile screen
 - Add tooltips to each chart to explain the correlations
 - Customizable dashboard with custom-built charts

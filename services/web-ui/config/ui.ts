@@ -14,7 +14,7 @@ const staging = {
     filters: {
         default: {
             stats: {
-                teamPlacement: { max: 20 }
+                // teamPlacement: { max: 20 }
             },
             sort: {
                 order: 1,
