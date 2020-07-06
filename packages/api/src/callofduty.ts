@@ -31,7 +31,7 @@ export class CallOfDuty {
     async Identity():Promise<T.CallOfDuty.Res.Identity> {
         return this.request({ url: `/crm/cod/v2/identities` })
     }
-    async Friends() {
+    async Friends():Promise<T.CallOfDuty.Res.Friends> {
         return this.request({ url: `/codfriends/v1/compendium` })
     }
     async Platforms(username:string, platform:T.CallOfDuty.Platform='uno'):Promise<T.CallOfDuty.Res.Platforms> {
@@ -43,7 +43,7 @@ export class CallOfDuty {
     async Matches(username:string, platform:T.CallOfDuty.Platform='uno', mode:T.CallOfDuty.Mode='wz', game:T.CallOfDuty.Game='mw', next:number=0):Promise<T.CallOfDuty.Res.Warzone.Matches> {
         return this.request({ url: `/crm/cod/v2/title/${game}/platform/${platform}/gamer/${encodeURIComponent(username)}/matches/${mode}/start/0/end/${next}/details` })
     }
-    async Login(email:string, password:string) {
+    async Login(email:string, password:string):Promise<{ xsrf: string, atkn: string, sso: string }> {
         const response = await axios.get('https://profile.callofduty.com/login')
         const xsrf = response?.headers['set-cookie'].find((cookie:string) => cookie.includes('XSRF-TOKEN='))?.replace(/^XSRF-TOKEN=([^;]+);.*$/, '$1')
         const fetch = (cfg:any):Promise<any> => new Promise((resolve,reject) => deprecatedRequest(cfg, (err:any,res:any) => err ? reject(err) : resolve(res)))

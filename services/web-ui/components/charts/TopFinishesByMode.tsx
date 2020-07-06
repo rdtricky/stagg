@@ -1,4 +1,4 @@
-import { CallOfDuty } from '@stagg/util'
+import { Map } from '@stagg/api'
 import Radar from './base/Radar'
 
 export default ({ performances }) => {
@@ -10,7 +10,7 @@ export default ({ performances }) => {
         Top10: [...emptyGroup],
     }
     for(const p of performances) {
-        const mode = CallOfDuty.Warzone.modeMap[p.modeId]
+        const mode = Map.CallOfDuty.Modes[p.modeId]
         if (!mode) continue
         const teamSizeLabels = ['Solos', 'Duos', 'Trios', 'Quads']        
         if (p.stats.teamPlacement > 0 && p.stats.teamPlacement <= 10) groups.Top10[mode.teamSize-1]++

@@ -9,6 +9,7 @@ export namespace CallOfDuty {
         uno:    { label: 'ATV', name: 'Activision'          },
         xbl:    { label: 'XBL', name: 'Xbox Live'           },
         psn:    { label: 'PSN', name: 'PlayStation Network' },
+        steam:  { label: 'STM', name: 'Steam'               },
         battle: { label: 'BTL', name: 'Battle.net'          },
     }
     export namespace Warzone {

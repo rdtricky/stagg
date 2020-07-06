@@ -1,8 +1,9 @@
-import { delay, timestamp } from '@stagg/util'
 import { T as Mongo } from '@stagg/mongo'
 import * as API from '@stagg/api'
 import * as Scrape from './scraper'
 import cfg from '../config'
+
+export const timestamp = () => Math.round(new Date().getTime()/1000)
 
 export const updateExistingPlayers = async (db:Mongo.Db) => {
     while(true) {
@@ -22,7 +23,7 @@ export const initializeNewPlayers = async (db:Mongo.Db) => {
             player.games = games
             player.profiles = profiles
             await initialize(player, db)
-            await delay(cfg.scrape.wait)
+            await Scrape.delay(cfg.scrape.wait)
         } catch(e) {
             // This can fail if they have no titleIdentities returned, so signal in the db to skip for now
             await db.collection('players').updateOne({ _id: player._id }, { $set: { initFailure: true } })
@@ -43,7 +44,7 @@ export const recheckExistingPlayers = async (db:Mongo.Db) => {
             player.games = games
             player.profiles = profiles
             await recheck(player)
-            await delay(cfg.scrape.wait)
+            await Scrape.delay(cfg.scrape.wait)
         } catch(e) {
             console.log('[!] Recheck failed for', player.email, e)
         }

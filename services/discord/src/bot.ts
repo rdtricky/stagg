@@ -1,9 +1,11 @@
+import { Map } from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
 import { Client, Message } from 'discord.js'
 import * as API from '@stagg/api'
-import { commaNum, percentage, CallOfDuty } from '@stagg/util'
 import * as LegacyAPI from './api'
 
+const commaNum = (num:Number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+const percentage = (divisor:number, dividend:number, decimals:number=2) => ((divisor / dividend) * 100).toFixed(decimals)
 export default class {
     protected bot:Client
     constructor(loginToken:string, jwtSecret:string, mailConfig:{user:string,pass:string}, mongoConfig:Mongo.T.Config) {
@@ -197,7 +199,7 @@ export default class {
             if (p.stats.teamPlacement <= 10)                  staggAll.top10++
             if (p.stats.gulagKills >= 1)                      staggAll.gulagWins++
             if (p.stats.gulagKills || p.stats.gulagDeaths)    staggAll.gulagGames++
-            const mode = CallOfDuty.Warzone.modeMap[p.modeId]
+            const mode = Map.CallOfDuty.Modes[p.modeId]
             if (!mode) { // If we don't know what the game mode is say fuck it and guess quads?
                 mode.type = 'br'
                 mode.teamSize = 4

@@ -1,6 +1,6 @@
 # Stagg Monorepo
 
-Built with TypeScript, Node, React, MongoDB, Express, and Socket.io; package management provided by Lerna
+Built with TypeScript, Node, Express, MongoDB, React, and Next; package management provided by Lerna
 
 ## Contributing
 
@@ -12,13 +12,9 @@ PRs are always welcome!
 
 #### Republish
 
-- Restructure players as players.users, players.enemies, players.sample
+- Discord register should just take a username, it'll send a confirmation email to that address (can be username/platform or email)
+- Add field to denote if registered player, enemy player, or control player (known good players)
 
-- Get rid of @stagg/util
-- Discord bot service fixes/updates
-    - If already logged in exit process
-    - Make all interactions via UI API
-    - Log all interactions (input/user/output?)
 - Set all packages to empty with no deps
 - Unpublish all packages
 - Create new repo
@@ -38,7 +34,6 @@ PRs are always welcome!
 - Match summaries
 - Multiplayer API/types
 - Testing and error reporting
-- Login/Platforms/Friends types
 - Some teamPlacement props are 0
 - Backfill rankedTeams with TRN whenever possible (maybe useless without uno ids?)
 

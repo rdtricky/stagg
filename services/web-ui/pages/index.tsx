@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import Head from 'next/head'
-import { commaNum } from '@stagg/util'
 import styled from 'styled-components'
 import Center from '../components/Center'
 import Template from '../components/Template'
+import { commaNum } from '../util'
 import cfg from '../config/ui'
 
 const GameWrapper = styled.div`
