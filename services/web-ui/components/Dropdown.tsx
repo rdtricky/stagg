@@ -5,6 +5,7 @@ import { useOnClickOutside } from '../hooks'
 const Wrapper = styled.span`
     display: inline-block;
     position: relative;
+    z-index: 1;
     ul {
         text-align: left;
         position: absolute;

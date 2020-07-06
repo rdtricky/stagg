@@ -169,11 +169,11 @@ export interface Filters {
 }
 
 // Need to add a special case for downs
-const filterMap = [
+export const filterMap = [
     { stat: 'timePlayed',           label: 'Time Played' },
     { stat: 'teamPlacement',        label: 'Finish' },
     { stat: 'kills',                label: 'Kills' },
-    { stat: 'Deaths',               label: 'Deaths' },
+    { stat: 'deaths',               label: 'Deaths' },
     { stat: 'damageDone',           label: 'DMG Done' },
     { stat: 'damageTaken',          label: 'DMG Taken' },
     // { stat: 'teamSurvivalTime',     label: 'Survival Time' },
