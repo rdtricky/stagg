@@ -147,7 +147,7 @@ export default class {
         if (!player) return this.FormatOutput([`No account found for ${identifier}. Did you forget to sign in? Try https://stagg.co/login`])
         if (player.discord) {
             if (player.discord === msg.author.id) return this.FormatOutput([`You're killing me smalls! Discord account already linked.`])
-            return this.FormatOutput([`No account found for ${identifier}. Did you forget to sign in? Try https://stagg.co/login`])
+            return this.FormatOutput([`This account has a different Discord account linked already. This can be corrected in your settings at https://stagg.co/settings`])
         }
         await LegacyAPI.Mail.SendConfirmation(player.email, { discord: msg.author.id })
         return this.FormatOutput([
