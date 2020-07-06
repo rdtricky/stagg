@@ -1,7 +1,16 @@
 import { Polar } from 'react-chartjs-2'
 
-const options = { maintainAspectRatio: false, legend: { display: false }, tooltips: { enabled: true } }
-export default ({ groups }) => {
+export default ({ groups, percentage=false }) => {
+  const percentageLabelCallback = (tooltipItem, data) => `${data.labels[tooltipItem.index]}: ${tooltipItem.yLabel}%`
+  const options = {
+    maintainAspectRatio: false,
+    legend: { display: false },
+    tooltips: {
+      enabled: true,
+      callbacks: {}
+    }
+  }
+  if (percentage) options.tooltips.callbacks = { label: percentageLabelCallback }
   const data = {
     labels: Object.keys(groups),
     datasets: [{

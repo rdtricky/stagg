@@ -16,7 +16,7 @@ export default ({ performances }) => {
         if (p.stats.teamPlacement > 0 && p.stats.teamPlacement <= 10) groups[teamSizeLabels[mode.teamSize-1]][1]++
     }
     for(const key in groups) {
-        groups[key] = [ (groups[key][1] / groups[key][0]) * 100 ]
+        groups[key] = [ Math.round((groups[key][1] / groups[key][0]) * 100) ]
     }
-    return <Polar groups={groups} />
+    return <Polar groups={groups} percentage={true} />
 }
