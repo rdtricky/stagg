@@ -12,6 +12,8 @@ PRs are always welcome!
 
 #### Republish
 
+- Restructure players as players.users, players.enemies, players.sample
+
 - Get rid of @stagg/util
 - Discord bot service fixes/updates
     - If already logged in exit process
@@ -24,7 +26,6 @@ PRs are always welcome!
 
 #### Web UI
 
-- Breakage when no Discord linked
 - Large expandable charts dont fit mobile screen
 - Add tooltips to each chart to explain the correlations
 - Customizable dashboard with custom-built charts

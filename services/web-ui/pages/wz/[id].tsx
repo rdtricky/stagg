@@ -78,7 +78,7 @@ const Page = ({ user, count, discord, filters }) => {
     }
 
 
-  return (
+    return (
     <Template user={user}>
         {
             !filteredPerformanceMap[username].length ? <FixedOverlay><Center><h1>Loading { commaNum(count.performances) } matches...</h1></Center></FixedOverlay> : <></>
@@ -124,7 +124,7 @@ const Page = ({ user, count, discord, filters }) => {
             </Card>
         </Center>
     </Template>
-  )
+    )
 }
 
 Page.getInitialProps = async ({ query }) => {

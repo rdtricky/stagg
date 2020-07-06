@@ -1,12 +1,17 @@
 import Head from 'next/head'
-import Link from 'next/link'
+// import Link from 'next/link'
 import Center from '../components/Center'
 import Template from '../components/Template'
 import { Wrapper, FormWrapper } from './login'
 import cfg from '../config/ui'
 
-
-export const Page = ({ user }) => {
+export const Page = ({ user, success }) => {
+  const mainMsg = success
+    ? 'Your Discord profile has been linked to your account.'
+    : 'There was a problem trying to confirm your account...'
+  const smallMsg = success
+    ? 'You may now close this window'
+    : 'Feel free to reach out at https://stagg.co/help if this persists'
   return (
     <Template user={user}>
       <Head>
@@ -16,21 +21,28 @@ export const Page = ({ user }) => {
         <Center>
           <FormWrapper>
               <Center>
-                  <h2>Your email has been confirmed.</h2>
+                  <h2>{ mainMsg }</h2>
               </Center>
           </FormWrapper>
-          <p><Link href="/login"><a>Back to login</a></Link></p>
+          {/* <p><Link href="/login"><a>Back to login</a></Link></p> */}
+          <p><small>{ smallMsg }</small></p>
         </Center>
       </Wrapper>
     </Template>
   )
 }
 
-Page.getInitialProps = async () => {
-  const jwt = 'from router'
-  // const confirmationRes = await fetch(`${cfg.api.host}/mail/confirm?jwt=${jwt}`)
-  // const success = await confirmationRes.json()
-  return { jwt }
+Page.getInitialProps = async (ctx) => {
+  const jwt = ctx.query.t
+  console.log(`${cfg.api.host}/api/mail/confirm?jwt=${jwt}`)
+  const confirmationRes = await fetch(`${cfg.api.host}/mail/confirm?jwt=${jwt}`)
+  try {
+    const { success } = await confirmationRes.json()
+    return { success }
+  } catch(e) {
+    console.log('Confirmation error', e)
+    return { success: false }
+  }
 }
 
 export default Page

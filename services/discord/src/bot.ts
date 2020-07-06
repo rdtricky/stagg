@@ -137,7 +137,10 @@ export default class {
     }
 
     protected async cmd_register(msg:Message, email:string) {
+        const mongo = await Mongo.Client()
         if (!email.match(/^.+@.+\..+$/i)) return this.FormatOutput(['Invalid email address'])
+        const player = await mongo.collection('players').findOne({ email })
+        if (!player) return this.FormatOutput([`No account found for ${email}. Did you forget to sign in? Try https://stagg.co/login`])
         await LegacyAPI.Mail.SendConfirmation(email, { discord: msg.author.id })
         return this.FormatOutput([
             `Confirmation email sent to ${email}, check your inbox...`,
