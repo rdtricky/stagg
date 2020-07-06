@@ -149,6 +149,9 @@ export default class {
             if (player.discord === msg.author.id) return this.FormatOutput([`You're killing me smalls! Discord account already linked.`])
             return this.FormatOutput([`This account has a different Discord account linked already. This can be corrected in your settings at https://stagg.co/settings`])
         }
+        // see if this discord is attached to another acct already
+        const discordExists = await mongo.collection('players').findOne({ discord: msg.author.id })
+        if (discordExists) return this.FormatOutput([`Your Discord is already linked with ${discordExists.profiles?.uno}. To undo this visit https://stagg.co/settings`])
         await LegacyAPI.Mail.SendConfirmation(player.email, { discord: msg.author.id })
         return this.FormatOutput([
             `Confirmation sent to ${isIdEmail ? identifier : `the email on file for ${identifier}`}, check your inbox...`,
