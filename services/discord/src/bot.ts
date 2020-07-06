@@ -1,4 +1,3 @@
-import { Map } from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
 import { Client, Message } from 'discord.js'
 import * as API from '@stagg/api'
@@ -105,7 +104,7 @@ export default class {
             'Available commands:',
             '- `help` Get help using the Stagg Discord bot',
             '- `meta` Get stats on the overall Stagg system',
-            '- `register <email>` Register your Discord account to your email',
+            '- `register <email> OR <username> <platform>` Link your Discord',
             '- `search <username> <platform?>` Find profiles matching your query',
             '- `wz all <username> <platform?>` Show all aggregated BR stats',
             '- `wz solos <username> <platform?>` Aggregated stats from all BR Solos matches',
@@ -138,14 +137,21 @@ export default class {
         ])
     }
 
-    protected async cmd_register(msg:Message, email:string) {
+    protected async cmd_register(msg:Message, identifier:string, platform?:API.T.CallOfDuty.Platform) {
         const mongo = await Mongo.Client()
-        if (!email.match(/^.+@.+\..+$/i)) return this.FormatOutput(['Invalid email address'])
-        const player = await mongo.collection('players').findOne({ email })
-        if (!player) return this.FormatOutput([`No account found for ${email}. Did you forget to sign in? Try https://stagg.co/login`])
-        await LegacyAPI.Mail.SendConfirmation(email, { discord: msg.author.id })
+        // accepts email or username/platform so check if first identifier is email and fetch accordingly
+        const isIdEmail = identifier.match(/^.+@.+\..+$/i)
+        const player = !isIdEmail
+            ? await Mongo.CallOfDuty.Get.Player(identifier, platform)
+            : await mongo.collection('players').findOne({ email: identifier })
+        if (!player) return this.FormatOutput([`No account found for ${identifier}. Did you forget to sign in? Try https://stagg.co/login`])
+        if (player.discord) {
+            if (player.discord === msg.author.id) return this.FormatOutput([`You're killing me smalls! Discord account already linked.`])
+            return this.FormatOutput([`No account found for ${identifier}. Did you forget to sign in? Try https://stagg.co/login`])
+        }
+        await LegacyAPI.Mail.SendConfirmation(player.email, { discord: msg.author.id })
         return this.FormatOutput([
-            `Confirmation email sent to ${email}, check your inbox...`,
+            `Confirmation sent to ${isIdEmail ? identifier : `the email on file for ${identifier}`}, check your inbox...`,
         ])
     }
 
@@ -199,7 +205,7 @@ export default class {
             if (p.stats.teamPlacement <= 10)                  staggAll.top10++
             if (p.stats.gulagKills >= 1)                      staggAll.gulagWins++
             if (p.stats.gulagKills || p.stats.gulagDeaths)    staggAll.gulagGames++
-            const mode = Map.CallOfDuty.Modes[p.modeId]
+            const mode = API.Map.CallOfDuty.Modes[p.modeId]
             if (!mode) { // If we don't know what the game mode is say fuck it and guess quads?
                 mode.type = 'br'
                 mode.teamSize = 4
