@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
-import cfg from '../../config/ui'
-import { colors } from './[id]'
-import Dropdown from '../../components/Dropdown'
+import cfg from '../../../config/ui'
+import { colors } from '../[id]'
+import Dropdown from '../../../components/Dropdown'
 
 const FilterContainer = styled.div`
 margin: 0.5rem;

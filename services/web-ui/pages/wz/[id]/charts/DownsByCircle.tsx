@@ -1,4 +1,4 @@
-import Pie from './base/Pie'
+import Pie from '../../../../components/charts/Pie'
 
 export default ({ performances }) => {
     const groups = {}

@@ -1,6 +1,15 @@
 import { Radar } from 'react-chartjs-2'
 
-const options = { maintainAspectRatio: false, legend: { display: false }, tooltips: { enabled: true } }
+const options = {
+  maintainAspectRatio: false,
+  scale: {
+    ticks: {
+      beginAtZero: true
+    }
+  },
+  legend: { display: false },
+  tooltips: { enabled: true }
+}
 const colors = [
   '179,181,198',
   '255,99,132',

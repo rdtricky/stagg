@@ -1,16 +1,17 @@
 import { useState } from 'react'
-import Card from '../../components/Card'
-import Dropdown from '../../components/Dropdown'
-import StatByRank from '../../components/charts/StatByRank'
-import { filterMap } from './Filters'
+import Card from '../../../../components/Card'
+import Dropdown from '../../../../components/Dropdown'
+import StatByRank from './StatByRank'
+import { filterMap } from '../Filters'
 export default ({ colors, username, performanceMap }) => {
     const dropdownItemClicked = (filterMapItem) => {
         setStat(filterMapItem.stat)
         setActiveItem({ label: filterMapItem.label, onClick: () => dropdownItemClicked(filterMapItem)})
     }
     const dontShow = ['teamPlacement', 'distanceTraveled', 'timePlayed', 'gulagKills', 'gulagDeaths']
-    const dropdownItems = filterMap.filter(s => !dontShow.includes(s.stat)).map(s => ({ label: s.label, onClick:() => dropdownItemClicked(s) }))
-    const [stat, setStat] = useState(filterMap[0].stat)
+    const filters = filterMap.filter(s => !dontShow.includes(s.stat))
+    const dropdownItems = filters.map(s => ({ label: s.label, onClick:() => dropdownItemClicked(s) }))
+    const [stat, setStat] = useState(filters[0].stat)
     const [activeItem, setActiveItem] = useState(dropdownItems[0])
     const Label = (
         <span>

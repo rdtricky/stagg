@@ -1,4 +1,4 @@
-import Line from './base/Line'
+import Line from '../../../../components/charts/Line'
 
 export default ({ username, performanceMap, colors=[], stat, xStep=0, yStep=0, color='' }) => {
     const lines = []

@@ -5,14 +5,14 @@ import { useState } from 'react'
 import Card from '../../components/Card'
 import Center from '../../components/Center'
 import Template, { FixedOverlay } from '../../components/Template'
-import GamesByMode from '../../components/charts/GamesByMode'
-import DownsByCircle from '../../components/charts/DownsByCircle'
-import TopFinishesByMode from '../../components/charts/TopFinishesByMode'
-import StatByRank from '../../components/charts/StatByRank'
-import StatOverTime from '../../components/charts/StatOverTime'
-import WinsByMode from '../../components/charts/WinsByMode'
-import Filters, { Filters as FiltersType } from './Filters'
-import AnyStatByRank from './AnyStatByRank'
+import GamesByMode from './[id]/charts/GamesByMode'
+import DownsByCircle from './[id]/charts/DownsByCircle'
+import TopFinishesByMode from './[id]/charts/TopFinishesByMode'
+import StatByRank from './[id]/charts/StatByRank'
+import StatOverTime from './[id]/charts/StatOverTime'
+import WinsByMode from './[id]/charts/WinsByMode'
+import Filters, { Filters as FiltersType } from './[id]/Filters'
+import AnyStatByRank from './[id]/charts/AnyStatByRank'
 import { commaNum } from '../../util'
 import cfg from '../../config/ui'
 
@@ -99,7 +99,7 @@ const Page = ({ user, count, discord, filters }) => {
             <Card label="Wins by Mode">
                 <WinsByMode performances={filteredPerformanceMap[username]} />
             </Card>
-            <Card label="Top finishes by Mode">
+            <Card label="Top 10 Finish % by Mode">
                 <TopFinishesByMode performances={filteredPerformanceMap[username]} />
             </Card>
             <Card label="Downs by Circle">

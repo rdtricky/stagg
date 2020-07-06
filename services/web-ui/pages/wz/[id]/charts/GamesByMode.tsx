@@ -1,5 +1,5 @@
 import { Map } from '@stagg/api'
-import Pie from './base/Pie'
+import Pie from '../../../../components/charts/Pie'
 
 export default ({ performances }) => {
     const groups = {}
@@ -11,7 +11,7 @@ export default ({ performances }) => {
         }
         const teamSizeLabels = ['Solos', 'Duos', 'Trios', 'Quads']
         if (!groups[teamSizeLabels[mode.teamSize-1]]) groups[teamSizeLabels[mode.teamSize-1]] = 0
-        if (p.stats.teamPlacement === 1) groups[teamSizeLabels[mode.teamSize-1]]++
+        groups[teamSizeLabels[mode.teamSize-1]]++
     }
     return <Pie groups={groups} />
 }

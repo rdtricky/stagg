@@ -8,11 +8,11 @@ export default ({ groups }) => {
       label: '',
       data: Object.values(groups),
       backgroundColor: [
-        '#FF6384',
         '#4BC0C0',
         '#FFCE56',
         '#E7E9ED',
         '#36A2EB',
+        '#FF6384',
       ]
     }]
   }
