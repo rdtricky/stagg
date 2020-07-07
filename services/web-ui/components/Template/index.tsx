@@ -43,6 +43,8 @@ export default ({ children, user }) => {
                 <link rel="stylesheet" href="/assets/css/base.css" media="all" />
                 <link rel="stylesheet" href="/assets/css/icomoon.css" media="all" />
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700%7COpen+Sans:300,400,700&amp;subset=latin,latin,latin" media="all" />
+                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171798332-1"></script>
+                <script src="/assets/js/ga.js"></script>
             </Head>
             <Overlay>
                 <Nav user={user} />
