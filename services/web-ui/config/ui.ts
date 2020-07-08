@@ -27,6 +27,12 @@ const staging = {
         postman: {
             url: 'https://documenter.getpostman.com/view/5519582/SzzgAefq'
         }
+    },
+    discord: {
+        server: {
+            id: '729780289727102976',
+            url: 'https://discord.me/stagg',
+        },
     }
 }
 

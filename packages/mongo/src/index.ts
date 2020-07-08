@@ -20,6 +20,17 @@ export const Client = async () => {
     return mdbClient.db(config.db)
 }
 
+export namespace Schema {
+    export type Db = Mongo.Db
+    export type Client = Mongo.MongoClient
+    export interface Config {
+        db:string
+        host:string
+        user:string
+        password:string
+    }
+}
+
 export namespace T {
     export type Db = Mongo.Db
     export type Client = Mongo.MongoClient

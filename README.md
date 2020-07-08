@@ -12,9 +12,6 @@ PRs are always welcome!
 
 #### Republish
 
-- Discord register should just take a username, it'll send a confirmation email to that address (can be username/platform or email)
-- Add field to denote if registered player, enemy player, or control player (known good players)
-
 - Set all packages to empty with no deps
 - Unpublish all packages
 - Create new repo
@@ -27,9 +24,16 @@ PRs are always welcome!
 - Customizable dashboard with custom-built charts
 - Correlation creation tool
 
+#### Misc
+
+- Sign ups seem to double create
+- Create roles for Discord servers (eg: "@2+ KD")
+- Alert when someone beats their previous best or gets a BR win
+- Store generated JWTs in db and provide back an ID for the confirmation email link
+- Add field to denote if registered player, enemy player, or control player (known good players)
+
 #### Call of Duty API
 
-- WZ game modes
 - WZ/MP Profiles
 - Match summaries
 - Multiplayer API/types
