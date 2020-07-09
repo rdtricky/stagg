@@ -33,7 +33,7 @@ const Container = styled.footer`
 export default () => {
     return (
         <Container>
-            <a href="https://discord.stagg.co" target="_blank">
+            <a href="/discord" target="_blank">
                 <i className="icon-discord" />
             </a>
             <a href="https://github.com/mdlindsey/stagg" target="_blank">
