@@ -68,6 +68,11 @@ export const Page = ({ user }) => {
                             <li>Send tangible tips on how to improve your game after each match</li>
                             <li>Rinse and repeat</li>
                         </ol>
+                        <h3 style={{marginTop: '3rem', lineHeight: '0.7em'}}>
+                            <small><small>
+                                Stagg is currently supporting Call of Duty MW + Warzone through beta phase with more games coming soon!
+                            </small></small>
+                        </h3>
                     </div>
                 </section>
                 <section className="join d-flex justify-content-center">
@@ -82,7 +87,6 @@ export const Page = ({ user }) => {
                         <h3 className="d-flex">Staff</h3>
                         <span>Stagg#4282</span>
                         <span>SixNoSkin#4451</span>
-                        <span>parker_ballner#9178</span>
                     </div>
                     <div style={{color: 'transparent'}} className="block d-flex flex-column">
                         <span>
