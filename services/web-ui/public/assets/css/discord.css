@@ -193,6 +193,12 @@ h1 {
 	margin: 0 0 35px 0;
 	padding: 0;
 }
+@media screen and (max-width: 767px) {
+	h1 { font-size: 52px; }
+}
+@media screen and (max-width: 499px) {
+	h1 { font-size: 42px; }
+}
 
 h2 {
 	font-size: 48px;
@@ -252,6 +258,15 @@ a.links-suppressor, .links-suppressor a {
 	padding: 0.25rem 1rem;
 	top: 1rem; right: 1rem; z-index: 10;
 	border-radius: 0.5rem;
+}
+
+@media screen and (max-width: 991px) {
+	.online-counter {
+	  top: auto;
+	  bottom: 1rem;
+	  left: auto; right: auto;
+	  margin: auto;
+	}
 }
 
 .online-counter:before {
