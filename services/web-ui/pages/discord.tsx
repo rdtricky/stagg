@@ -79,7 +79,8 @@ export const Page = ({ user }) => {
                 <div className="d-flex">
                     <div className="block d-flex flex-column">
                         <h3 className="d-flex">Staff</h3>
-                        <span>mdlindsey#8745</span>
+                        <span>Stagg#4282</span>
+                        <span>SixNoSkin#4451</span>
                         <span>parker_ballner#9178</span>
                     </div>
                     <div style={{color: 'transparent'}} className="block d-flex flex-column">
