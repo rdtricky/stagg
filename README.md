@@ -27,6 +27,7 @@ PRs are always welcome!
 #### Misc
 
 - Sign ups seem to double create
+- chartjs-node to draw charts for Discord bot
 - Create roles for Discord servers (eg: "@2+ KD")
 - Alert when someone beats their previous best or gets a BR win
 - Store generated JWTs in db and provide back an ID for the confirmation email link

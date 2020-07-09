@@ -3,7 +3,7 @@ body, html {
 }
 
 body {
-	background-image: url("/assets/img/discord/bg-main.jpg");
+	background-image: url("/assets/img/discord/wz-banner-dam.jpg");
 	background-size: cover;
 	background-position: center center;
 	position: relative;
@@ -31,7 +31,7 @@ body {
 .header {
 	height: 550px;
 	width: 100%;
-	background: url("/assets/img/discord/top.jpg");
+	background: url("/assets/img/discord/wz-cinematic.jpg");
 	background-size: cover;
 	background-position: center center;
 	position: relative;
@@ -88,11 +88,11 @@ section .image {
 }
 
 section .image.image1 {
-	background-image: url("/assets/img/discord/example.jpg");
+	background-image: url("/assets/img/discord/wz-jump-crop.jpg");
 }
 
 section .image.image2 {
-	background-image: url("/assets/img/discord/example-2.jpg");
+	background-image: url("/assets/img/discord/wz-final-circle.jpg");
 }
 
 section .text {
@@ -111,13 +111,15 @@ section .text p b {
 	font-weight: 700;
 }
 
-section .text ul {
+section .text ul,
+section .text ol {
 	color: #fff;
 	margin: 0;
 	padding: 0 0 0 20px;
 }
 
-section .text ul li {
+section .text ul li,
+section .text ol li {
 	font-size: 18px;
 	line-height: 26px;
 	color: rgba(255, 255, 255, 0.5);
@@ -125,7 +127,8 @@ section .text ul li {
 	padding: 0;
 }
 
-section .text ul li b {
+section .text ul li b,
+section .text ol li b {
 	color: #fff;
 	font-weight: 700;
 }
