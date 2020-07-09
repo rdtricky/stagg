@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import cfg from '../config/ui'
 import ForceHTTPS from '../components/ForceHTTPS'
+import { commaNum } from '../util'
 
-export const Page = ({ user }) => {
+export const Page = ({ user, server }) => {
   return (
       <>
         <Head>
@@ -15,6 +16,9 @@ export const Page = ({ user }) => {
         <div className="overlay"></div>
         <div className="container d-flex flex-column">
             <div className="header d-flex flex-column justify-content-between align-items-center">
+                <a target="_blank" href={cfg.discord.server.url} className="online-counter">
+                    {commaNum(server?.online?.length || 0)} members online
+                </a>
                 <nav className="topmenu d-flex justify-content-center">
                     <a href="/">Home</a>
                     <div className="line align-self-center"></div>
@@ -87,8 +91,11 @@ export const Page = ({ user }) => {
                 <div className="d-flex">
                     <div className="block d-flex flex-column">
                         <h3 className="d-flex">Staff</h3>
-                        <span>Stagg#4282</span>
-                        <span>SixNoSkin#4451</span>
+                        {
+                            server?.staff?.map(m => (
+                                <span key={m.id}>{m.username}#{m.discriminator}</span>
+                            ))
+                        }
                     </div>
                     <div style={{color: 'transparent'}} className="block d-flex flex-column">
                         <span>
@@ -98,7 +105,7 @@ export const Page = ({ user }) => {
                     </div>
                 </div>
                 <p style={{marginTop: '-2em'}}>
-                    Stagg is a fully automated open-source analytics and coaching platform complete with a premium Discord bot. We're using game data
+                    Stagg is a fully automated open-source analytics and coaching platform complete with a premium Discord bot. We're using in-game data
                     to drive players to more wins and more enjoyable games while pairing them with teammates that are hand-selected for their 
                     play-style compatability.
                 </p>
@@ -106,6 +113,12 @@ export const Page = ({ user }) => {
         </div>
       </>
   )
+}
+
+Page.getInitialProps = async (ctx) => {
+    const serverRes = await fetch(`${cfg.api.host}/discord/server`)
+    const server = await serverRes.json()
+    return { server }
 }
 
 export default Page
