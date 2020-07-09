@@ -250,18 +250,28 @@ a.links-suppressor, .links-suppressor a {
 	flex-grow: 1;
 }
 
-.online-counter {
+.server-info-container {
+	position: absolute;
+	top: 1rem; right: 1rem; z-index: 10;
+}
+
+.online-counter,
+.stream-counter {
+	display: block;
 	color: white !important;
 	text-decoration: none !important;
 	background: #25272C;
-	position: absolute;
 	padding: 0.25rem 1rem;
-	top: 1rem; right: 1rem; z-index: 10;
 	border-radius: 0.5rem;
 }
 
+.stream-counter {
+	margin-bottom: 0.25rem;
+}
+
+
 @media screen and (max-width: 991px) {
-	.online-counter {
+	.server-info-container {
 	  top: auto;
 	  bottom: 1rem;
 	  left: auto; right: auto;
@@ -269,7 +279,8 @@ a.links-suppressor, .links-suppressor a {
 	}
 }
 
-.online-counter:before {
+.online-counter:before,
+.stream-counter:before {
 	content: '';
 	display: inline-block;
 	position: relative;
@@ -279,4 +290,8 @@ a.links-suppressor, .links-suppressor a {
 	margin-right: 0.5rem;
 	background: rgb(89, 255, 89);
 	border-radius: 50%;
+}
+
+.stream-counter:before {
+	background: rgb(160, 20, 160);
 }

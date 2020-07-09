@@ -16,9 +16,22 @@ export const Page = ({ user, server }) => {
         <div className="overlay"></div>
         <div className="container d-flex flex-column">
             <div className="header d-flex flex-column justify-content-between align-items-center">
-                <a target="_blank" href={cfg.discord.server.url} className="online-counter">
-                    {commaNum(server?.online?.length || 0)} members online
-                </a>
+                {
+                    !server?.members?.length ? null : (
+                        <div className="server-info-container">
+                            {
+                                !server?.streamers?.length ? null : (
+                                    <a target="_blank" href={cfg.discord.server.url} className="stream-counter">
+                                        {commaNum(server?.streamers?.length || 0)} active streamer{server?.streamers?.length === 1 ? '' : 's'}
+                                    </a>
+                                )
+                            }
+                            <a target="_blank" href={cfg.discord.server.url} className="online-counter">
+                                {commaNum(server?.online?.length || 0)} members online
+                            </a>
+                        </div>
+                    )
+                }
                 <nav className="topmenu d-flex justify-content-center">
                     <a href="/">Home</a>
                     <div className="line align-self-center"></div>

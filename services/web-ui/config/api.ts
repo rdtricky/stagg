@@ -15,6 +15,9 @@ export interface Config {
     }
     discord: {
         token: string
+        delay: number
+        attempts: number
+        staffRoles: string[]
     }
 }
 export default {
@@ -27,7 +30,10 @@ export default {
         password: process.env.MONGO_PASS,
     },
     discord: {
+        delay: 100,
+        attempts: 10,
         token: process.env.DISCORD_TOKEN,
+        staffRoles: ['Stagg', '@moderator'],
     },
     gmail: {
         user: process.env.GMAIL_ADDRESS,

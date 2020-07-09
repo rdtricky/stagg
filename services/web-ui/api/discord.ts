@@ -26,21 +26,22 @@ export const server = async (req,res) => {
     let guild
     let attempts = 0
     while(!guild) {
-        if (attempts > 10) {
+        if (attempts > apiCfg.discord.attempts) {
             return res.send({ staff: [], members: [], online: [], error: 'unable to connect to Discord' })
         }
         guild = discord.guilds.resolve(discord.guilds.resolveID(uiCfg.discord.server.id))
         attempts++
-        await delay(100)
+        await delay(apiCfg.discord.delay)
     }
     const online = []
     const members = []
+    const streamers = []
     const staffMembers = []
     const staffRoleIds = []
     const onlineMemberIds = []
-    const staffRoleNames = ['Stagg', '@moderator'] // leaving out @admin for now
+    const streamingMemberIds = []
     for(const [, role] of guild.roles.cache) {
-        if (staffRoleNames.includes(role.name)) {
+        if (apiCfg.discord.staffRoles.includes(role.name)) {
             staffRoleIds.push(role.id)
         }
     }
@@ -49,10 +50,16 @@ export const server = async (req,res) => {
             onlineMemberIds.push(presence.userID)
         }
     }
+    for(const [mId, voiceState] of guild.voiceStates.cache) {
+        if (voiceState.streaming) {
+            streamingMemberIds.push(mId)
+        }
+    }
     for(const [, member] of guild.members.cache) {
         const memberProps = {
             id: member.user.id,
             bot: member.user.bot,
+            avatar: member.user.avatar,
             username: member.user.username,
             discriminator: member.user.discriminator,
         }
@@ -65,7 +72,10 @@ export const server = async (req,res) => {
         if (onlineMemberIds.includes(memberProps.id)) {
             online.push({ ...memberProps })
         }
+        if (streamingMemberIds.includes(memberProps.id)) {
+            streamers.push({ ...memberProps })
+        }
     }
     const staff = staffMembers.sort((a,b) => (a.username.length + a.discriminator.length) - (b.username.length + b.discriminator.length))
-    res.send({ staff, members, online })
+    res.send({ staff, streamers, online, members })
 }
