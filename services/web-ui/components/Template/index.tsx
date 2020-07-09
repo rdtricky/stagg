@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Main from './Main'
 import Nav from './Nav'
 import Footer from './Footer'
+import ForceHTTPS from '../ForceHTTPS'
 
 const Container = styled.div`
     background: url(/assets/img/bg.jpg) no-repeat center center fixed; 
@@ -53,6 +54,7 @@ export default ({ children, user }) => {
                 </Main>
                 <Footer />
             </Overlay>
+            <ForceHTTPS />
         </Container>
     )
 }

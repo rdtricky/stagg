@@ -1,6 +1,7 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import StaggBot from './bot'
+import './chart'
 import cfg from './config'
 
 const app = express()

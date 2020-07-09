@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import cfg from '../config/ui'
+import ForceHTTPS from '../components/ForceHTTPS'
 
 export const Page = ({ user }) => {
   return (
@@ -10,6 +11,7 @@ export const Page = ({ user }) => {
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" media="all" />
             <link rel="stylesheet" href="/assets/css/discord.css" media="all" />
         </Head>
+        <ForceHTTPS />
         <div className="overlay"></div>
         <div className="container d-flex flex-column">
             <div className="header d-flex flex-column justify-content-between align-items-center">
