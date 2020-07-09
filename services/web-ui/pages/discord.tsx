@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import cfg from '../config/ui'
 import ForceHTTPS from '../components/ForceHTTPS'
-import { commaNum } from '../util'
+import { commaNum, pluralizeStr } from '../util'
 
 export const Page = ({ user, server }) => {
   return (
@@ -22,12 +22,12 @@ export const Page = ({ user, server }) => {
                             {
                                 !server?.streamers?.length ? null : (
                                     <a target="_blank" href={cfg.discord.server.url} className="stream-counter">
-                                        {commaNum(server?.streamers?.length || 0)} active streamer{server?.streamers?.length === 1 ? '' : 's'}
+                                        {commaNum(server?.streamers?.length || 0)} active {pluralizeStr('streamer', server?.streamers?.length)}
                                     </a>
                                 )
                             }
                             <a target="_blank" href={cfg.discord.server.url} className="online-counter">
-                                {commaNum(server?.online?.length || 0)} members online
+                                {commaNum(server?.online?.length || 0)} {pluralizeStr('member', server?.members?.length)} online
                             </a>
                         </div>
                     )
