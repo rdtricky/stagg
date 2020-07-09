@@ -176,6 +176,14 @@ section.join .line {
 	margin-bottom: 0;
 }
 
+.server-icon {
+	display: block;
+	margin: 0 auto 1rem;
+	border-radius: 50%;
+	width: 8rem;
+	height: 8rem;
+}
+
 h1 {
 	font-size: 68px;
 	color: #fff;

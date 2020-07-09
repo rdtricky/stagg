@@ -21,6 +21,7 @@ export const Page = ({ user }) => {
                     <a target="_blank" href={cfg.discord.server.url}>Join</a>
                 </nav>
                 <div className="server-info d-flex align-items-center flex-column text-center">
+                    <img className="server-icon" src="/assets/img/discord/server-icon.png" alt="Stagg Discord Server Icon" />
                     <h1>Stagg/Discord</h1>
                     <a className="links-suppressor join-btn btn-pill white" target="_blank" href={cfg.discord.server.url}>Join Now</a>
                 </div>
