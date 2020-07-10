@@ -70,6 +70,11 @@ export default class {
         }
         await mongo.collection('log.discord').insertOne(logRecord)
         msg.channel.send('> Working on it...').then(async (sentMessage) => {
+            if (cmd === 'chart') {
+                sentMessage.edit('> See chart(s) below...')
+                msg.channel.send('', { files: ["https://stagg.co/api/chart.png?c={type:'bar',data:{labels:['Q1','Q2','Q3','Q4'], datasets:[{label:'Users',data:[50,60,70,180]},{label:'Revenue',data:[100,200,300,400]}]}}"] })
+                return
+            }
             const commandResponse = await this.CommandDispatcher(msg, cmd, ...args)
             const truncatedResponse = this.TruncateOutput(commandResponse) // truncates only if > 2k char limit
             sentMessage.edit(truncatedResponse)

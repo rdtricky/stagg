@@ -19,6 +19,7 @@ PRs are always welcome!
 
 #### Web UI
 
+- Discord landing page off-center in mobile
 - Large expandable charts dont fit mobile screen
 - Add tooltips to each chart to explain the correlations
 - Customizable dashboard with custom-built charts
@@ -26,6 +27,7 @@ PRs are always welcome!
 
 #### Misc
 
+- Discord bot most kills in a game
 - Sign ups seem to double create
 - chartjs-node to draw charts for Discord bot
 - Create roles for Discord servers (eg: "@2+ KD")
@@ -49,3 +51,5 @@ To publish new packages, you will need access to [Stagg NPM](https://www.npmjs.c
 ```
 npm login --registry=https://registry.npmjs.org/ --scope=stagg
 ```
+
+https://quickchart.io/chart?c={type:'bar',data:{labels:['Q1','Q2','Q3','Q4'], datasets:[{label:'Users',data:[50,60,70,180]},{label:'Revenue',data:[100,200,300,400]}]}}
