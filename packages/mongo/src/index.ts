@@ -1,3 +1,38 @@
+// import * as Mongo from 'mongodb'
+// import { T as API } from '@stagg/api'
+// import { CallOfDuty } from './callofduty'
+
+// let cfg:T.Config
+// let mdbClients:{[key:string]:Mongo.MongoClient} // db:client
+
+// export { CallOfDuty }
+// export const config = (c:T.Config) => cfg = c
+// export const client = async (dbToUse?:string):Promise<Db> => {
+//     const db = dbToUse || cfg.db
+//     if (!cfg) throw new Error('MongoDB config not found')
+//     if (!mdbClients[db]) mdbClients[db] = new Mongo.MongoClient(
+//         `mongodb+srv://${cfg.user}:${cfg.password}@${cfg.host}/${cfg.db}?retryWrites=true&w=majority`,
+//         { useNewUrlParser: true, useUnifiedTopology: true }
+//     )
+//     if (!mdbClients[db].isConnected()) {
+//         await mdbClients[db].connect()
+//         console.log(`[+] Connected to MongoDB ${cfg.host}/${cfg.db}`)
+//     }
+//     return mdbClients[db].db(db)
+// }
+
+// export type Db = Mongo.Db
+// export type Client = Mongo.MongoClient
+// export interface Config {
+//     db:string
+//     host:string
+//     user:string
+//     password:string
+// }
+// export namespace Schema {
+
+// }
+
 import * as Mongo from 'mongodb'
 import { T as API } from '@stagg/api'
 import { CallOfDuty } from './callofduty'

@@ -56,14 +56,14 @@ export default class {
         const mongo = await Mongo.Client()
         const logRecord = {
             content: msg.content,
-            channel: { type: msg.channel.type },
+            channel: { type: msg?.channel?.type },
             author: {
                 id: msg.author.id,
                 avatar: msg.author.avatar,
                 username: msg.author.username
             }
         } as any
-        if (msg.channel.type !== 'dm') {
+        if (msg?.channel?.type !== 'dm') {
             logRecord.channel.id = msg.channel.id
             logRecord.channel.name = msg.channel.name
             logRecord.channel.parentID = msg.channel.parentID
@@ -72,11 +72,11 @@ export default class {
         msg.channel.send('> Working on it...').then(async (sentMessage) => {
             if (cmd === 'chart') {
                 sentMessage.delete()
-                msg.channel.send('', { files: ["https://stagg.co/api/chart.png?c={type:'bar',data:{labels:['Q1','Q2','Q3','Q4'], datasets:[{label:'Users',data:[50,60,70,180]},{label:'Revenue',data:[100,200,300,400]}]}}"] })
+                msg.channel.send('', { files: ["https://stagg.co/api/chart.png?c={type:'pie',data:{labels:['Solos','Duos','Trios','Quads'],datasets:[{data:[6,4,52,42]}]}}"] })
                 return
             }
             const commandResponse = await this.CommandDispatcher(msg, cmd, ...args)
-            const truncatedResponse = this.TruncateOutput(commandResponse) // truncates only if > 2k char limit
+            const truncatedResponse = this.TruncateOutput(commandResponse) || '> Something went wrong :(' // truncates only if > 2k char limit
             sentMessage.edit(truncatedResponse)
             await mongo.collection('log.discord').updateOne({ _id: logRecord._id }, { $set: { response: truncatedResponse } })
         })
