@@ -16,6 +16,7 @@ PRs are always welcome!
 - Unpublish all packages
 - Create new repo
 - Republish
+- Testing and error reporting
 
 #### Web UI
 
@@ -28,22 +29,19 @@ PRs are always welcome!
 
 #### Misc
 
+- Discord bot "barracks" cmd to show accurate W/L, games played, time played, etc
 - Discord bot most kills in a game
 - Sign ups seem to double create
-- chartjs-node to draw charts for Discord bot
 - Create roles for Discord servers (eg: '@2+ KD')
 - Alert when someone beats their previous best or gets a BR win
-- Store generated JWTs in db and provide back an ID for the confirmation email link
-- Add field to denote if registered player, enemy player, or control player (known good players)
+- Add field to denote if registered player, enemy player, or KGP (known good players)
 
 #### Call of Duty API
 
 - WZ/MP Profiles
 - Match summaries
 - Multiplayer API/types
-- Testing and error reporting
 - Some teamPlacement props are 0
-- Backfill rankedTeams with TRN whenever possible (maybe useless without uno ids?)
 
 ### Publishing to NPM
 

@@ -11,27 +11,38 @@ export namespace Map {
             battle: { label: 'BTL', name: 'Battle.net'          },
         }
         export const Modes = {
-            br_87:              { type: 'br', teamSize: 1 },
-            br_71:              { type: 'br', teamSize: 1 },
-            br_brsolo:          { type: 'br', teamSize: 1 },
-            br_88:              { type: 'br', teamSize: 2 },
-            br_brduos:          { type: 'br', teamSize: 2 },
-            br_74:              { type: 'br', teamSize: 3 },
-            br_77:              { type: 'br', teamSize: 3 },
-            br_25:              { type: 'br', teamSize: 3 },
-            br_brtrios:         { type: 'br', teamSize: 3 },
-            br_jugg_brtriojugr: { type: 'br', teamSize: 3 }, // juggernaut drops in trios
-            br_89:              { type: 'br', teamSize: 4 },
-            br_brquads:         { type: 'br', teamSize: 4 },
-            br_86:              { type: 'br', teamSize: 4, realism: true },
-            br_br_real:         { type: 'br', teamSize: 4, realism: true }, // realism quads
-            br_brthquad:        { type: 'br', teamSize: 4, lobbySize: 200 }, // 200 player quads
-            brtdm_rmbl:         { type: 'tdm', teamSize: 6, lobbySize: 150 },
-            br_dmz_38:          { type: 'plunder', teamSize: 3 },
-            br_dmz_76:          { type: 'plunder', teamSize: 4 },
-            br_dmz_85:          { type: 'plunder', teamSize: 4 },
-            br_dmz_104:         { type: 'plunder', teamSize: 4 },
+            br_87:                  { type: 'br', teamSize: 1 },
+            br_71:                  { type: 'br', teamSize: 1 },
+            br_brsolo:              { type: 'br', teamSize: 1 },
+            br_88:                  { type: 'br', teamSize: 2 },
+            br_brduos:              { type: 'br', teamSize: 2 },
+            br_74:                  { type: 'br', teamSize: 3 },
+            br_77:                  { type: 'br', teamSize: 3 },
+            br_25:                  { type: 'br', teamSize: 3 },
+            br_brtrios:             { type: 'br', teamSize: 3 },
+            br_jugg_brtriojugr:     { type: 'br', teamSize: 3 }, // juggernaut drops in trios
+            br_brtriostim_name2:    { type: 'br', teamSize: 3 }, // stimulus trios (auto respawn if >$4500)
+            br_89:                  { type: 'br', teamSize: 4 },
+            br_brquads:             { type: 'br', teamSize: 4 },
+            br_86:                  { type: 'br', teamSize: 4, realism: true },
+            br_br_real:             { type: 'br', teamSize: 4, realism: true }, // realism quads
+            br_brthquad:            { type: 'br', teamSize: 4, lobbySize: 200 }, // 200 player quads
+            brtdm_rmbl:             { type: 'tdm', teamSize: 6, lobbySize: 150 },
+            br_dmz_38:              { type: 'plunder', teamSize: 3 },
+            br_dmz_76:              { type: 'plunder', teamSize: 4 },
+            br_dmz_85:              { type: 'plunder', teamSize: 4 },
+            br_dmz_104:             { type: 'plunder', teamSize: 4 },
         }
+        /*
+        Circle 1 outlined, 3:30 till gas moves in (-1:00). Gas moves to circle 1 in 4:30.
+        Circle 2 outlined, 1:30 till gas moves in. Gas moves to circle 2 in 3:30. (+1:00)
+        Circle 3 outlined, 1:15 till gas moves in. Gas moves to circle 3 in 2:50 (+:50)
+        Circle 4 outlined, 1:00 till gas moves in. Gas moves to circle 4 in 1:50 (+:20)
+        Circle 5 outlined, 1:00 till gas moves in. Gas moves to circle 5 in 1:08 (+:08)
+        Circle 6 outlined, :50 till gas moves in. Gas moves to circle 6 in :50 (+:05)
+        Circle 7 outlined, :30 till gas moves in. Gas moves to circle 7 in :48 (+:03)
+        1:45 for last circle to close (+:15)
+        */
     }
 }
 export namespace T {

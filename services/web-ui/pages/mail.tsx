@@ -33,7 +33,8 @@ export const Page = ({ user, success }) => {
 }
 
 Page.getInitialProps = async (ctx) => {
-  const jwt = ctx.query.t
+  const token = new Buffer(ctx.query.t, 'base64')
+  const jwt = token.toString('ascii')
   console.log(`${cfg.api.host}/api/mail/confirm?jwt=${jwt}`)
   const confirmationRes = await fetch(`${cfg.api.host}/mail/confirm?jwt=${jwt}`)
   try {
