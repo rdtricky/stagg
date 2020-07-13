@@ -10,14 +10,6 @@ You will need a `.env` file in the root of each service you intend to run for lo
 
 PRs are always welcome!
 
-#### Republish
-
-- Set all packages to empty with no deps
-- Unpublish all packages
-- Create new repo
-- Republish
-- Testing and error reporting
-
 #### Web UI
 
 - Bring back IDB
@@ -42,6 +34,14 @@ PRs are always welcome!
 - Match summaries
 - Multiplayer API/types
 - Some teamPlacement props are 0
+
+#### Republish
+
+- Set all packages to empty with no deps
+- Unpublish all packages
+- Create new repo
+- Republish
+- Testing and error reporting
 
 ### Publishing to NPM
 

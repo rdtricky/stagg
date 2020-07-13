@@ -11,7 +11,13 @@ export const init = () => {
     Mongo.Config(cfg.mongo)
     bot = new Discord.Client()
     bot.login(cfg.discord.token)
-    bot.on('ready', () => console.log(`[+] Using bot ${bot.user.tag}`))
+    bot.on('ready', () => {
+        console.log(`[+] Using bot ${bot.user.tag}`)
+        bot.user.setActivity('for % messages...', {
+            type: 'WATCHING',
+            url: 'https://stagg.co/discord'
+        })
+    })
     bot.on('message', (m:Discord.Message) => dispatcher(m))
 }
 
