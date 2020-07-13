@@ -6,7 +6,7 @@ import cfg from './config'
 const app = express()
 app.use(cors({ credentials: false })).listen(cfg.port, async () => {
     init()
-    app.get('/', (req,res) => res.redirect('https://discord.me/ggez'))
+    app.get('/', (req,res) => res.redirect('https://stagg.co/discord'))
     app.get('/health', (req,res) => res.status(200).send('ok'))
     console.log(
         `${'\x1b[32m' /* green */}${'\x1b[1m' /* bright/bold */}`+

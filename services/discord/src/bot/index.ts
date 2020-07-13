@@ -1,6 +1,7 @@
 import * as API from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
 import * as Discord from 'discord.js'
+import logger from './logger'
 import cfg from '../config'
 import { SendConfirmation } from './mail'
 
@@ -17,7 +18,7 @@ export const init = () => {
 const dispatcher = async (m:Discord.Message) => {
     if (msg.isSelf(m)) return // message sent from the bot, ignore
     if (!msg.isDm(m) && !msg.triggerFound(m)) return // not a dm and no trigger, ignore
-    logger(m)
+    logger.create(m)
     const [ cmd ] = msg.args(m)
     switch(cmd) {
         case 'wz': return wz.dispatcher(m)
@@ -27,29 +28,6 @@ const dispatcher = async (m:Discord.Message) => {
         case 'chart': return msg.sendFiles(m, ["https://stagg.co/api/chart.png?c={type:'pie',data:{labels:['Solos','Duos','Trios','Quads'],datasets:[{data:[6,4,52,42]}]}}"])
         default: return msg.send(m, static_invalid)
     }
-}
-
-const logger = async (m:Discord.Message, response?:string) => {
-    const db = await Mongo.Client()
-    const existingLog = await db.collection('log.discord').findOne({ $or: [{ messageId: m.id }, { responseId: m.id }] })
-    if (!existingLog) {
-        await db.collection('log.discord').insertOne({
-            messageId: m.id,
-            messageAuthor: m.author,
-            messageContent: m.content,
-            responseMessages: []
-        })
-    }
-    if (response) {
-        const responseObj = { response, time: Date.now() }
-        await db.collection('log.discord').updateOne({ messageId: m.id }, { $push: { responseMessages: responseObj } })
-    }
-}
-
-const loggerLinkRes = async (m:Discord.Message, r:Discord.Message) => {
-    const db = await Mongo.Client()
-    console.log('Linking', { messageId: m.id }, 'with', { responseId: r.id })
-    await db.collection('log.discord').updateOne({ messageId: m.id }, { $set: { responseId: r.id } })
 }
 
 const register = async (m:Discord.Message) => {
@@ -136,7 +114,7 @@ namespace msg { // Discord.Message helpers
         return new Promise(
             (resolve,reject) => {
                 m.channel.send(`> ${text || 'Working on it...'}`).then(async sentMessage => {
-                    await loggerLinkRes(m, sentMessage)
+                    logger.link(m, sentMessage)
                     resolve(sentMessage)
                 }).catch(e => reject(e))
             }
@@ -146,19 +124,17 @@ namespace msg { // Discord.Message helpers
     export const send = (m:Discord.Message, output:string[]) => {
         const formattedOutput = formatOutput(output)
         m.channel.send(formattedOutput).then(async sentMessage => {
-            await logger(m, formattedOutput)
-            await loggerLinkRes(m, sentMessage)
+            logger.link(m, sentMessage)
         })
     }
     export const edit = (m:Discord.Message, output:string[]) => {
         const formattedOutput = formatOutput(output)
         m.edit(formattedOutput)
-        logger(m, formattedOutput)
+        logger.response(m, formattedOutput)
     }
     export const sendFiles = (m:Discord.Message, fileUrls:string[]) => {
-        m.channel.send('', { files: fileUrls }).then(async sentMessage => {
-            logger(m, `files:${JSON.stringify(fileUrls)}`)
-            await loggerLinkRes(m, sentMessage)
+        m.channel.send('', { files: fileUrls }).then(sentMessage => {
+            logger.response(m, `files:${JSON.stringify(fileUrls)}`)
         })
     }
     export const truncate = (output:string):string => {
