@@ -134,10 +134,12 @@ export namespace mdb {
 }
 
 export namespace msg { // Discord.Message helpers
-    export const args = (m:Discord.Message):string[] => msg.sanitizeInput(m).split(' ')
+    export const args = (m:Discord.Message, toLower:boolean=true):string[] => msg.sanitizeInput(m, toLower).split(' ')
     export const isDm = (m:Discord.Message):boolean => m.channel.type === 'dm'
     export const isSelf = (m:Discord.Message):boolean => m.author.id === bot.user.id
-    export const sanitizeInput = (m:Discord.Message):string => m.content.toLowerCase().replace(/^%\s*/, '').trim()
+    export const sanitizeInput = (m:Discord.Message, toLower:boolean=true):string => !toLower
+        ? m.content.replace(/^%\s*/, '').trim()
+        : m.content.toLowerCase().replace(/^%\s*/, '').trim()
     export const triggerFound = (m:Discord.Message):boolean => !m.content.toLowerCase().trim().replace(`<@!${bot.user.id}>`, '%').indexOf('%')
     export const placeholder = (m:Discord.Message, text?:string):Promise<Discord.Message> => {
         return new Promise(

@@ -6,8 +6,7 @@ import { msg } from '..'
 const chartUrlPrefix = 'https://stagg.co/api/chart.png?c='
 
 export const statOverTime = async (m:Discord.Message) => {
-    const [,,, username ] = msg.args(m)
-    const [,, stat ] = m.content.split(' ')
+    const [,, stat, username ] = msg.args(m, false)
     const placeholder = await msg.placeholder(m, 'Finding player...')
     const player = await findPlayer(m, username)
     if (!player) {
@@ -25,7 +24,7 @@ export const statOverTime = async (m:Discord.Message) => {
         chartLabels.push(i++)
         chartData.push(doc[stat])
     }
-    const send = await msg.sendFiles(m, [
+    await msg.sendFiles(m, [
         `${chartUrlPrefix}{type:'line',data:{labels:[${chartLabels.join(',')}], datasets:[{label:'Kills OT', data: [${chartData.join(',')}], fill:false, borderColor:'green'}]}}`
     ])
     placeholder.delete()
