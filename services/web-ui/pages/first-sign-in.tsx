@@ -23,7 +23,7 @@ export const Page = ({ user }) => {
     const { profiles } = JWT.decode(jwt) as any
     setUno(profiles.uno)
   }
-  const interval = setInterval(recheck, 10000)
+  const interval = setInterval(recheck, cfg.login.forward.recheck)
   useEffect(() => {
     if (uno) {
         clearInterval(interval)

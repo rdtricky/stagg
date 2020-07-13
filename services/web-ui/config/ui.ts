@@ -5,7 +5,8 @@ const staging = {
     },
     login: {
         forward: {
-            delay: 3000
+            delay: 3000,
+            recheck: 10000
         },
         forgot: {
             url: 'https://profile.callofduty.com/cod/login'
