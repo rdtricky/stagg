@@ -61,7 +61,7 @@ export const byMode = async (m:Discord.Message, modeIdentifier:string|number='al
     return msg.edit(placeholder, [...output, '```'])
 }
 
-const header = (player:Mongo.T.CallOfDuty.Schema.Player, platform:string='uno'):string[] => [
+const header = (player:Mongo.Schema.CallOfDuty.Player, platform:string='uno'):string[] => [
     `**${player.profiles[platform]}** (${player.uno})`,
     `Full profile: https://stagg.co/wz/${player.profiles?.uno?.split('#').join('@')}`,
 ]

@@ -12,7 +12,7 @@ import cfg from '../config'
 let bot:Discord.Client
 
 export const init = async () => {
-    Mongo.Config(cfg.mongo)
+    Mongo.config(cfg.mongo)
     bot = new Discord.Client()
     bot.login(cfg.discord.token)
     bot.on('ready', () => {
@@ -59,10 +59,10 @@ namespace wz {
 }
 
 const register = async (m:Discord.Message) => {
-    const db = await Mongo.Client()
+    const db = await Mongo.client()
     const placeholder = await msg.placeholder(m, 'Working on it...')
     const [, query, platform='uno'] = msg.args(m)
-    let player:Mongo.T.CallOfDuty.Schema.Player
+    let player:Mongo.Schema.CallOfDuty.Player
     if (query.match(/[^@]+@[^\.]+\..+$/)) {
         msg.edit(placeholder, ['Looking up email...'])
         player = await db.collection('players').findOne({ email: query })
@@ -90,7 +90,7 @@ const search = async (m:Discord.Message) => {
     const [, username, platform ] = msg.args(m)
     if (!username || username.length < 3) return msg.send(m, ['Enter at least 3 characters you lazy turd'])
     const placeholder = await msg.placeholder(m, 'Searching for players...')
-    const db = await Mongo.Client()
+    const db = await Mongo.client()
     const queries = []
     if (platform) {
         queries.push({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
@@ -117,7 +117,7 @@ const search = async (m:Discord.Message) => {
 }
 
 export namespace mdb {
-    export let db:Mongo.T.Db
+    export let db:Mongo.Db
     interface PlayerIdentifiers {
         uno?:string
         discord?:string
@@ -125,7 +125,7 @@ export namespace mdb {
         platform?:string
     }
     export const findPlayer = async (pids:PlayerIdentifiers) => {
-        const db = await Mongo.Client()
+        const db = await Mongo.client()
         if (pids.uno) return db.collection('players').findOne({ uno: pids.uno })
         if (pids.discord) return db.collection('players').findOne({ discord: pids.discord })
         const { username='', platform='uno' } = pids

@@ -1,9 +1,9 @@
 import * as deprecatedRequest from 'request'
 import axios, { AxiosRequestConfig } from 'axios'
-import { T } from '.'
+import { Schema } from '.'
 export class CallOfDuty {
-    private tokens:T.CallOfDuty.Tokens
-    constructor(tokens?:T.CallOfDuty.Tokens) {
+    private tokens:Schema.CallOfDuty.Tokens
+    constructor(tokens?:Schema.CallOfDuty.Tokens) {
         this.Tokens(tokens)
     }
     private async request(config:Partial<AxiosRequestConfig>):Promise<any> {
@@ -24,23 +24,23 @@ export class CallOfDuty {
         }
         return res.data
     }
-    Tokens(tokens?:T.CallOfDuty.Tokens) {
+    Tokens(tokens?:Schema.CallOfDuty.Tokens) {
         this.tokens = tokens
         return this
     }
-    async Identity():Promise<T.CallOfDuty.Res.Identity> {
+    async Identity():Promise<Schema.CallOfDuty.Res.Identity> {
         return this.request({ url: `/crm/cod/v2/identities` })
     }
-    async Friends():Promise<T.CallOfDuty.Res.Friends> {
+    async Friends():Promise<Schema.CallOfDuty.Res.Friends> {
         return this.request({ url: `/codfriends/v1/compendium` })
     }
-    async Platforms(username:string, platform:T.CallOfDuty.Platform='uno'):Promise<T.CallOfDuty.Res.Platforms> {
+    async Platforms(username:string, platform:Schema.CallOfDuty.Platform='uno'):Promise<Schema.CallOfDuty.Res.Platforms> {
         return this.request({ url: `/crm/cod/v2/accounts/platform/${platform}/gamer/${encodeURIComponent(username)}` })
     }
-    async Profile(username:string, platform:T.CallOfDuty.Platform='uno', mode:T.CallOfDuty.Mode='wz', game:T.CallOfDuty.Game='mw'):Promise<T.CallOfDuty.Res.Warzone.Profile> {
+    async Profile(username:string, platform:Schema.CallOfDuty.Platform='uno', mode:Schema.CallOfDuty.Mode='wz', game:Schema.CallOfDuty.Game='mw'):Promise<Schema.CallOfDuty.Res.Warzone.Profile> {
         return this.request({ url: `/stats/cod/v1/title/${game}/platform/${platform}/gamer/${encodeURIComponent(username)}/profile/type/${mode}` })
     }
-    async Matches(username:string, platform:T.CallOfDuty.Platform='uno', mode:T.CallOfDuty.Mode='wz', game:T.CallOfDuty.Game='mw', next:number=0):Promise<T.CallOfDuty.Res.Warzone.Matches> {
+    async Matches(username:string, platform:Schema.CallOfDuty.Platform='uno', mode:Schema.CallOfDuty.Mode='wz', game:Schema.CallOfDuty.Game='mw', next:number=0):Promise<Schema.CallOfDuty.Res.Warzone.Matches> {
         return this.request({ url: `/crm/cod/v2/title/${game}/platform/${platform}/gamer/${encodeURIComponent(username)}/matches/${mode}/start/0/end/${next}/details` })
     }
     async Login(email:string, password:string):Promise<{ xsrf: string, atkn: string, sso: string }> {

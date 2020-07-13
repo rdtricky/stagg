@@ -20,8 +20,8 @@ export const findPlayer = async (m:Discord.Message, username:string, platform?:s
         : await mdb.findPlayer({ discord: m.author.id })
 }
 
-export const isolatedStat = async (player:Mongo.T.CallOfDuty.Schema.Player, stat:string, modeIds:string[]=[], sort?:'time'|'best', limit:number=25) => {
-    const db = await Mongo.Client()
+export const isolatedStat = async (player:Mongo.Schema.CallOfDuty.Player, stat:string, modeIds:string[]=[], sort?:'time'|'best', limit:number=25) => {
+    const db = await Mongo.client()
     const modeIdOp = !modeIds || !modeIds.length ? '$nin' : '$in'
     return db.collection('performances.wz').aggregate([
         { $match: { 'player._id': player._id, modeId: { [modeIdOp]: modeIds || [] } } },
@@ -35,8 +35,8 @@ export const isolatedStat = async (player:Mongo.T.CallOfDuty.Schema.Player, stat
         { $limit: limit },
     ]).toArray()
 }
-export const ratioStat = async (player:Mongo.T.CallOfDuty.Schema.Player, stat:string, modeIds:string[]=[], sort?:'time'|'best', limit:number=25) => {
-    const db = await Mongo.Client()
+export const ratioStat = async (player:Mongo.Schema.CallOfDuty.Player, stat:string, modeIds:string[]=[], sort?:'time'|'best', limit:number=25) => {
+    const db = await Mongo.client()
     const modeIdOp = !modeIds || !modeIds.length ? '$nin' : '$in'
     const [dividend, divisor] = stat.split('/')
     return db.collection('performances.wz').aggregate([
@@ -59,8 +59,8 @@ export const ratioStat = async (player:Mongo.T.CallOfDuty.Schema.Player, stat:st
     ]).toArray()
 }
 
-export const statsReportByMode = async (player:Mongo.T.CallOfDuty.Schema.Player, modeIds:string[]=[], groupByModeId=false) => {
-    const db = await Mongo.Client()
+export const statsReportByMode = async (player:Mongo.Schema.CallOfDuty.Player, modeIds:string[]=[], groupByModeId=false) => {
+    const db = await Mongo.client()
     // if we're fetching "all" _id should be $modeId
     // if we're fetching anything else we should aggregate them all together
     const modeIdOp = !modeIds || !modeIds.length ? '$nin' : '$in'

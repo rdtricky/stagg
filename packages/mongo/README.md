@@ -15,9 +15,9 @@ Configure the connection on startup (only done once).
 ```typescript
 import * as Mongo from '@stagg/mongo'
 (async () => {
-    const cfg:Mongo.T.Config = {...}
-    Mongo.Config(cfg)
-    const db = await Mongo.Client()
+    const cfg:Mongo.Config = {...}
+    Mongo.config(cfg)
+    const db = await Mongo.client()
     // ... do stuff
 })()
 ```
@@ -28,21 +28,19 @@ In any subsequent requests, only the client needs to be fetched.
 ```typescript
 import * as Mongo from '@stagg/mongo'
 (async () => {
-    const db = await Mongo.Client()
+    const db = await Mongo.client()
     // ... do stuff
 })()
 ```
 
-The config interface can be found in `<PKG>.T.Config`
+The config interface can be found in `<PKG>.Config`
 
 ```typescript
-export namespace T {
-    export interface Config {
-        db:string
-        host:string
-        user:string
-        password:string
-    }
+export interface Config {
+    db:string
+    host:string
+    user:string
+    password:string
 }
 ```
 

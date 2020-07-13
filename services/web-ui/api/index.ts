@@ -7,7 +7,7 @@ import cfg from '../config/api'
 
 export { Discord }
 
-Mongo.Config(cfg.mongo)
+Mongo.config(cfg.mongo)
 
 export const jwt = async (req, res) => {
     try {
@@ -18,7 +18,7 @@ export const jwt = async (req, res) => {
 }
 
 export const profileStatus = async (req,res) => {
-    const mongo = await Mongo.Client()
+    const mongo = await Mongo.client()
     const { email } = JSON.parse(req.body)
     const player = await mongo.collection('players').findOne({ email })
     if (!player) {
@@ -32,7 +32,7 @@ export const profileStatus = async (req,res) => {
 }
 
 export const meta = async (req, res) => {
-    const mongo = await Mongo.Client()
+    const mongo = await Mongo.client()
     const players = await mongo.collection('players').countDocuments()
     const matches = await mongo.collection('matches.wz').countDocuments()
     const performances = await mongo.collection('performances.wz').countDocuments()
@@ -40,7 +40,7 @@ export const meta = async (req, res) => {
 }
 
 export const search = async (req,res) => {
-    const mongo = await Mongo.Client()
+    const mongo = await Mongo.client()
     const { username, platform } = JSON.parse(req.body)
     const queries = []
     if (platform) {
@@ -55,25 +55,25 @@ export const search = async (req,res) => {
 }
 
 export const ping = async (req,res) => {
+    const mongo = await Mongo.client()
     const { username, platform } = JSON.parse(req.body)
-    const player = await Mongo.CallOfDuty.Get.Player(username, platform)
+    const player = await mongo.collection('players').findOne(Mongo.Queries.CallOfDuty.Player.Find(username, platform))
     if (!player) return res.status(404).send({ error: 'player not found' })
-    const mongo = await Mongo.Client()
     const performances = await mongo.collection('performances.wz').find({ 'player._id': player._id }).count()
     const result = { performances } as any
     res.send(result)
 }
 
 export const download = async (req,res) => {
-    const mongo = await Mongo.Client()
+    const mongo = await Mongo.client()
     const { username, platform } = req.query
-    const player = await Mongo.CallOfDuty.Get.Player(username, platform)
+    const player = await mongo.collection('players').findOne(Mongo.Queries.CallOfDuty.Player.Find(username, platform))
     if (!player) return res.status(404).send({ error: 'player not found' })
     mongo.collection('performances.wz').find({ 'player._id': player._id }).pipe(JSONStream.stringify()).pipe(res)
 }
 
 export const login = async (req,res) => {
-    const mongo = await Mongo.Client()
+    const mongo = await Mongo.client()
     try {
         const API = new CallOfDuty()
         const { email, password } = JSON.parse(req.body)
@@ -119,7 +119,7 @@ export const login = async (req,res) => {
 }
 
 export namespace Stagg {
-    export const statsByFinish = (performances:Mongo.T.CallOfDuty.Schema.Performance[], stat:any) => {
+    export const statsByFinish = (performances:Mongo.Schema.CallOfDuty.Performance[], stat:any) => {
         const finishPosStats = []
         for(const p of performances) {
             const key = p.stats.teamPlacement - 1
@@ -133,7 +133,7 @@ export namespace Stagg {
         }
         return finishPosStats.map(f => f.stats[stat] / f.games)
     }
-    export const statOverTime = (performances:Mongo.T.CallOfDuty.Schema.Performance[], stat:any):number[] => 
+    export const statOverTime = (performances:Mongo.Schema.CallOfDuty.Performance[], stat:any):number[] => 
         performances.map(p => {
             if (typeof stat === typeof 'str') return p.stats[stat]
             let quotient = p.stats[stat.divisor]/p.stats[stat.dividend]

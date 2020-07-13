@@ -21,6 +21,7 @@ PRs are always welcome!
 
 #### Misc
 
+- Discord bot add time/date to X axis on overtime charts
 - Discord bot "barracks" cmd to show accurate W/L, games played, time played, etc
 - Discord bot most kills in a game
 - Sign ups seem to double create

@@ -4,7 +4,7 @@ import * as Mongo from '@stagg/mongo'
 import * as emails from '../emails'
 import cfg from '../config/api'
 
-Mongo.Config(cfg.mongo)
+Mongo.config(cfg.mongo)
 
 export const Send = (to:string, subject:string, html:string) => new Promise((resolve,reject) => {
     gmailSend({
@@ -28,7 +28,7 @@ export const SendConfirmation = async (email:string, extendedPayload:{[key:strin
 }
 
 export const confirm = async (req,res) => {
-    const mongo = await Mongo.Client()
+    const mongo = await Mongo.client()
     if (!req.query.jwt) return res.status(400).send({ error: 'jwt required' })
     try {
         const decoded = jwt.verify(req.query.jwt, cfg.jwt) as any

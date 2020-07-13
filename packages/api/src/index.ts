@@ -45,7 +45,7 @@ export namespace Map {
         */
     }
 }
-export namespace T {
+export namespace Schema {
     export namespace CallOfDuty {
         export type Mode = 'mp' | 'wz'
         export type Game = 'mw' | 'bo4' | 'wwii'

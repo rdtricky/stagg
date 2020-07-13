@@ -3,8 +3,8 @@ import * as Mongo from '@stagg/mongo'
 import cfg from '../config'
 
 (async () => {
-    Mongo.Config(cfg.mongo)
-    const db = await Mongo.Client()
+    Mongo.config(cfg.mongo)
+    const db = await Mongo.client()
     while(true) {
         for(const item of queue) {
             if (item.method === 'insertOne') {

@@ -4,13 +4,13 @@ import apiCfg from '../config/api'
 import uiCfg from '../config/ui'
 import { delay } from '../util'
 
-Mongo.Config(apiCfg.mongo)
+Mongo.config(apiCfg.mongo)
 const discord = new Client()
 discord.login(apiCfg.discord.token)
 
 export const profileById = async (id:string) => discord.users.fetch(id)
 export const profileByEmail = async (email:string) => {
-    const mongo = await Mongo.Client()
+    const mongo = await Mongo.client()
     const player = await mongo.collection('players').findOne({ email })
     if (!player) return null
     if (!player.discord) return null
