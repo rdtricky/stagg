@@ -101,6 +101,7 @@ export default ({ user }) => {
     setForm(newForm)
   }
   const submitForm = async () => {
+    setForm({ ...form, status: Status.Loading })
     if (!form.input.email) return formErr('email required')
     if (!form.input.email.match(/^[^@]+@[^\.]+\..+$/)) return formErr('invalid email')
     if (!form.input.password) return formErr('password required')
@@ -110,12 +111,19 @@ export default ({ user }) => {
     })
     const { jwt, error } = await login.json()
     if (error) {
+      setForm({ ...form, status: Status.Idle })
       return formErr(JSON.stringify(Object.keys(error)))
     }
-    const { profiles: { uno } } = JWT.decode(jwt) as any
     Cookies.set('jwt', jwt, { expires: 365 })
+    const decodedJwt = JWT.decode(jwt) as any
+    const forward = { page: '/first-sign-in', as: '/first-sign-in' }
+    if (decodedJwt?.profiles?.uno) {
+      const { profiles: { uno } } = decodedJwt
+      forward.page = '/wz/[id]'
+      forward.as = `/wz/${uno.split('#').join('@')}`
+    }
     setForm({ ...form, status: Status.Success, response: 'login successful, one moment...'})
-    setTimeout(() => Router.push('/wz/[id]', `/wz/${uno.split('#').join('@')}`), cfg.login.forward.delay)
+    setTimeout(() => Router.push(forward.page, forward.as), cfg.login.forward.delay)
   }
   return (
     <Template user={user}>

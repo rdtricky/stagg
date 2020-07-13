@@ -17,6 +17,20 @@ export const jwt = async (req, res) => {
     }
 }
 
+export const profileStatus = async (req,res) => {
+    const mongo = await Mongo.Client()
+    const { email } = JSON.parse(req.body)
+    const player = await mongo.collection('players').findOne({ email })
+    if (!player) {
+        return res.status(400).send({ error: 'email not found' })
+    }
+    if (!player?.profiles?.uno) {
+        return res.send({ error: 'no uno profile' })
+    }
+    const jwt = JWT.sign({ email, profiles: player.profiles, discord: player.discord, uno: player.uno }, cfg.jwt)
+    res.send({ jwt })
+}
+
 export const meta = async (req, res) => {
     const mongo = await Mongo.Client()
     const players = await mongo.collection('players').countDocuments()
@@ -77,8 +91,8 @@ export const login = async (req,res) => {
             const prevAuth = userRecord.prevAuth ? userRecord.prevAuth : []
             if (userRecord.auth) prevAuth.push(userRecord.auth)
             await mongo.collection('players').updateOne({ _id: userRecord._id }, { $set: { auth, prevAuth } })
-            const { discord, profiles } = userRecord
-            const jwt = JWT.sign({ email, discord, profiles }, cfg.jwt)
+            const { discord, profiles, uno } = userRecord
+            const jwt = JWT.sign({ email, discord, profiles, uno }, cfg.jwt)
             return res.status(200).send({ jwt })
         }
         const { titleIdentities } = await API.Tokens(auth).Identity()

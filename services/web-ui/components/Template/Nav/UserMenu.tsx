@@ -59,9 +59,13 @@ export default ({ user }) => {
                             !user?.discord?.username ? null
                                 : <label><i className="icon-discord" />{ `${user.discord.username}#${user.discord.discriminator}` }</label>
                         }
-                        <Link href="/wz/[id]" as={`/wz/${user.profiles.uno.split('#').join('@')}`}>
-                            <a><label style={{cursor: 'pointer'}}><img src={lvl} alt="Activision" />{ user.profiles.uno }</label></a>
-                        </Link>
+                        {
+                            !user?.profiles?.uno ? null : (
+                                <Link href="/wz/[id]" as={`/wz/${user.profiles.uno?.split('#')?.join('@')}`}>
+                                    <a><label style={{cursor: 'pointer'}}><img src={lvl} alt="Activision" />{ user.profiles.uno }</label></a>
+                                </Link>
+                            )
+                        }
                         <Button onClick={signOut} size="small" variant="contained" color="primary"
                             style={{margin: '24px 0 0', fontSize: '12px', padding: '3px 12px 1px', width: '100%'}}>Sign out</Button>
                     </aside>
