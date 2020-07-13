@@ -25,7 +25,7 @@ export const statOverTime = async (m:Discord.Message) => {
         chartData.push(doc[stat])
     }
     await msg.sendFiles(m, [
-        `${chartUrlPrefix}{type:'line',data:{labels:[${chartLabels.join(',')}], datasets:[{label:'Kills OT', data: [${chartData.join(',')}], fill:false, borderColor:'green'}]}}`
+        `${chartUrlPrefix}{type:'line',data:{labels:[${chartLabels.join(',')}], datasets:[{label:'${stat} over time', data: [${chartData.join(',')}], fill:false, borderColor:'green'}]}}`
     ])
     placeholder.delete()
 }
