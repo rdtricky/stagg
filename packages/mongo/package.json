@@ -1,6 +1,6 @@
 {
   "name": "@stagg/mongo",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
@@ -18,7 +18,7 @@
   },
   "gitHead": "816b83c2801d8dcc299dfb3eae43cb3853ca5c2f",
   "dependencies": {
-    "@stagg/api": "^0.1.6",
+    "@stagg/api": "^0.2.0",
     "mongodb": "^3.5.9"
   },
   "devDependencies": {

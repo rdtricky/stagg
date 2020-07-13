@@ -1,6 +1,6 @@
 {
   "name": "stagg-ui-web",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Web UI for Stagg.co",
   "scripts": {
     "dev": "next dev -p 8080",
@@ -14,8 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
-    "@stagg/api": "^0.1.6",
-    "@stagg/mongo": "^0.1.6",
+    "@stagg/api": "^0.2.0",
+    "@stagg/mongo": "^0.2.0",
     "JSONStream": "^1.3.5",
     "axios": "^0.19.2",
     "babel-plugin-styled-components": "^1.10.7",
