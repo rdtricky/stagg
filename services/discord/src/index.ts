@@ -5,7 +5,7 @@ import cfg from './config'
 
 const app = express()
 app.use(cors({ credentials: false })).listen(cfg.port, async () => {
-    init()
+    await init()
     app.get('/', (req,res) => res.redirect('https://stagg.co/discord'))
     app.get('/health', (req,res) => res.status(200).send('ok'))
     console.log(

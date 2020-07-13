@@ -1,13 +1,17 @@
 import * as API from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
 import * as Discord from 'discord.js'
+import { SendConfirmation } from '../mail'
+import { byMode } from './stats/reports'
+import { statOverTime } from './stats/charts'
+import * as staticRes from './static'
+import { commaNum } from '../util'
 import logger from './logger'
 import cfg from '../config'
-import { SendConfirmation } from './mail'
 
 let bot:Discord.Client
 
-export const init = () => {
+export const init = async () => {
     Mongo.Config(cfg.mongo)
     bot = new Discord.Client()
     bot.login(cfg.discord.token)
@@ -28,11 +32,29 @@ const dispatcher = async (m:Discord.Message) => {
     const [ cmd ] = msg.args(m)
     switch(cmd) {
         case 'wz': return wz.dispatcher(m)
-        case 'help': return msg.send(m, static_help)
+        case 'help': return msg.send(m, staticRes.help)
+        case 'stats': return msg.send(m, staticRes.statsList)
+        case 'defaults': return msg.send(m, staticRes.defaultArgs)
         case 'search': return search(m)
         case 'register': return register(m)
         case 'chart': return msg.sendFiles(m, ["https://stagg.co/api/chart.png?c={type:'pie',data:{labels:['Solos','Duos','Trios','Quads'],datasets:[{data:[6,4,52,42]}]}}"])
-        default: return msg.send(m, static_invalid)
+        default: return msg.send(m, staticRes.invalid)
+    }
+}
+
+namespace wz {
+    export const dispatcher = async (m:Discord.Message) => {
+        const [, operator ] = msg.args(m)
+        operator === 'chart' ? chart(m) : report(m)
+    }
+    const report = async (m:Discord.Message) => {
+        const [, mode ] = msg.args(m)
+        const depluralizedMode = mode.replace(/s$/i, '')
+        return ['all', 'combined', 'solo', 'duo', 'trio', 'quad'].includes(depluralizedMode) 
+            ? byMode(m, depluralizedMode) : msg.send(m, staticRes.invalid)
+    }
+    const chart = async (m:Discord.Message) => {
+        statOverTime(m)
     }
 }
 
@@ -94,7 +116,8 @@ const search = async (m:Discord.Message) => {
     msg.edit(placeholder, [...output, '```'])
 }
 
-namespace mdb {
+export namespace mdb {
+    export let db:Mongo.T.Db
     interface PlayerIdentifiers {
         uno?:string
         discord?:string
@@ -110,7 +133,7 @@ namespace mdb {
     }
 }
 
-namespace msg { // Discord.Message helpers
+export namespace msg { // Discord.Message helpers
     export const args = (m:Discord.Message):string[] => msg.sanitizeInput(m).split(' ')
     export const isDm = (m:Discord.Message):boolean => m.channel.type === 'dm'
     export const isSelf = (m:Discord.Message):boolean => m.author.id === bot.user.id
@@ -128,21 +151,27 @@ namespace msg { // Discord.Message helpers
     }
     export const formatOutput = (linesArr:string[]) => truncate(linesArr.reduce((prev, curr) => prev + `> ${curr}\n`, ''))
     export const send = (m:Discord.Message, output:string[]) => {
-        const formattedOutput = formatOutput(output)
-        m.channel.send(formattedOutput).then(async sentMessage => {
-            logger.link(m, sentMessage)
-        })
+        return new Promise(
+            (resolve,reject) => {
+                const formattedOutput = formatOutput(output)
+                m.channel.send(formattedOutput).then(async sentMessage => {
+                    logger.link(m, sentMessage)
+                    resolve(sentMessage)
+                }).catch(e => reject(e))
+            }
+        )
     }
     export const edit = (m:Discord.Message, output:string[]) => {
         const formattedOutput = formatOutput(output)
         m.edit(formattedOutput)
         logger.response(m, formattedOutput)
     }
-    export const sendFiles = (m:Discord.Message, fileUrls:string[]) => {
+    export const sendFiles = (m:Discord.Message, fileUrls:string[]) => new Promise((resolve,reject) => {
         m.channel.send('', { files: fileUrls }).then(sentMessage => {
             logger.response(m, `files:${JSON.stringify(fileUrls)}`)
+            resolve(sentMessage)
         })
-    }
+    })
     export const truncate = (output:string):string => {
         let truncatedResponse = output
         if (truncatedResponse.length > 2000) {
@@ -157,251 +186,3 @@ namespace msg { // Discord.Message helpers
         return truncatedResponse
     }
 }
-
-namespace wz {
-    export const dispatcher = async (m:Discord.Message) => {
-        const [, mode ] = msg.args(m)
-        const depluralizedMode = mode.replace(/s$/i, '')
-        return ['all', 'combined', 'solo', 'duo', 'trio', 'quad'].includes(depluralizedMode) 
-            ? statsByMode(m, depluralizedMode) : msg.send(m, static_invalid)
-    }
-
-    const modeTeamSize = { all: -1, combined: 0, solo: 1, duo: 2, trio: 3, quad: 4 }
-    const statsByMode = async (m:Discord.Message, modeIdentifier:string|number='all') => {
-        const [,, username, platform ] = msg.args(m)
-        const placeholder = await msg.placeholder(m, 'Finding player...')
-        const player = username !== 'me'
-            ? await mdb.findPlayer({ username, platform })
-            : await mdb.findPlayer({ discord: m.author.id })
-        if (!player) {
-            return msg.edit(placeholder, username !== 'me' 
-                ? static_playerNotFound : static_playerNotRegistered)
-        }
-        msg.edit(placeholder, ['Loading profile...'])
-        const type = 'br' // may do plunder in future but meh
-        const teamSize = typeof modeIdentifier === typeof 1 ? modeIdentifier : modeTeamSize[modeIdentifier]
-        const modeIds = []
-        if (teamSize >= 1) {
-            // get all modeIds for this teamSize
-            for(const modeId in API.Map.CallOfDuty.Modes) {
-                const modeDetails = API.Map.CallOfDuty.Modes[modeId]
-                if (modeDetails.type === type && modeDetails.teamSize === teamSize) {
-                    modeIds.push(modeId)
-                }
-            }
-        }
-        const isFullReport = teamSize === -1 // "all" breaks all stats down by modes
-        const data = await fetch(player, modeIds, isFullReport)
-        const teamSizeLables = ['Combined', 'Solos', 'Duos', 'Trios', 'Quads']
-        const output = [
-            ...playerHeaderReport(player, platform),
-            '```'
-        ]
-        if (!isFullReport) {
-            return msg.edit(placeholder, [...output, '', ...statsReport(data[0], teamSizeLables[teamSize]), '```'])
-        }
-        // Combine groups from different modeIds of the same teamSize
-        const groupedByTeamSizeLabel = {}
-        for(const modeData of data) {
-            const modeDetails = API.Map.CallOfDuty.Modes[modeData._id]
-            if (!modeDetails || modeDetails.type !== type) {
-                continue
-            }
-            const dataGroup = groupedByTeamSizeLabel[teamSizeLables[modeDetails.teamSize]]
-            if (!dataGroup) {
-                groupedByTeamSizeLabel[teamSizeLables[modeDetails.teamSize]] = { ...modeData }
-                continue
-            }
-            // merge the existing and new stats together
-            for(const key in dataGroup) {
-                groupedByTeamSizeLabel[teamSizeLables[modeDetails.teamSize]][key] = dataGroup[key] + modeData[key]
-            }
-        }
-        for(const label of Object.keys(groupedByTeamSizeLabel).sort((a,b) => teamSizeLables.indexOf(a) - teamSizeLables.indexOf(b))) {
-            output.push('', ...statsReport(groupedByTeamSizeLabel[label], label))
-        }
-        return msg.edit(placeholder, [...output, '```'])
-    }
-    const playerHeaderReport = (player:Mongo.T.CallOfDuty.Schema.Player, platform:string='uno'):string[] => [
-        `**${player.profiles[platform]}** (${player.uno})`,
-        `Full profile: https://stagg.co/wz/${player.profiles?.uno?.split('#').join('@')}`,
-    ]
-    const statsReport = (statsCluster:any, label:string):string[] => {
-        return [
-            `WZ BR ${label}:`,
-            '--------------------------------',
-            `Wins: ${commaNum(statsCluster.wins)}`,
-            `Games: ${commaNum(statsCluster.games)}`,
-            `Kills: ${commaNum(statsCluster.kills)}`,
-            // `Downs: ${commaNum(statsCluster.downs)}`,
-            `Deaths: ${commaNum(statsCluster.deaths)}`,
-            // `Loadouts: ${commaNum(statsCluster.loadouts)}`,
-            `Win rate: ${percentage(statsCluster.wins, statsCluster.games)}%`,
-            `Top 5 rate: ${percentage(statsCluster.top5, statsCluster.games)}%`,
-            `Top 10 rate: ${percentage(statsCluster.top10, statsCluster.games)}%`,
-            `Gulag win rate: ${percentage(statsCluster.gulagWins, statsCluster.gulagGames)}%`,
-            `Kills per death: ${(statsCluster.kills/statsCluster.deaths).toFixed(2)}`,
-            `Damage per kill: ${commaNum(Math.round(statsCluster.damageDone / statsCluster.kills))}`,
-            `Damage per death: ${commaNum(Math.round(statsCluster.damageTaken / statsCluster.deaths))}`,
-        ]
-    }
-    const fetch = async (player:Mongo.T.CallOfDuty.Schema.Player, modeIds:string[]=[], groupByModeId=false) => {
-        const db = await Mongo.Client()
-        // if we're fetching "all" _id should be $modeId
-        // if we're fetching anything else we should aggregate them all together
-        const modeIdOp = !modeIds || !modeIds.length ? '$nin' : '$in'
-        return db.collection('performances.wz').aggregate([
-            { $match: { 'player._id': player._id, modeId: { [modeIdOp]: modeIds || [] } } },
-            { $sort: { startTime: -1 } },
-            { $group: {
-                _id: groupByModeId ? '$modeId' : null,
-                games: { $sum: 1 },
-                score: { $sum: '$stats.score' },
-                kills: { $sum: '$stats.kills' },
-                deaths: { $sum: '$stats.deaths' },
-                damageDone: { $sum: '$stats.damageDone' },
-                damageTaken: { $sum: '$stats.damageTaken' },
-                teamWipes: { $sum: '$stats.teamWipes' },
-                eliminations: { $sum: '$stats.eliminations' },
-                timePlayed: { $sum: '$stats.timePlayed' },
-                distanceTraveled: { $sum: '$stats.distanceTraveled' },
-                percentTimeMoving: { $sum: '$stats.percentTimeMoving' },
-                // downs: { $sum: { $reduce: { input: '$stats.downs', initialValue: 0, in: { $add : ["$$value", "$$this"] } } } },
-                gulagWins: {
-                    $sum: {
-                        $switch: { 
-                            branches: [ 
-                                { 
-                                    case: { $gt: [ "$stats.gulagKills", 0 ] }, 
-                                    then: 1
-                                }
-                            ], 
-                            default: 0
-                        }
-                    }
-                },
-                gulagGames: {
-                    $sum: {
-                        $switch: { 
-                            branches: [
-                                { 
-                                    case: { $gt: [ "$stats.gulagKills", 0 ] }, 
-                                    then: 1
-                                },
-                                { 
-                                    case: { $gt: [ "$stats.gulagDeaths", 0 ] }, 
-                                    then: 1
-                                }
-                            ], 
-                            default: 0
-                        }
-                    }
-                },
-                wins: {
-                    $sum: {
-                        $switch: { 
-                            branches: [ 
-                                { 
-                                    case: { $eq: [ "$stats.teamPlacement", 1 ] }, 
-                                    then: 1
-                                }
-                            ], 
-                            default: 0
-                        }
-                    }
-                },
-                top5: {
-                    $sum: {
-                        $switch: { 
-                            branches: [ 
-                                { 
-                                    case: { $lt: [ "$stats.teamPlacement", 6 ] }, 
-                                    then: 1
-                                }
-                            ], 
-                            default: 0
-                        }
-                    }
-                },
-                top10: {
-                    $sum: {
-                        $switch: { 
-                            branches: [ 
-                                { 
-                                    case: { $lt: [ "$stats.teamPlacement", 11 ] }, 
-                                    then: 1
-                                }
-                            ], 
-                            default: 0
-                        }
-                    }
-                }
-            } },
-        ]).toArray()
-    }
-}
-
-// const aggr = await db.collection('performances.wz').aggregate([
-//     { $match: { 'player._id': player._id } },
-//     { $sort: { startTime: -1 } },
-//     { $group: {
-//         _id: { finishPos: '$stats.teamPlacement', mode: '$modeId' },
-//         games: { $sum: 1 },
-//         kills: { $sum: '$stats.kills' },
-//         deaths: { $sum: '$stats.deaths' },
-//     } },
-//     { $limit: 50 },
-// ], { cursor: { batchSize: 1 } }).toArray()
-
-const static_invalid:string[] = [
-    'Invalid command, try `help`'
-]
-const static_playerNotFound:string[] = [
-    'Player not found, try `help`'
-]
-const static_playerNotRegistered:string[] = [
-    'Your Discord has not been linked to a Stagg account yet, try `help`, then look for the `register` command'
-]
-const static_help:string[] = [
-    '———————————————————————————',
-    '**# First time users                                                                              #**',
-    '———————————————————————————',
-    'Getting started is an easy 3-step process:',
-    '1) Create your account at https://profile.callofduty.com',
-    '2) Sign in with your CallOfDuty account from Step #1 at https://stagg.co/login',
-    '3) Relax while your match history is collected and try some of the commands below',
-    '',
-    '———————————————————————————',
-    '**# Using the bot                                                                                  #**',
-    '———————————————————————————',
-    'If calling the bot in a text channel you will need to prefix messages with `%` or `@Stagg`; this is not necessary in DMs.',
-    'DM example:',
-    '```',
-    'search HusKerrs',
-    '```',
-    'Text channel example:',
-    '```',
-    '% search HusKerrs',
-    '```',
-    '',
-    'Available commands:',
-    '- `help` Get help using the Stagg Discord bot',
-    '- `search <username> <platform?>` Find profiles matching your query',
-    '- `register <email> OR <username> <platform>` Link your Discord',
-    '- `wz all <username> <platform?>` Show all aggregated BR stats',
-    '- `wz solos <username> <platform?>` Aggregated stats from all BR Solos matches',
-    '- `wz duos <username> <platform?>` Aggregated stats from all BR Duos matches',
-    '- `wz trios <username> <platform?>` Aggregated stats from all BR Trios matches',
-    '- `wz quads <username> <platform?>` Aggregated stats from all BR Quads matches',
-    '- `wz combined <username> <platform?>` Aggregated stats from all BR modes',
-    '',
-    'Any arguments that end with `?` are optional (eg: `<platform?>`); default values are listed below:',
-    '- `<platform?> = uno` (Activision)',
-    '',
-    'Additional support may be provided on an as-needed basis in the `#help` channel here: https://discord.gg/VC6P63e',
-    '',
-    'If you want this humble binary buck in your server, click the link below:',
-    'https://discord.com/oauth2/authorize?client_id=723179755548967027&scope=bot&permissions=67584',
-]
-const commaNum = (num:Number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-const percentage = (divisor:number, dividend:number, decimals:number=2) => ((divisor / dividend) * 100).toFixed(decimals)

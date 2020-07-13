@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 import * as gmailSend from 'gmail-send'
-import cfg from '../config'
+import cfg from './config'
 export const Send = (to:string, subject:string, html:string) => new Promise((resolve,reject) => {
     gmailSend({
         to,
