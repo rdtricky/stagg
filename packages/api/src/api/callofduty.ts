@@ -1,7 +1,7 @@
 import * as deprecatedRequest from 'request'
 import axios, { AxiosRequestConfig } from 'axios'
-import { Schema } from '.'
-export class CallOfDuty {
+import { Schema } from '..'
+export default class {
     private tokens:Schema.CallOfDuty.Tokens
     constructor(tokens?:Schema.CallOfDuty.Tokens) {
         this.Tokens(tokens)
