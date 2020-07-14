@@ -24,8 +24,13 @@ export const statOverTime = async (m:Discord.Message) => {
         chartLabels.push(i++)
         chartData.push(doc[stat])
     }
+    const avgData = []
+    const avg = chartData.reduce((a,b) => a+b, 0) / chartData.length
+    for(let i = 0; i < chartData.length; i++) {
+        avgData.push(avg)
+    }
     await msg.sendFiles(m, [
-        `${chartUrlPrefix}{type:'line',data:{labels:[${chartLabels.join(',')}], datasets:[{label:'${stat.replace('/', ':')} over time', data: [${chartData.join(',')}], fill:false, borderColor:'%2301a2fc'}]}}`
+        `${chartUrlPrefix}{type:'line',data:{labels:[${chartLabels.join(',')}], datasets:[{label:'${stat.replace('/', ':')} over time', data: [${chartData.join(',')}], fill:false, borderColor:'%2301a2fc'},{label:'Avg ${stat.replace('/', ':')} over time', data: [${avgData.join(',')}], fill:false, borderColor:'%23aaa'}]}}`
     ])
     placeholder.delete()
 }
