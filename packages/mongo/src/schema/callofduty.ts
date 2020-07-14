@@ -16,6 +16,7 @@ export interface Player extends Player.Scaffold {
     prevAuth?: Player.Auth[]
     prevEmails?: string[]
     initFailure?: boolean // true if titleIdentities was blank on init
+    discordShortcuts?: { [key:string]: string } // shortcut: payload
 }
 export namespace Player {
     export interface Auth {

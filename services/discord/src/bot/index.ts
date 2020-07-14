@@ -37,6 +37,7 @@ const dispatcher = async (m:Discord.Message) => {
         case 'defaults': return msg.send(m, staticRes.defaultArgs)
         case 'search': return search(m)
         case 'register': return register(m)
+        case 'shortcut': return shortcut(m)
         case 'chart': return msg.sendFiles(m, ["https://stagg.co/api/chart.png?c={type:'pie',data:{labels:['Solos','Duos','Trios','Quads'],datasets:[{data:[6,4,52,42]}]}}"])
         default: return msg.send(m, staticRes.invalid)
     }
@@ -56,6 +57,18 @@ namespace wz {
     const chart = async (m:Discord.Message) => {
         statOverTime(m)
     }
+}
+
+const shortcut = async (m:Discord.Message) => {
+    const db = await Mongo.client()
+    const placeholder = await msg.placeholder(m, 'Working on it...')
+    const [, shortcut, ...payload] = msg.args(m)
+    if (shortcut === 'delete') {
+        await db.collection('players').updateOne({ discord: m.author.id }, { $unset: { [`discordShortcuts.${payload.join('')}`]: '' } })
+        return msg.edit(placeholder, ['Shortcut deleted'])
+    }
+    await db.collection('players').updateOne({ discord: m.author.id }, { $set: { [`discordShortcuts.${shortcut}`]: payload.join(' ') } })
+    msg.edit(placeholder, ['Shortcut created'])
 }
 
 const register = async (m:Discord.Message) => {
@@ -137,10 +150,20 @@ export namespace msg { // Discord.Message helpers
     export const args = (m:Discord.Message, toLower:boolean=true):string[] => msg.sanitizeInput(m, toLower).split(' ')
     export const isDm = (m:Discord.Message):boolean => m.channel.type === 'dm'
     export const isSelf = (m:Discord.Message):boolean => m.author.id === bot.user.id
-    export const sanitizeInput = (m:Discord.Message, toLower:boolean=true):string => !toLower
-        ? m.content.replace(/^%\s*/, '').trim()
-        : m.content.toLowerCase().replace(/^%\s*/, '').trim()
+    export const sanitizeInput = (m:Discord.Message, toLower:boolean=true):string => 
+        (!toLower ? m.content : m.content.toLowerCase()).replace(/^%\s*/, '').replace(/\s+/g, ' ').trim()
     export const triggerFound = (m:Discord.Message):boolean => !m.content.toLowerCase().trim().replace(`<@!${bot.user.id}>`, '%').indexOf('%')
+    export const hydratedArgs = async (m:Discord.Message) => {
+        const arr = args(m)
+        const db = await Mongo.client()
+        for(const index in arr) {
+            const word = arr[index]
+            const player = await db.collection('players').findOne({ discord: m.author.id })
+            if (!player || !player.discordShortcuts || !player.discordShortcuts[word]) continue
+            arr[index] = player.discordShortcuts[word]
+        }
+        return arr
+    }
     export const placeholder = (m:Discord.Message, text?:string):Promise<Discord.Message> => {
         return new Promise(
             (resolve,reject) => {

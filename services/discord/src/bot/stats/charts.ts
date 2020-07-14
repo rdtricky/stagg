@@ -6,7 +6,8 @@ import { msg } from '..'
 const chartUrlPrefix = 'https://stagg.co/api/chart.png?c='
 
 export const statOverTime = async (m:Discord.Message) => {
-    const [,, stat, username ] = msg.args(m, false)
+    const [,, stat ] = msg.args(m, false)
+    const [,,, username ] = await msg.hydratedArgs(m)
     const placeholder = await msg.placeholder(m, 'Finding player...')
     const player = await findPlayer(m, username)
     if (!player) {

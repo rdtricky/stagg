@@ -8,26 +8,45 @@ You will need a `.env` file in the root of each service you intend to run for lo
 
 ### To do
 
-PRs are always welcome!
+PRs are always welcome so please feel free to fork or request feature branch access.
 
 #### Web UI
 
-- Bring back IDB
+- Cache data in IDB again
 - Discord landing page off-center in mobile
 - Large expandable charts dont fit mobile screen
-- Add tooltips to each chart to explain the correlations
+- Add tooltips to each chart to explain correlations
 - Customizable dashboard with custom-built charts
 - Correlation creation tool
 
-#### Misc
+#### Discord Bot
 
-- Discord bot add time/date to X axis on overtime charts
-- Discord bot "barracks" cmd to show accurate W/L, games played, time played, etc
-- Discord bot most kills in a game
-- Sign ups seem to double create
-- Create roles for Discord servers (eg: '@2+ KD')
-- Alert when someone beats their previous best or gets a BR win
-- Add field to denote if registered player, enemy player, or KGP (known good players)
+- Make X axis date/time for OT charts
+- Group by time of day (eg: compare 8pm-9pm vs 12am-1am)
+- Correlations
+    - kills/avgLifeTime
+    - damageDone/timePlayed
+- Summarize with `wz barracks` and `mp barracks`
+    - Time played
+    - Games played
+    - Win/Loss Ratio
+    - Kill/Death Ratio
+    - Score Per Minute
+    - Best game
+        - Kills
+        - Score
+        - Team Wipes
+        - Damage Done
+        - Damage Taken
+- Custom Discord roles
+    - KD
+    - SPM
+    - Win/Top5/Top10 Rate
+    - Correlations from above
+- Alert when player beats previous best
+    - Kills
+    - Damage
+    - Any win
 
 #### Call of Duty API
 
@@ -35,6 +54,7 @@ PRs are always welcome!
 - Match summaries
 - Multiplayer API/types
 - Some teamPlacement props are 0
+- Scrape isolated summary for each match with `start=(startTime-1)*1000, end=(endTime-1)*1000`
 
 #### Republish
 

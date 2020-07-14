@@ -8,7 +8,7 @@ import { msg } from '..'
 
 const modeTeamSize = { all: -1, combined: 0, solo: 1, duo: 2, trio: 3, quad: 4 }
 export const byMode = async (m:Discord.Message, modeIdentifier:string|number='all') => {
-    const [,, username, platform ] = msg.args(m)
+    const [,, username, platform ] = await msg.hydratedArgs(m)
     const placeholder = await msg.placeholder(m, 'Finding player...')
     const player = await findPlayer(m, username, platform)
     if (!player) {
