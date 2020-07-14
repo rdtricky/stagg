@@ -43,6 +43,7 @@ export const help:string[] = [
     // '- `defaults` List all default values (see below)',
     '- `search <username> <platform?>` Find profiles matching your query',
     '- `register <email> OR <username> <platform>` Link your Discord',
+    '- `shortcut <...arg(s)>` Shortcut your favorite commands',
     '- `wz all <username> <platform?>` Show all aggregated BR stats',
     '- `wz solos <username> <platform?>` Aggregated stats from all BR Solos matches',
     '- `wz duos <username> <platform?>` Aggregated stats from all BR Duos matches',
