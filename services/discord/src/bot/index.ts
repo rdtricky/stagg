@@ -4,6 +4,7 @@ import * as Discord from 'discord.js'
 import { SendConfirmation } from '../mail'
 import { byMode } from './stats/reports'
 import { statOverTime } from './stats/charts'
+import { ratioStat } from './stats/data'
 import * as staticRes from './static'
 import { commaNum } from '../util'
 import logger from './logger'
@@ -35,6 +36,7 @@ const dispatcher = async (m:Discord.Message) => {
         case 'help': return msg.send(m, staticRes.help)
         case 'stats': return msg.send(m, staticRes.statsList)
         case 'defaults': return msg.send(m, staticRes.defaultArgs)
+        case 'teams': return teams(m)
         case 'search': return search(m)
         case 'register': return register(m)
         case 'shortcut': return shortcut(m)
@@ -69,6 +71,45 @@ const shortcut = async (m:Discord.Message) => {
     }
     await db.collection('players').updateOne({ discord: m.author.id }, { $set: { [`discordShortcuts.${shortcut}`]: payload.join(' ') } })
     msg.edit(placeholder, ['Shortcut created'])
+}
+
+const teams = async (m:Discord.Message) => {
+    const placeholder = await msg.placeholder(m, 'Pulling player records...')
+    const [, ...tags] = msg.args(m)
+    if (!tags.includes(`<@!${m.author.id}>`)) {
+        tags.push(`<@!${m.author.id}>`)
+    }
+    const stats:[string, number][] = [] // [key,val]
+    for(const tag of tags) {
+        const player = await msg.hydrateUsername(m, tag)
+        if (!player) continue
+        const stat = 'damageDone/timePlayed'
+        const dmgPerSecArr = await ratioStat(player, stat)
+        let total = 0
+        for(const dmg of dmgPerSecArr) total += dmg[stat]
+        stats.push([player.profiles?.uno || tag, total / dmgPerSecArr.length])
+    }
+    const sorted = stats.sort((a,b) => a[1]-b[1])
+    const minTeams = Math.ceil(sorted.length / 4)
+    const diffPercs = sorted.map((kvArr, i) => !sorted[i+1] ? null : kvArr[1] / sorted[i+1][1])
+    const sortedDiff = [...diffPercs].sort()
+    const biggestDiffIndexes = sortedDiff.map(v => diffPercs.indexOf(v))
+    const teams = []
+    for(let i = 0; i < minTeams; i++) {
+        const prev = biggestDiffIndexes[i-1] || 0
+        const next = biggestDiffIndexes[i] || sorted.length
+        teams.push(sorted.slice(prev, next))
+    }
+    const output = []
+    let i = 1
+    for(const team of teams) {
+        output.push(`\`\`\`Team #${i++}`)
+        for(const [k,v] of team) {
+            output.push(k)
+        }
+        output.push('```')
+    }
+    msg.edit(placeholder, output)
 }
 
 const register = async (m:Discord.Message) => {
@@ -163,6 +204,22 @@ export namespace msg { // Discord.Message helpers
             arr[index] = player.discordShortcuts[word]
         }
         return arr
+    }
+    export const hydrateUsername = async (m:Discord.Message, username:string, platform:string='uno'):Promise<Mongo.Schema.CallOfDuty.Player> => {
+        const db = await Mongo.client()
+        if (username === 'me') {
+            return await db.collection('players').findOne({ discord: m.author.id })
+        }
+        if (username.match(/<@![0-9]+>/)) {
+            const discordId = username.replace(/<@!([0-9]+)>/, '$1')
+            return await db.collection('players').findOne({ discord: discordId })
+        }
+        const player = await db.collection('players').findOne({ discord: m.author.id })
+        if (player.discordShortcuts[username]) {
+            const [ uname, platform ] = player.discordShortcuts[username].split(' ')
+            return await mdb.findPlayer({ username: uname, platform })
+        }
+        return await mdb.findPlayer({ username, platform })
     }
     export const placeholder = (m:Discord.Message, text?:string):Promise<Discord.Message> => {
         return new Promise(

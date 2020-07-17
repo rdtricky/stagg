@@ -2,10 +2,10 @@ export const invalid:string[] = [
     'Invalid command, try `help`'
 ]
 export const playerNotFound:string[] = [
-    'Player not found, try `help`'
+    'Player not found, try `search` or `help`'
 ]
 export const playerNotRegistered:string[] = [
-    'Player not found, try `help`'
+    'Player not found, try `search` or `help`'
 ]
 export const defaultArgs:string[] = [
     '- `<platform?> = uno` (Activision)',
@@ -13,10 +13,13 @@ export const defaultArgs:string[] = [
 export const statsList:string[] = [
     'Available stats:',
     '```',
-    'score, kills, deaths, eliminations, damageDone, damageTaken, teamWipes, revives, contracts, lootCrates,',
-    'buyStations, assists, executions, headshots, wallBangs, clusterKills, airstrikeKills, longestStreak,',
-    'trophyDefense, munitionShares, missileRedirects, equipmentDestroyed, percentTimeMoving, distanceTraveled',
-    'teamSurvivalTime, teamPlacement, timePlayed',
+    [
+        'score', 'kills', 'deaths', 'timePlayed', 'teamPlacement', 'eliminations', 'damageDone', 'damageTaken', 'teamWipes', 
+        'revives', 'contracts', 'lootCrates',
+        'buyStations', 'assists', 'executions', 'headshots', 'wallBangs', 'clusterKills', 'airstrikeKills', 'longestStreak',
+        'trophyDefense', 'munitionShares', 'missileRedirects', 'equipmentDestroyed', 'percentTimeMoving', 'distanceTraveled', 
+        'teamSurvivalTime', 
+    ].join(', '),
     '```',
 ]
 export const help:string[] = [

@@ -304,7 +304,7 @@ export default ({ username, performanceMap, setPerformanceMap, filters, setFilte
                     <input type="number" style={{width: '4rem'}}
                         onChange={e => onLimitInputChange(Number(e.target.value))}
                         value={filters.sort.limit}
-                        placeholder="Min" min={5} />
+                        placeholder="Limit" min={0} />
                 </span>
                 <span className={searchOpen ? 'open' : ''}>
                     <div className="comparison-container">

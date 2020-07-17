@@ -1,6 +1,4 @@
-import * as Discord from 'discord.js'
 import * as Mongo from '@stagg/mongo'
-import { mdb, msg } from '..'
 
 // const aggr = await db.collection('performances.wz').aggregate([
 //     { $match: { 'player._id': player._id } },
@@ -14,17 +12,15 @@ import { mdb, msg } from '..'
 //     { $limit: 50 },
 // ], { cursor: { batchSize: 1 } }).toArray()
 
-export const findPlayer = async (m:Discord.Message, username:string, platform?:string) => {
-    return username !== 'me'
-        ? await mdb.findPlayer({ username, platform })
-        : await mdb.findPlayer({ discord: m.author.id })
-}
-
 export const isolatedStat = async (player:Mongo.Schema.CallOfDuty.Player, stat:string, modeIds:string[]=[], sort?:'time'|'best', limit:number=25) => {
     const db = await Mongo.client()
     const modeIdOp = !modeIds || !modeIds.length ? '$nin' : '$in'
     return db.collection('performances.wz').aggregate([
-        { $match: { 'player._id': player._id, modeId: { [modeIdOp]: modeIds || [] } } },
+        { $match: {
+            'player._id': player._id,
+            modeId: { [modeIdOp]: modeIds || [] },
+            'stats.timePlayed': { $gt: 90 }
+        } },
         {
             $group: {
                 _id: '$startTime',
@@ -40,7 +36,11 @@ export const ratioStat = async (player:Mongo.Schema.CallOfDuty.Player, stat:stri
     const modeIdOp = !modeIds || !modeIds.length ? '$nin' : '$in'
     const [dividend, divisor] = stat.split('/')
     return db.collection('performances.wz').aggregate([
-        { $match: { 'player._id': player._id, modeId: { [modeIdOp]: modeIds || [] } } },
+        { $match: {
+            'player._id': player._id,
+            modeId: { [modeIdOp]: modeIds || [] },
+            'stats.timePlayed': { $gt: 90 }
+        } },
         {
             $group: {
                 _id: '$startTime',

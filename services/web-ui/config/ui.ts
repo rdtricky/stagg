@@ -15,11 +15,11 @@ const staging = {
     filters: {
         default: {
             stats: {
-                timePlayed: { min: 300 },
+                // timePlayed: { min: 300 },
             },
             sort: {
                 order: 1,
-                limit: 100,
+                // limit: 100,
                 prop: 'startTime',
             }
         }

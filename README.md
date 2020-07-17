@@ -10,17 +10,29 @@ You will need a `.env` file in the root of each service you intend to run for lo
 
 PRs are always welcome so please feel free to fork or request feature branch access.
 
+#### Misc
+
+- Add DrDisrespect#9218550 to KGP
+
 #### Web UI
 
+- [MDX Storybook](https://storybook.js.org/docs/formats/mdx-syntax/) for components
+- Default charts below pies/polars
+    - Show avg line of KGP in background
 - Cache data in IDB again
-- Discord landing page off-center in mobile
-- Large expandable charts dont fit mobile screen
 - Add tooltips to each chart to explain correlations
 - Customizable dashboard with custom-built charts
 - Correlation creation tool
+- Implement landing page template: https://open.cruip.com/
+- Bugs
+    - After expanding chart, labels do not go back to hidden
+    - Large expandable charts dont fit mobile screen
+    - Discord landing page off-center in mobile
 
 #### Discord Bot
 
+- Show avg KPG line in background
+- Matchmaking (auto-move to channels)
 - Make X axis date/time for OT charts
 - Group by time of day (eg: compare 8pm-9pm vs 12am-1am)
 - Correlations

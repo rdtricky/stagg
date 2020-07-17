@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { isolatedStat, ratioStat, findPlayer } from './data'
+import { isolatedStat, ratioStat } from './data'
 import * as staticRes from '../static'
 import { msg } from '..'
 
@@ -9,7 +9,7 @@ export const statOverTime = async (m:Discord.Message) => {
     const [,, stat ] = msg.args(m, false)
     const [,,, username ] = await msg.hydratedArgs(m)
     const placeholder = await msg.placeholder(m, 'Finding player...')
-    const player = await findPlayer(m, username)
+    const player = await msg.hydrateUsername(m, username)
     if (!player) {
         return msg.edit(placeholder, username !== 'me' 
             ? staticRes.playerNotFound : staticRes.playerNotRegistered)
