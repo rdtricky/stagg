@@ -12,10 +12,16 @@ PRs are always welcome so please feel free to fork or request feature branch acc
 
 #### Misc
 
-- Add DrDisrespect#9218550 to KGP
+- Cleanup
+    - mail + util pkgs
+    - rename mongo pkg to mdb
+    - update player db schema
+        - add DrDisrespect#9218550 to KGP
+    - use separate dbs for discord (supercedes games)
 
 #### Web UI
 
+- Discord bot help page
 - [MDX Storybook](https://storybook.js.org/docs/formats/mdx-syntax/) for components
 - Default charts below pies/polars
     - Show avg line of KGP in background
