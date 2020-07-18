@@ -1,43 +1,52 @@
-import * as Discord from 'discord.js'
 import * as Mongo from '@stagg/mongo'
 import * as API from '@stagg/api'
-import { commaNum, percentage } from '../../util'
-import * as staticRes from '../static'
-import { statsReportByMode } from './data'
-import { msg } from '..'
+import { commaNum, percentage } from '../../../util'
+import { statsReport } from '../data'
 
-const modeTeamSize = { all: -1, combined: 0, solo: 1, duo: 2, trio: 3, quad: 4 }
-export const byMode = async (m:Discord.Message, modeIdentifier:string|number='all') => {
-    const [,, username, platform ] = await msg.hydratedArgs(m)
-    const placeholder = await msg.placeholder(m, 'Finding player...')
-    const player = await msg.hydrateUsername(m, username, platform)
-    if (!player) {
-        return msg.edit(placeholder, username !== 'me' 
-            ? staticRes.playerNotFound : staticRes.playerNotRegistered)
+const type = 'br' // may do plunder in future but meh
+const header = (player:Mongo.Schema.CallOfDuty.Player, platform:string='uno'):string[] => [
+    `**${player.profiles[platform]}** (${player.uno})`,
+    `Full profile: https://stagg.co/wz/${player.profiles?.uno?.split('#').join('@')}`,
+]
+export const combined = async (player:Mongo.Schema.CallOfDuty.Player, platform:string='uno'):Promise<string[]> => {
+    const data = await statsReport(player)
+    return [
+        ...header(player, platform),
+        '```',
+        '',
+        ...formatOutput(data[0], 'Combined'),
+        '```',
+    ]
+}
+export const isolated = async (teamSize:number, player:Mongo.Schema.CallOfDuty.Player, platform:string='uno'):Promise<string[]> => {
+    if (teamSize < 1 || teamSize > 4) {
+        return ['Invalid request, team size must be between 1-4']
     }
-    msg.edit(placeholder, ['Loading profile...'])
-    const type = 'br' // may do plunder in future but meh
-    const teamSize = typeof modeIdentifier === typeof 1 ? modeIdentifier : modeTeamSize[modeIdentifier]
+    const teamSizeLables = ['Solos', 'Duos', 'Trios', 'Quads']
+    // get all modeIds for this teamSize
     const modeIds = []
-    if (teamSize >= 1) {
-        // get all modeIds for this teamSize
-        for(const modeId in API.Map.CallOfDuty.Modes) {
-            const modeDetails = API.Map.CallOfDuty.Modes[modeId]
-            if (modeDetails.type === type && modeDetails.teamSize === teamSize) {
-                modeIds.push(modeId)
-            }
+    for(const modeId in API.Map.CallOfDuty.Modes) {
+        const modeDetails = API.Map.CallOfDuty.Modes[modeId]
+        if (modeDetails.type === type && modeDetails.teamSize === teamSize) {
+            modeIds.push(modeId)
         }
     }
-    const isFullReport = teamSize === -1 // "all" breaks all stats down by modes
-    const data = await statsReportByMode(player, modeIds, isFullReport)
+    const data = await statsReport(player, modeIds)
+    return [
+        ...header(player, platform),
+        '```',
+        '',
+        ...formatOutput(data[0], teamSizeLables[teamSize-1]),
+        '```',
+    ]
+}
+export const all = async (player:Mongo.Schema.CallOfDuty.Player, platform:string='uno'):Promise<string[]> => {
+    const data = await statsReport(player, [], true)
     const teamSizeLables = ['Combined', 'Solos', 'Duos', 'Trios', 'Quads']
     const output = [
         ...header(player, platform),
         '```'
     ]
-    if (!isFullReport) {
-        return msg.edit(placeholder, [...output, '', ...formatOutput(data[0], teamSizeLables[teamSize]), '```'])
-    }
     // Combine groups from different modeIds of the same teamSize
     const groupedByTeamSizeLabel = {}
     for(const modeData of data) {
@@ -58,13 +67,8 @@ export const byMode = async (m:Discord.Message, modeIdentifier:string|number='al
     for(const label of Object.keys(groupedByTeamSizeLabel).sort((a,b) => teamSizeLables.indexOf(a) - teamSizeLables.indexOf(b))) {
         output.push('', ...formatOutput(groupedByTeamSizeLabel[label], label))
     }
-    return msg.edit(placeholder, [...output, '```'])
+    return [...output, '```']
 }
-
-const header = (player:Mongo.Schema.CallOfDuty.Player, platform:string='uno'):string[] => [
-    `**${player.profiles[platform]}** (${player.uno})`,
-    `Full profile: https://stagg.co/wz/${player.profiles?.uno?.split('#').join('@')}`,
-]
 const formatOutput = (statsCluster:any, label:string):string[] => {
     return [
         `WZ BR ${label}:`,

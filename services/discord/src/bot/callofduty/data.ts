@@ -1,4 +1,92 @@
+import { Map } from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
+
+export interface PlayerIdentifiers {
+    uno?:string
+    discord?:string
+    username?:string
+    platform?:string
+}
+export const findPlayer = async (pids:PlayerIdentifiers):Promise<Mongo.Schema.CallOfDuty.Player> => {
+    const db = await Mongo.client('callofduty')
+    if (pids.uno) return db.collection('players').findOne({ uno: pids.uno })
+    if (pids.discord) return db.collection('players').findOne({ discord: pids.discord })
+    const { username='', platform='uno' } = pids
+    return db.collection('players').findOne({ [`profiles.${platform.toLowerCase()}`]: { $regex: username, $options: 'i' } })
+}
+
+interface FetchedPlayer {
+    query: {
+        tag: string
+        username: string
+        platform: string
+    }
+    player: Mongo.Schema.CallOfDuty.Player
+}
+export const hydratePlayerIdentifiers = async (authorId:string, pids:string[]):Promise<FetchedPlayer[]> => {
+    const db = await Mongo.client('callofduty')
+    const queries = []
+    for(const i in pids) {
+        const pid = pids[i].toLowerCase()
+        const index = Number(i)
+        if (Object.keys(Map.CallOfDuty.Platforms).includes(pid)) {
+            if (!pids[index-1]) {
+                // its a platform identifier with no preceding username, dump it
+                delete pids[index]
+                continue
+            }
+            queries.push({ username: pids[index-1], platform: pid, tag: `${pids[index-1]}:${pid}` })
+            delete pids[index]
+            delete pids[index-1]
+        }
+    }
+    const foundPlayers = []
+    // reduce discord tags if possible
+    for(const i in pids) {
+        const pid = pids[i]
+        if (pid.match(/<@!([0-9]+)>/)) {
+            const discordId = pid.replace(/<@!([0-9]+)>/, '$1')
+            const player = await db.collection('players').findOne({ discord: discordId })
+            if (player) {
+                foundPlayers.push({
+                    player,
+                    query: { discord: discordId, tag: `<@!${discordId}>` },
+                })
+            }
+        }
+    }
+    // all username + platform combos are gone, now reduce uno usernames and shortcuts if applicable
+    const player = await db.collection('players').findOne({ discord: authorId })
+    if (player) {
+        for(const i in pids) {
+            if (!pids[i]) continue
+            const pid = pids[i].toLowerCase()
+            if (pid === 'me') {
+                queries.push({ username: player.profiles.uno, platform: 'uno', tag: `me` })
+                delete pids[i]
+                continue
+            }
+            if (player.discordShortcuts && player.discordShortcuts[pid]) {
+                const shortcutPlayers = await hydratePlayerIdentifiers(authorId, player.discordShortcuts[pid].split(' '))
+                if (shortcutPlayers.length) {
+                    delete pids[i]
+                    foundPlayers.push(...shortcutPlayers)
+                }
+            }
+        }
+    }
+    for(const pid of pids) {
+        if (!pid) continue
+        queries.push({ username: pid, platform: 'uno', tag: pid })
+    }
+    for(const query of queries) {
+        const player = await findPlayer({ username: query.username, platform: query.platform })
+        foundPlayers.push({ query, player })
+    }
+    return foundPlayers
+}
+
+//["https://stagg.co/api/chart.png?c={type:'pie',data:{labels:['Solos','Duos','Trios','Quads'],datasets:[{data:[6,4,52,42]}]}}"]
 
 // const aggr = await db.collection('performances.wz').aggregate([
 //     { $match: { 'player._id': player._id } },
@@ -59,7 +147,7 @@ export const ratioStat = async (player:Mongo.Schema.CallOfDuty.Player, stat:stri
     ]).toArray()
 }
 
-export const statsReportByMode = async (player:Mongo.Schema.CallOfDuty.Player, modeIds:string[]=[], groupByModeId=false) => {
+export const statsReport = async (player:Mongo.Schema.CallOfDuty.Player, modeIds:string[]=[], groupByModeId=false) => {
     const db = await Mongo.client()
     // if we're fetching "all" _id should be $modeId
     // if we're fetching anything else we should aggregate them all together

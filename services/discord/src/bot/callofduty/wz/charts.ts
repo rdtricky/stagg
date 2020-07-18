@@ -1,23 +1,28 @@
 import * as Discord from 'discord.js'
-import { isolatedStat, ratioStat } from './data'
-import * as staticRes from '../static'
-import { msg } from '..'
+import * as Mongo from '@stagg/mongo'
+import { hydratePlayerIdentifiers, isolatedStat, ratioStat } from '../data'
+import relay from '../../relay'
 
 const chartUrlPrefix = 'https://stagg.co/api/chart.png?c='
 
-export const statOverTime = async (m:Discord.Message) => {
-    const [,, stat ] = msg.args(m, false)
-    const [,,, username ] = await msg.hydratedArgs(m)
-    const placeholder = await msg.placeholder(m, 'Finding player...')
-    const player = await msg.hydrateUsername(m, username)
-    if (!player) {
-        return msg.edit(placeholder, username !== 'me' 
-            ? staticRes.playerNotFound : staticRes.playerNotRegistered)
+export default async (m:Discord.Message, stat:string, ...pids:string[]) => {
+    const rly = await relay(m, ['Finding players(s)...'])
+    const foundPlayers = await hydratePlayerIdentifiers(m.author.id, pids)
+    if (!foundPlayers) {
+        rly.edit(['Player(s) not found...'])
+        return
     }
-    msg.edit(placeholder, ['Loading profile...'])
+    rly.edit(['Loading profile(s)...'])
+    const chartUrls = await statOverTime(foundPlayers.map(fp => fp.player), stat)
+    rly.edit(['Rendering chart...'])
+    await rly.files(chartUrls)
+    rly.delete()
+}
+
+const statOverTime = async (players:Mongo.Schema.CallOfDuty.Player[], stat:string):Promise<string[]> => {
+    const [player] = players
     const statMethod = stat.includes('/') ? ratioStat : isolatedStat
     const data = await statMethod(player, stat)
-    msg.edit(placeholder, ['Rendering chart...'])
     const chartData = []
     const chartLabels = []
     let i = 1
@@ -30,8 +35,7 @@ export const statOverTime = async (m:Discord.Message) => {
     for(let i = 0; i < chartData.length; i++) {
         avgData.push(avg)
     }
-    await msg.sendFiles(m, [
+    return [
         `${chartUrlPrefix}{type:'line',data:{labels:[${chartLabels.join(',')}], datasets:[{label:'${stat.replace('/', ':')} over time', data: [${chartData.join(',')}], fill:false, borderColor:'%2301a2fc'},{label:'Avg ${stat.replace('/', ':')} over time', data: [${avgData.join(',')}], fill:false, borderColor:'%23aaa'}]}}`
-    ])
-    placeholder.delete()
+    ]
 }

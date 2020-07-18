@@ -30,6 +30,8 @@ const create = async (m:Discord.Message) => {
     queue.push({
         method: 'insertOne',
         payload: {
+            guildId: m.guild?.id || 'DM',
+            channelId: m.channel?.id || 'DM',
             messageId: m.id,
             messageAuthor: m.author,
             messageContent: m.content,
