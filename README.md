@@ -12,10 +12,9 @@ PRs are always welcome so please feel free to fork or request feature branch acc
 
 #### Misc
 
-- Cleanup
-    - update player db schema
-        - add DrDisrespect#9218550 to KGP
-    - use separate dbs for discord (supercedes games)
+- update player db schema
+    - add DrDisrespect#9218550 to KGP
+- use separate dbs for discord (supercedes games)
 
 #### Web UI
 
