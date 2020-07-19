@@ -1,3 +1,4 @@
+import { spaces } from '@stagg/util'
 import * as Discord from 'discord.js'
 import relay from '../../relay'
 import { hydratePlayerIdentifiers, ratioStat } from '../data'
@@ -39,10 +40,12 @@ export default async (m:Discord.Message, ...pids:string[]) => {
 
     const output = []
     let i = 1
+    const longestNameChars = Math.max(...sorted.map(([k]) => k.length))
     for(const team of teams) {
         output.push(`\`\`\`Team #${i++}`)
         for(const [k,v] of team) {
-            output.push(k)
+            const extraSpaces = spaces(longestNameChars - k.length)
+            output.push(`${k}${extraSpaces}   (${v.toFixed(2)})`)
         }
         output.push('```')
     }
