@@ -1,3 +1,4 @@
+import { delay } from '@stagg/util'
 import * as mdb from '@stagg/mongo'
 import * as API from '@stagg/api'
 import * as Scrape from './scraper'
@@ -27,7 +28,7 @@ export const initializeNewPlayers = async () => {
             player.games = games
             player.profiles = profiles
             await initialize(player)
-            await Scrape.delay(cfg.scrape.wait)
+            await delay(cfg.scrape.wait)
         } catch(e) {
             // This can fail if they have no titleIdentities returned, so signal in the db to skip for now
             await db.collection('players').updateOne({ _id: player._id }, { $set: { initFailure: true } })
@@ -49,7 +50,7 @@ export const recheckExistingPlayers = async () => {
             player.games = games
             player.profiles = profiles
             await recheck(player)
-            await Scrape.delay(cfg.scrape.wait)
+            await delay(cfg.scrape.wait)
         } catch(e) {
             console.log('[!] Recheck failed for', player.email, e)
         }
