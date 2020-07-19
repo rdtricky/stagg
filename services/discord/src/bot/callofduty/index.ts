@@ -1,5 +1,5 @@
 import * as API from '@stagg/api'
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import * as mail from '@stagg/mail'
 import * as Discord from 'discord.js'
 import * as wz from './wz'

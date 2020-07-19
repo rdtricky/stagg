@@ -1,5 +1,5 @@
 {
-  "name": "@stagg/mongo",
+  "name": "@stagg/mdb",
   "version": "0.2.2",
   "main": "lib/index.js",
   "directories": {

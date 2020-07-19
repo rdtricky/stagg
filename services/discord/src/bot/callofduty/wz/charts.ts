@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import { hydratePlayerIdentifiers, isolatedStat, ratioStat } from '../data'
 import relay from '../../relay'
 

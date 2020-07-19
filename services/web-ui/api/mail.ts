@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import cfg from '../config/api'
 
 Mongo.config(cfg.mongo)

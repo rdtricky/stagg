@@ -1,4 +1,4 @@
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import * as Discord from 'discord.js'
 import logger from './logger'
 import relay from './relay'

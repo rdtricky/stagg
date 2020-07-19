@@ -1,4 +1,4 @@
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import { Client } from 'discord.js'
 import apiCfg from '../config/api'
 import uiCfg from '../config/ui'

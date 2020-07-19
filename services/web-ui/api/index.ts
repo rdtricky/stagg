@@ -1,7 +1,7 @@
 import JWT from 'jsonwebtoken'
 import JSONStream from 'JSONStream'
 import { CallOfDuty } from '@stagg/api'
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import * as Discord from './discord'
 import cfg from '../config/api'
 

@@ -1,5 +1,5 @@
 import { delay } from '@stagg/util'
-import * as mdb from '@stagg/mongo'
+import * as mdb from '@stagg/mdb'
 import * as API from '@stagg/api'
 import * as Scrape from './scraper'
 import cfg from '../config'

@@ -1,5 +1,5 @@
 import { Map } from '@stagg/api'
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 
 export interface PlayerIdentifiers {
     uno?:string

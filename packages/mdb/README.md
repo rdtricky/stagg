@@ -7,13 +7,13 @@ Provided by [Stagg.co](https://stagg.co)
 Install the package
 
 ```
-yarn install @stagg/mongo
+yarn install @stagg/mdb
 ```
 
 Configure the connection on startup (only done once).
 
 ```typescript
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 (async () => {
     const cfg:Mongo.Config = {...}
     Mongo.config(cfg)
@@ -26,7 +26,7 @@ In any subsequent requests, only the client needs to be fetched.
 
 
 ```typescript
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 (async () => {
     const db = await Mongo.client()
     // ... do stuff

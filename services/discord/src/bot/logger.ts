@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import { delay } from '@stagg/util'
 import cfg from '../config'
 

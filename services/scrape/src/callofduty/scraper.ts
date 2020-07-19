@@ -1,6 +1,6 @@
 import { Db } from 'mongodb'
 import * as API from '@stagg/api'
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import { delay } from '@stagg/util'
 
 export class Warzone {

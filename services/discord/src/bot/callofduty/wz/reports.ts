@@ -1,4 +1,4 @@
-import * as Mongo from '@stagg/mongo'
+import * as Mongo from '@stagg/mdb'
 import * as API from '@stagg/api'
 import { commaNum, percentage } from '@stagg/util'
 import { statsReport } from '../data'
