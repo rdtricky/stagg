@@ -15,5 +15,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "gmail-send": "^1.8.10",
+    "jsonwebtoken": "^8.5.1"
   }
 }
