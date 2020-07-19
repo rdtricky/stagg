@@ -1,13 +1,13 @@
 import Head from 'next/head'
-import cfg from '../config/ui'
-import ForceHTTPS from '../components/ForceHTTPS'
+import cfg from '../../config/ui'
+import ForceHTTPS from '../../components/ForceHTTPS'
 import { commaNum, pluralizeStr } from '@stagg/util'
 
 export const Page = ({ user, server }) => {
   return (
       <>
         <Head>
-            <title>Stagg Discord</title>
+            <title>Stagg Discord Bot Help</title>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossOrigin="anonymous" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" media="all" />
             <link rel="stylesheet" href="/assets/css/discord.css" media="all" />
