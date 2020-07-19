@@ -278,6 +278,24 @@ export namespace Res {
                 totalXp: number
                 challengeXp: number
                 averageSpeedDuringMatch: number
+                objectiveCaptureKill?: number
+                objectiveObjProgDefend?: number
+                objectiveGainedGunRank?: number
+                objectiveKillConfirmed?: number
+                objectiveKillDenied?: number
+                objectiveKcFriendlyPickup?: number
+                objectiveMedalModeKcOwnTagsScore?: number
+                objectiveDestroyedEquipment?: number
+                objectiveMedalScoreSsKillPrecisionAirstrike?: number
+                objectiveMedalScoreSsKillCruisePredator?: number
+                objectiveMedalScoreKillSsSentryGun?: number
+                objectiveMedalScoreKillSsChopperGunner?: number
+                objectiveMedalModeXAssaultScore?: number
+                objectiveMedalModeXDefendScore?: number
+                objectiveMedalModeDomSecureScore?: number
+                objectiveMedalModeDomSecureBScore?: number
+                objectiveMedalModeDomSecureNeutralScore?: number
+                objectiveMedalModeDomSecureAssistScore?: number
             }
             export interface WeaponStats {
                 hits: number
