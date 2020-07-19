@@ -86,9 +86,3 @@ To publish new packages, you will need access to [Stagg NPM](https://www.npmjs.c
 ```
 npm login --registry=https://registry.npmjs.org/ --scope=stagg
 ```
-
-https://quickchart.io/chart?c={type:'bar',data:{labels:['Q1','Q2','Q3','Q4'], datasets:[{label:'Users',data:[50,60,70,180]},{label:'Revenue',data:[100,200,300,400]}]}}
-https://quickchart.io/chart?c={type:'pie',data:{labels:['Solos','Duos','Trios','Quads'],datasets:[{data:[6,0,52,42]}]}}
-
-{type:'pie',data:{labels:['Solos','Duos','Trios','Quads'],datasets:}}
-{'labels':['Solos','Duos','Trios','Quads'],'datasets':[{'data':[6,0,52,42],'backgroundColor':['#003f5c','#2f4b7c','#665191','#a05195','#d45087','#f95d6a','#ff7c43','#ffa600'],'hoverBackgroundColor':['#003f5c','#2f4b7c','#665191','#a05195','#d45087','#f95d6a','#ff7c43','#ffa600']}]}
