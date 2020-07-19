@@ -10,10 +10,10 @@ export default async (m:Discord.Message, ...pids:string[]) => {
         rly.edit(['Players not found...'])
         return
     }
-    if (foundPlayers.length < 5) {
-        rly.edit(['Team building requires at least 5 players...'])
-        return
-    }
+    // if (foundPlayers.length < 5) {
+    //     rly.edit(['Team building requires at least 5 players...'])
+    //     return
+    // }
     rly.edit(['Building player profiles...'])
     const stats:[string, number][] = [] // [key,val]
     for(const fp of foundPlayers) {
