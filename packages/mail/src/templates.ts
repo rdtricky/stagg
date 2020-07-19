@@ -14,7 +14,7 @@ export namespace confirm {
                     <p style="font-size: 16px;">Click the button below to link your Discord account; if you did not make this request just ignore this email.</p>
                 </div>
                 <div style="text-align: center; margin: 50px 0; color: rgba(255, 255, 255, 0.9);">
-                    <a href="https://stagg.co/mail?t={jwtToken}" 
+                    <a href="https://stagg.co/mail?t=${jwtToken}" 
                         style="box-shadow: 0 10px 10px -5px; text-decoration: none; text-align: center; background: #007bff; color: inherit; font-size: 20px; padding: 6px 32px; outline: none; border: 1px solid #0069d9; border-radius: 4px;">
                             Confirm Email
                     </a>
