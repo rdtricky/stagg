@@ -17,7 +17,7 @@ export namespace Res {
         }[]
     }
     export interface Platforms {
-        [key:string]: { // key is platform
+        [key: string]: { // key is platform
             username: string
         }
     }
@@ -80,13 +80,49 @@ export namespace Res {
             }
         }
     }
+
+    export interface Player {
+        team: string
+        rank: number
+        awards: {}
+        username: string
+        clantag: string
+        uno: string
+        loadout: Loadout[]
+    }
+
+    export interface PlayerStats {
+        rank: number
+        kills: number
+        deaths: number
+        kdRatio: number
+        headshots: number
+        assists: number
+        executions: number
+        wallBangs?: number
+        nearmisses?: number
+        damageDone: number
+        damageTaken: number
+        longestStreak: number
+        scorePerMinute: number
+        percentTimeMoving: number
+        distanceTraveled: number
+        timePlayed: number
+        score: number
+        miscXp: number
+        medalXp: number
+        matchXp: number
+        scoreXp: number
+        totalXp: number
+    }
+
     export namespace Warzone {
         export interface Matches {
             summary: Summary
             matches: Match[]
         }
         export interface Summary {
-            
+
         }
         export interface Match {
             utcStartSeconds: number
@@ -102,20 +138,12 @@ export namespace Res {
             gameType: string
             playerCount: number
             teamCount: number
-            player: Match.Player
+            player: Player
             playerStats: Match.PlayerStats
             rankedTeams: Match.Team[]
         }
         export namespace Match {
-            export interface Player {
-                team: string
-                rank: number
-                awards: {}
-                username: string
-                clantag: string
-                uno: string
-                loadout: Loadout[]
-            }
+
             export interface Team {
                 name: string
                 placement: number
@@ -157,30 +185,8 @@ export namespace Res {
                     }
                 }
             }
-            export interface PlayerStats {
-                rank: number
-                kills: number
-                deaths: number
-                kdRatio: number
-                headshots: number
-                assists: number
-                executions: number
-                wallBangs?: number
-                nearmisses?: number
-                damageDone: number
-                damageTaken: number
-                longestStreak: number
-                scorePerMinute: number
-                percentTimeMoving: number
-                distanceTraveled: number
-                timePlayed: number
-                score: number
-                miscXp: number
-                medalXp: number
-                matchXp: number
-                scoreXp: number
+            export interface PlayerStats extends Res.PlayerStats {
                 bonusXp: number
-                totalXp: number
                 challengeXp: number
                 teamPlacement: number
                 teamSurvivalTime: number
@@ -213,22 +219,75 @@ export namespace Res {
             level: number
         }
     }
+
+    export type Result = 'win' | 'loss' | 'draw'
+    export type Team = 'allies' | 'axis'
     export namespace Multiplayer {
         export interface Matches {
-
+            summary: Summary,
+            matches: Match[]
         }
         export interface Summary {
 
         }
+        export interface Match {
+            utcStartSeconds: number
+            utcEndSeconds: number
+            map: string
+            mode: string
+            matchID: string
+            duration: number
+            playlistName: string
+            version: number
+            gameType: Mode
+            result: Result
+            winningTeam: Team
+            gameBattle: boolean
+            team1Score: number
+            team2Score: number
+            isPresentAtEnd: boolean
+            allPlayers: {}
+            arena: boolean
+            privateMatch: boolean
+            player: Match.Player
+            playerStats: Match.PlayerStats
+            weaponStats: { [key: string]: Match.WeaponStats } // weaponId: { weaponStats }
+        }
         export namespace Match {
-            export interface Player extends Warzone.Match.Player {
+            export interface Player extends Res.Player {
                 nemesis: string
                 mostKilled: string
                 killstreakUsage: {
-                    pac_sentry: number          // Wheelson
-                    hover_jet: number           // VTOL
-                    chopper_gunner: number      // Chopper Gunner
+                    radar_drone_overwatch: number   // Radar Drone
+                    uav: number                     // UAV
+                    airdrop: number                 // Care Package
+                    precision_airstrike: number     // Airstrike
+                    cruise_predator: number         // Cruise Missle
+                    pac_sentry: number              // Wheelson
+                    hover_jet: number               // VTOL
+                    chopper_gunner: number          // Chopper Gunner
                 }
+            }
+            export interface PlayerStats extends Res.PlayerStats {
+                suicides: number
+                accuracy: number
+                shotsLanded: number
+                shotsMissed: number
+                shotsFired: number
+                bonusXp: number
+                totalXp: number
+                challengeXp: number
+                averageSpeedDuringMatch: number
+            }
+            export interface WeaponStats {
+                hits: number
+                kills: number
+                headshots: number
+                loadoutIndex: number
+                shots: number
+                startingWeaponXp: number
+                deaths: number
+                xpEarned: number
             }
         }
     }
