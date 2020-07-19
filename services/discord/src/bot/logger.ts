@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
 import * as Mongo from '@stagg/mongo'
+import { delay } from '@stagg/util'
 import cfg from '../config'
 
 (async () => {
@@ -24,7 +25,6 @@ interface QueueItem {
     query?: { [key:string]: any }
 }
 const queue:QueueItem[] = []
-const delay = (ms:number) => new Promise(resolve => setTimeout(() => resolve(), ms))
 
 const create = async (m:Discord.Message) => {
     queue.push({

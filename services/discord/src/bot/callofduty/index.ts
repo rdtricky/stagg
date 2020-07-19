@@ -1,10 +1,17 @@
 import * as API from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
+import * as mail from '@stagg/mail'
 import * as Discord from 'discord.js'
 import * as wz from './wz'
 import relay from '../relay'
 import { findPlayer } from './data'
-import { SendConfirmation } from '../../mail'
+import cfg from '../../config'
+
+mail.config({
+    jwtSecret: cfg.jwt,
+    gmailUser: cfg.gmail.user,
+    gmailPass: cfg.gmail.pass,
+})
 
 export { wz }
 
@@ -71,6 +78,6 @@ export const register = async (m:Discord.Message, ...args:string[]) => {
         return
     }
     msg.edit(['Sending confirmation email...'])
-    const send = await SendConfirmation(player.email, { discord: m.author.id })
-    msg.edit([send ? 'Confirmation email sent, check your inbox' : 'Failed to send confirmation email, please try again or contact support'])
+    const sent = await mail.send.confirmation.discord(player.email, { discord: m.author.id })
+    msg.edit([sent ? 'Confirmation email sent, check your inbox' : 'Failed to send confirmation email, please try again or contact support'])
 }

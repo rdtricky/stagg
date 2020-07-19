@@ -3,7 +3,7 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import Center from '../components/Center'
 import Template from '../components/Template'
-import { commaNum } from '../util'
+import { commaNum } from '@stagg/util'
 import cfg from '../config/ui'
 
 const GameWrapper = styled.div`

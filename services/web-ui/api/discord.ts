@@ -2,7 +2,7 @@ import * as Mongo from '@stagg/mongo'
 import { Client } from 'discord.js'
 import apiCfg from '../config/api'
 import uiCfg from '../config/ui'
-import { delay } from '../util'
+import { delay } from '@stagg/util'
 
 Mongo.config(apiCfg.mongo)
 const discord = new Client()

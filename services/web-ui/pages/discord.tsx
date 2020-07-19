@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import cfg from '../config/ui'
 import ForceHTTPS from '../components/ForceHTTPS'
-import { commaNum, pluralizeStr } from '../util'
+import { commaNum, pluralizeStr } from '@stagg/util'
 
 export const Page = ({ user, server }) => {
   return (

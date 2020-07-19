@@ -12,12 +12,13 @@
   },
   "dependencies": {
     "@stagg/api": "^0.2.2",
+    "@stagg/mail": "^0.2.3",
     "@stagg/mongo": "^0.2.2",
+    "@stagg/util": "^0.2.3",
     "cors": "^2.8.5",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "gmail-send": "^1.8.10",
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {

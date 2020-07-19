@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import { commaNum } from '../util'
+import { commaNum } from '@stagg/util'
 import logger from './logger'
 
 type ExtendableMessage = Omit<Discord.Message, 'edit'>

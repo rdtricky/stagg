@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Cookies from 'js-cookie'
+import { commaNum } from '@stagg/util'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Card from '../../components/Card'
@@ -13,7 +14,6 @@ import StatOverTime from './[id]/charts/StatOverTime'
 import WinsByMode from './[id]/charts/WinsByMode'
 import Filters, { Filters as FiltersType } from './[id]/Filters'
 import AnyStatByRank from './[id]/charts/AnyStatByRank'
-import { commaNum } from '../../util'
 import cfg from '../../config/ui'
 
 const inferUsername = (id:string) => {

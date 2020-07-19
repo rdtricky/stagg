@@ -1,8 +1,7 @@
 import { Db } from 'mongodb'
 import * as API from '@stagg/api'
 import * as Mongo from '@stagg/mongo'
-
-export const delay = (ms:number) => new Promise(resolve => setTimeout(() => resolve(), ms))
+import { delay } from '@stagg/util'
 
 export class Warzone {
     public  player              : Mongo.Schema.CallOfDuty.Player

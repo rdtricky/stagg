@@ -1,6 +1,6 @@
 import * as Mongo from '@stagg/mongo'
 import * as API from '@stagg/api'
-import { commaNum, percentage } from '../../../util'
+import { commaNum, percentage } from '@stagg/util'
 import { statsReport } from '../data'
 
 const type = 'br' // may do plunder in future but meh
