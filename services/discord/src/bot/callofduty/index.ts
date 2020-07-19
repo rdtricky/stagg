@@ -78,6 +78,6 @@ export const register = async (m:Discord.Message, ...args:string[]) => {
         return
     }
     msg.edit(['Sending confirmation email...'])
-    const sent = await mail.send.confirmation.discord(player.email, { discord: m.author.id })
+    const sent = await mail.send.confirmation.discord(player.email, player.profiles.uno, { ...m.author })
     msg.edit([sent ? 'Confirmation email sent, check your inbox' : 'Failed to send confirmation email, please try again or contact support'])
 }

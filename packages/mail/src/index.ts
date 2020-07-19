@@ -26,9 +26,13 @@ export namespace send {
     })
 
     export namespace confirmation {
-        export const discord = async (email:string, extendedPayload:{[key:string]:any}={}):Promise<boolean> => {
-            const token = jwt.sign({ email, ...extendedPayload }, cfg.jwtSecret)
-            const emailHTML = templates.confirm.discord(Buffer.from(token).toString('base64'))
+        export const discord = async (email:string, username:string, discord:{id:string, tag:string, avatar:string}):Promise<boolean> => {
+            const token = jwt.sign({ email, profiles: { uno: username }, discord }, cfg.jwtSecret)
+            const emailHTML = templates.confirm.discord({
+                discord,
+                username,
+                jwt: Buffer.from(token).toString('base64'),
+            })
             try {
                 await send.generic(email, 'Confirm your email address for Stagg.co', emailHTML)
                 return true
