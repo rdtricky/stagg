@@ -1,6 +1,6 @@
 {
   "name": "stagg-scraper",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "author": "Dan Lindsey",
   "main": "dist/index.js",
   "private": true,
